@@ -10,21 +10,23 @@ import { TipoLicencia } from './tipoLicencia';
 import { VehiculoPersona } from './vehiculoPersona';
 
 export class Persona {
-    id: number;
+    id: string;
     identificacion: string;
     nombresApellidos: string;
     telefono: string;
     licencia: string;
     informacionAdicional: string;
-    usuario: Usuario;
-    trabajoList: Trabajo[];
+    usuario: string;
     filtroPersonaList: FiltroPersona[];
-    nacionalidad: Nacionalidad;
-    nivelEstudios: NivelEstudios;
-    ocupacion: Ocupacion;
-    profesion: Profesion;
-    tipoLicencia: TipoLicencia;
-    direccionList: Direccion[];
-    vehiculoPersonaList: VehiculoPersona[];
+    nacionalidad: string;
+    nivelEstudios: string;
+    ocupacion: string;
+    profesion: string;
+    tipoLicencia: string;
+    pais: string;
+    ciudad: string;
+    direccion: string;
+    tipoVehiculo: string;
+    placaVehiculo: string;
     usuarioList: Usuario[];
 }

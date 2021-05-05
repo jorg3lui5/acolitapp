@@ -3,7 +3,7 @@ import { Favor } from './favor';
 import { TipoPago } from './tipoPago';
 
 export class DetalleTipoPago {
-    id: number;
+    id: string;
     descripcion: string;
     favorList: Favor[];
     tipoPago: TipoPago;

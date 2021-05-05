@@ -4,7 +4,7 @@ import { TipoConfiguracion } from './tipoConfiguracion';
 import { Usuario } from './usuario';
 
 export class FiltroConfiguracionUsuario {
-    id: number;
+    id: string;
     valorString: string;
     valorInt: number;
     tabla: number;

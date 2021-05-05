@@ -4,7 +4,7 @@ import { Empresa } from './empresa';
 import { Ocupacion } from './ocupacion';
 
 export class Trabajo {
-    id: number;
+    id: string;
     cargo: string;
     direccion: Direccion;
     empresa: Empresa;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Constantes } from '../../compartido/constantes';
 
 @Component({
   selector: 'app-notificaciones',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./notificaciones.page.scss'],
 })
 export class NotificacionesPage implements OnInit {
+  constantes: Constantes = new Constantes;
 
   constructor() { }
 

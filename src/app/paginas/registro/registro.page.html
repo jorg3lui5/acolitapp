@@ -1,9 +1,63 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>registro</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-cabecera [titulo]="constantes._registro"></app-cabecera>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+  <form (submit)="registrar()" [formGroup]="formularioRegistro" errorTailor>
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">        
+      <ion-item>
+        <ion-label position="floating" for="identificacion">
+          {{constantes._identificacion}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="identificacion" id="identificacion" formControlName="identificacion" type="text"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="identificacion.invalid && (identificacion.dirty || identificacion.touched)">
+        <div *ngFor="let error of mensajesError.identificacion">
+          <small class="container-error-message" *ngIf="identificacion.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="correo">
+          {{constantes._correoElectronico}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="correo" id="correo" formControlName="correo" type="email"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="correo.invalid && (correo.dirty || correo.touched)">
+        <div *ngFor="let error of mensajesError.correo">
+          <small class="container-error-message" *ngIf="correo.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="contrasenia">
+          {{constantes._contrasenia}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="contrasenia" id="contrasenia" formControlName="contrasenia" type="password"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="contrasenia.invalid && (contrasenia.dirty || contrasenia.touched)">
+        <div *ngFor="let error of mensajesError.contrasenia">
+          <small class="container-error-message" *ngIf="contrasenia.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="contraseniaConfirmada">
+          {{constantes._confirmarContrasenia}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="contraseniaConfirmada" id="contraseniaConfirmada" formControlName="contraseniaConfirmada" type="password"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="contraseniaConfirmada.invalid && (contraseniaConfirmada.dirty || contraseniaConfirmada.touched)">
+        <div *ngFor="let error of mensajesError.contraseniaConfirmada">
+          <small class="container-error-message" *ngIf="contraseniaConfirmada.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <div class="botones-inferiores">
+        <ion-button expand="block" type="submit">{{constantes._registrar}}</ion-button>
+      </div>
+    </ion-list>
+  </form>
 </ion-content>
+<!-- <ion-footer>
+  <div>
+    <ion-button expand="block" type="ion-button" (click)="crearCuenta()" class="ion-no-margin">{{constantes._crearCuenta}}</ion-button>
+  </div>
+  <div >
+    <ion-button expand="block" type="ion-button" (click)="cancelar()" class="ion-no-margin">{{constantes._cancela}}</ion-button>
+  </div>
+</ion-footer> -->

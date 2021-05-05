@@ -5,7 +5,7 @@ import { FiltroConfiguracionUsuario } from './filtroConfiguracionUsuario';
 import { FiltroPersona } from './filtroPersona';
 
 export class Filtro {
-    id: number;
+    id: string;
     nombre: string;
     descripcion: string;
     categoriaFiltro: CategoriaFiltro;

@@ -1,9 +1,169 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>datos-personales</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-cabecera [titulo]="constantes._datosPersonales"></app-cabecera>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+  <form (submit)="finalizar()" [formGroup]="formularioDatosPersonales" errorTailor>
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">        
+      <ion-item>
+        <ion-label position="floating" for="nombresApellidos">
+          {{constantes._nombresApellidos}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="nombresApellidos" id="nombresApellidos" formControlName="nombresApellidos" type="text"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="nombresApellidos.invalid && (nombresApellidos.dirty || nombresApellidos.touched)">
+        <div *ngFor="let error of mensajesError.nombresApellidos">
+          <small class="container-error-message" *ngIf="nombresApellidos.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label for="pais">
+          {{constantes._pais}}
+        </ion-label>
+        <ion-select [compareWith]="compareWith" name="pais" id="pais" formControlName="pais" 
+        placeholder="Seleccione un Pais" (ngModelChange)="seleccionarPais()">
+          <ion-select-option *ngFor="let objPais of paises" [value]="objPais">
+            {{objPais}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="pais.invalid && (pais.dirty || pais.touched)">
+        <div *ngFor="let error of mensajesError.pais">
+          <small class="container-error-message" *ngIf="pais.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item *ngIf="pais">
+        <ion-label for="ciudad">{{constantes._ciudad}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="ciudad" id="ciudad" formControlName="ciudad" 
+        [placeholder]="ciudad ? ciudad : 'Seleccione una Ciudad'">
+          <ion-select-option *ngFor="let objCiudad of ciudades" [value]="objCiudad">
+            {{objCiudad}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="ciudad.invalid && (ciudad.dirty || ciudad.touched)">
+        <div *ngFor="let error of mensajesError.ciudad">
+          <small class="container-error-message" *ngIf="ciudad.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="direccion">
+          {{constantes._direccion}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="direccion" id="direccion" formControlName="direccion" type="text"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="direccion.invalid && (direccion.dirty || direccion.touched)">
+        <div *ngFor="let error of mensajesError.direccion">
+          <small class="container-error-message" *ngIf="direccion.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="telefono">
+          {{constantes._telefono}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="telefono" id="telefono" formControlName="telefono" type="number"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
+        <div *ngFor="let error of mensajesError.telefono">
+          <small class="container-error-message" *ngIf="telefono.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label for="nivelEstudios">{{constantes._nivelEstudios}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="nivelEstudios" id="nivelEstudios" formControlName="nivelEstudios" 
+        [placeholder]="persona.nivelEstudios ? persona.nivelEstudios : 'Seleccione un nivel de estudios'" (ngModelChange)="seleccionarNivelEstudios()">
+          <ion-select-option *ngFor="let objNivelEstudios of nivelesEstudios" [value]="objNivelEstudios">
+            {{objNivelEstudios}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="nivelEstudios.invalid && (nivelEstudios.dirty || nivelEstudios.touched)">
+        <div *ngFor="let error of mensajesError.nivelEstudios">
+          <small class="container-error-message" *ngIf="nivelEstudios.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item *ngIf="persona.nivelEstudios && persona.nivelEstudios=='Profesional'">
+        <ion-label for="profesion">{{constantes._profesion}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="profesion" id="profesion" formControlName="profesion" 
+        [placeholder]="persona.profesion ? persona.profesion : 'Seleccione una profesion'">
+          <ion-select-option *ngFor="let objProfesion of profesiones" [value]="objProfesion">
+            {{objProfesion}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="profesion.invalid && (profesion.dirty || profesion.touched)">
+        <div *ngFor="let error of mensajesError.profesion">
+          <small class="container-error-message" *ngIf="profesion.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label for="ocupacion">{{constantes._ocupacion}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="ocupacion" id="ocupacion" formControlName="ocupacion" 
+        [placeholder]="persona.ocupacion ? persona.ocupacion : 'Seleccione una ocupacion'">
+          <ion-select-option *ngFor="let objOcupacion of ocupaciones" [value]="objOcupacion">
+            {{objOcupacion}}
+          </ion-select-option>
+        </ion-select>        
+      </ion-item>
+      <div class="alert-danger" *ngIf="ocupacion.invalid && (ocupacion.dirty || ocupacion.touched)">
+        <div *ngFor="let error of mensajesError.ocupacion">
+          <small class="container-error-message" *ngIf="ocupacion.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label for="tipoLicencia">{{constantes._tipoLicencia}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="tipoLicencia" id="tipoLicencia" formControlName="tipoLicencia" 
+        [placeholder]="persona.tipoLicencia ? persona.tipoLicencia : 'Seleccione un tipo de licencia'">
+          <ion-select-option *ngFor="let objTipoLicencia of tiposLicencia" [value]="objTipoLicencia">
+            {{objTipoLicencia}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="tipoLicencia.invalid && (tipoLicencia.dirty || tipoLicencia.touched)">
+        <div *ngFor="let error of mensajesError.tipoLicencia">
+          <small class="container-error-message" *ngIf="tipoLicencia.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label for="tipoVehiculo">{{constantes._tipoVehiculo}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="tipoVehiculo" id="tipoVehiculo" formControlName="tipoVehiculo" 
+        [placeholder]="tipoVehiculo ? tipoVehiculo : 'Seleccione un tipo de vehículo'">
+          <ion-select-option *ngFor="let objTipoVehiculo of tiposVehiculos" [value]="objTipoVehiculo">
+            {{objTipoVehiculo}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="tipoVehiculo.invalid && (tipoVehiculo.dirty || tipoVehiculo.touched)">
+        <div *ngFor="let error of mensajesError.tipoVehiculo">
+          <small class="container-error-message" *ngIf="tipoVehiculo.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item *ngIf="tipoVehiculo">
+        <ion-label position="floating" for="placaVehiculo">{{constantes._placaVehiculo}}
+        </ion-label>
+        <ion-input name="placaVehiculo" id="placaVehiculo" formControlName="placaVehiculo" type="text"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="placaVehiculo.invalid && (placaVehiculo.dirty || placaVehiculo.touched)">
+        <div *ngFor="let error of mensajesError.placaVehiculo">
+          <small class="container-error-message" *ngIf="placaVehiculo.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="otros">{{constantes._otros}}</ion-label>
+        <ion-textarea  name="otros" id="otros" formControlName="otros"></ion-textarea>
+      </ion-item>
+      <div class="alert-danger" *ngIf="otros.invalid && (otros.dirty || otros.touched)">
+        <div *ngFor="let error of mensajesError.otros">
+          <small class="container-error-message" *ngIf="otros.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+    </ion-list>
+    <div class="botones-inferiores">
+      <ion-button expand="block" type="submit">{{constantes._finalizar}}</ion-button>
+    </div>
+  </form>
 </ion-content>
+<!-- 
+<ion-footer class="botones-inferiores">
+  <div>
+    <ion-button expand="block" type="ion-button" (click)="finalizar()" class="ion-no-margin">{{constantes._finalizar}}</ion-button>
+  </div>
+</ion-footer> -->

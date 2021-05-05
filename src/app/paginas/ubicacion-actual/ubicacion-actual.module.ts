@@ -7,13 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { UbicacionActualPageRoutingModule } from './ubicacion-actual-routing.module';
 
 import { UbicacionActualPage } from './ubicacion-actual.page';
+import { ComponentesModule } from '../../componentes/componentes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    UbicacionActualPageRoutingModule
+    UbicacionActualPageRoutingModule,
+    ComponentesModule,
+    
   ],
   declarations: [UbicacionActualPage]
 })

@@ -1,9 +1,69 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>solicitud</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-cabecera [titulo]="constantes._solicitud"></app-cabecera>
 
 <ion-content>
-
+  <ion-list lines="full" class="ion-no-margin ion-no-padding">        
+    <ion-item>
+      <ion-label position="floating" >{{constantes._titulo}}<ion-text color="danger">*</ion-text>
+      </ion-label>
+      <ion-input required [(ngModel)]=favor.titulo type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{constantes._descripcion}}<ion-text color="danger">*</ion-text></ion-label>
+      <ion-textarea [(ngModel)]=favor.descripcion maxlength="250"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{constantes._formaPago}}<ion-text color="danger">*</ion-text></ion-label>
+      <ion-select [compareWith]="compareWith" [(ngModel)]="favor.detalleTipoPago.tipoPago" multiple="false" 
+      [placeholder]="favor.detalleTipoPago.tipoPago ? favor.detalleTipoPago.tipoPago : 'Seleccione una tipo de pago'">
+        <ion-select-option *ngFor="let objTipoPago of tiposPago" [value]="objTipoPago">
+          {{objTipoPago.nombre}}
+        </ion-select-option>
+      </ion-select>        
+    </ion-item>
+    <ion-item *ngIf="favor.detalleTipoPago.tipoPago && favor.detalleTipoPago.tipoPago.nombre!='Valor Monetario'">
+      <ion-label position="floating">{{favor.detalleTipoPago.tipoPago.nombre=='Obsequio'? constantes._detalleObsequio : constantes._detalleFavor}}<ion-text color="danger">*</ion-text></ion-label>
+      <ion-textarea [(ngModel)]=favor.detalleTipoPago.descripcion maxlength="50"></ion-textarea>
+    </ion-item>
+    <ion-item *ngIf="favor.detalleTipoPago.tipoPago && favor.detalleTipoPago.tipoPago.nombre=='Valor Monetario'">
+      <ion-label position="floating">{{constantes._valorPagar}} ($)<ion-text color="danger">*</ion-text></ion-label>
+      <ion-input required type="number" [(ngModel)]=favor.detalleTipoPago.valor></ion-input>
+    </ion-item>
+  </ion-list>
+  <!-- <ion-list>
+    <ion-list-header>{{constantes._filtros}}</ion-list-header>
+    <p>
+      <ion-chip  color="primary">
+        <ion-icon name="filtro1"></ion-icon>
+        <ion-label>Filtro 1</ion-label>
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip outline color="secondary">
+        <ion-icon name="filtro2"></ion-icon>
+        <ion-label>Filtro 2</ion-label>
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip outline color="tertiary">
+        <ion-icon name="filtro3"></ion-icon>
+        <ion-label>Filtro 3</ion-label>
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+      <ion-chip outline color="dark">
+        <ion-icon name="filtro4"></ion-icon>
+        <ion-label>Filtro 4</ion-label>
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+    </p>
+  </ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label >{{constantes._ubicacion}}</ion-label>
+    </ion-item>
+  </ion-list> -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="solicitar()">
+      <ion-icon name="redo" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<app-pie-pagina></app-pie-pagina>

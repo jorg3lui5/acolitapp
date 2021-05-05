@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "acolitapp-85f04": {
+      "hosting": {
+        "app": [
+          "acolitapp-85f04"
+        ]
+      }
+    }
+  }
+}

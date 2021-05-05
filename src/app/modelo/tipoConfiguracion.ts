@@ -2,7 +2,7 @@ import { Persona } from './persona';
 import { FiltroConfiguracionUsuario } from './filtroConfiguracionUsuario';
 
 export class TipoConfiguracion {
-    id: number;
+    id: string;
     nombre: string;
     filtroConfiguracionUsuarioList: FiltroConfiguracionUsuario[];
     

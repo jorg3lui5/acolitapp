@@ -3,7 +3,7 @@ import { Favor } from './favor';
 import { Filtro } from './filtro';
 
 export class FiltroFavor {
-    id: number;
+    id: string;
     valorString: String;
     valorInt: number;
     tabla: number;

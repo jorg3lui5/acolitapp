@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Componente } from 'src/app/interfaces/interfaces';
+import { OpcionesMenuService } from '../../servicios/menu/opciones-menu.service';
 
 @Component({
   selector: 'app-menu-lateral',
@@ -6,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu-lateral.component.scss'],
 })
 export class MenuLateralComponent implements OnInit {
+  componentes: Observable<Componente[]>;
 
-  constructor() { }
+  constructor(
+    private _opcionesMenuService: OpcionesMenuService
+  ) {
 
-  ngOnInit() {}
+  }
+
+  ngOnInit() {
+    this.componentes=this._opcionesMenuService.getOpcionesMenu();
+  }
 
 }

@@ -1,9 +1,37 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>favor-recibido</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-cabecera [titulo]="constantes._favorRecibido"></app-cabecera>
 
 <ion-content>
-
+  <ion-list lines="full" class="ion-no-margin ion-no-padding">   
+    <ion-item>
+        <h1>Titulo</h1>
+    </ion-item>     
+    <ion-item>
+      <ion-label>nombre
+      </ion-label>
+      <ion-label>puntaje
+      </ion-label>
+    </ion-item>
+    <ion-item>
+        <p>descripcion</p>
+    </ion-item>  
+    <ion-item>
+      <ion-label>{{constantes._formaPago}}:
+      </ion-label>
+      <ion-label>forma
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{constantes._ubicacion}}:
+      </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label>{{constantes._calificacion}}
+        </ion-label>
+      </ion-item>
+  </ion-list>
+  <div>
+    <ion-button expand="block" type="submit" class="ion-no-margin">{{constantes._realizar}}</ion-button>
+  </div>
 </ion-content>
+
+<app-pie-pagina></app-pie-pagina>

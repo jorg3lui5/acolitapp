@@ -1,7 +1,7 @@
 import { Persona } from './persona';
 
 export class TipoLicencia {
-    id: number;
+    id: string;
     nombre: string;
     personaList: Persona[];
     

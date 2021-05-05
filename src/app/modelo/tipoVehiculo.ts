@@ -2,7 +2,7 @@ import { Persona } from './persona';
 import { Vehiculo } from './vehiculo';
 
 export class TipoVehiculo {
-    id: number;
+    id: string;
     nombre: string;
     vehiculoList: Vehiculo[];
     

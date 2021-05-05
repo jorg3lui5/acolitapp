@@ -2,7 +2,7 @@ import { Persona } from './persona';
 import { DetalleTipoPago } from './detalleTipoPago';
 
 export class TipoPago {
-    id: number;
+    id: string;
     nombre: string;
     detalleTipoPagoList:DetalleTipoPago[];
     

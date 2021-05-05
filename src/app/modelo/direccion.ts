@@ -5,7 +5,7 @@ import { Ubicacion } from './ubicacion';
 import { Favor } from './favor';
 
 export class Direccion {
-    id: number;
+    id: string;
     callePrincipal: string;
     calleSecundaria: string;
     barrio: string;

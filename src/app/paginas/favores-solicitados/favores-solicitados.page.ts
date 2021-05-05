@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { Constantes } from '../../compartido/constantes';
 
 @Component({
   selector: 'app-favores-solicitados',
@@ -6,10 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./favores-solicitados.page.scss'],
 })
 export class FavoresSolicitadosPage implements OnInit {
-
-  constructor() { }
+  item: any;
+  constantes: Constantes = new Constantes;
+  
+  constructor(
+    public navCtrl: NavController,
+  ) { }
 
   ngOnInit() {
   }
 
+  unread(item){
+
+  }
+
+  nuevaSolicitud(){
+    this.navCtrl.navigateForward("/solicitud");
+  }
 }

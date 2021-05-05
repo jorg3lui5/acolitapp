@@ -1,7 +1,7 @@
 import { Persona } from './persona';
 
 export class NivelEstudios {
-    id: number;
+    id: string;
     nombre: string;
     
 }

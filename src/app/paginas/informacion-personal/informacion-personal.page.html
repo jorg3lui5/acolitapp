@@ -1,9 +1,73 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>informacion-personal</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<app-cabecera [titulo]="constantes._informacionPersonal"></app-cabecera>
 <ion-content>
-
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">   
+        <ion-item>
+            <h1>cedula</h1>
+        </ion-item>     
+        <ion-item>
+            <h1>nombre</h1>
+        </ion-item> 
+        <ion-item>
+          <ion-thumbnail>
+            <ion-img src="../../assets/img/logo.png"></ion-img>
+          </ion-thumbnail>
+        </ion-item>
+        <ion-item>
+            <ion-label>{{constantes._nombresApellidos}}
+            </ion-label>
+            <ion-label>{{constantes._nombresApellidos}}
+              </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._nacionalidad}}
+            </ion-label>
+            <ion-label>{{constantes._nacionalidad}}
+              </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._nivelEstudios}}
+            </ion-label>
+            <ion-label>{{constantes._nivelEstudios}}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._profesion}}
+            </ion-label>
+            <ion-label>{{constantes._profesion}}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._ocupacion}}
+            </ion-label>
+            <ion-label>{{constantes._ocupacion}}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._licencia}}
+            </ion-label>
+            <ion-label>{{constantes._licencia}}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._placaVehiculo}}
+            </ion-label>
+            <ion-label>{{constantes._placaVehiculo}}
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._ubicacion}}:
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{constantes._otros}}
+            </ion-label>
+            <ion-label>{{constantes._otros}}
+            </ion-label>
+          </ion-item>
+      </ion-list>
+      <div>
+        <ion-button expand="block" type="submit" class="ion-no-margin">{{constantes._aceptar}}</ion-button>
+      </div>
 </ion-content>
+
+<app-pie-pagina></app-pie-pagina>

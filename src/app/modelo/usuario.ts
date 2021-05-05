@@ -5,8 +5,8 @@ import { Favor } from './favor';
 import { UsuarioAyudaFavor } from './usuarioAyudaFavor';
 
 export class Usuario {
-    id: number;
-    usuario: Usuario;
+    id: string;
+    usuario: string;
     correo: string;
     contrasenia: string;
     foto: any;

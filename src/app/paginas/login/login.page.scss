@@ -1,0 +1,18 @@
+// input.ng-invalid.ng-touched input.ng-invalid.ng-untouched {
+//     border: solid  2px red;
+// }
+
+// input.ng-valid {
+//     border: solid 2px blue;
+// }
+
+.logo {
+    background-image: url(../../../assets/img/logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: top center;
+    border: none;
+    width: 100%;
+    height: 40vh;
+    overflow: auto;
+}

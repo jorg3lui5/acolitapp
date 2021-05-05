@@ -1,3 +1,25 @@
-<p>
-  menu-lateral works!
-</p>
+<!-- can be "xs", "sm", "md", "lg", or "xl" -->
+<ion-split-pane when="md" contentId="main">
+  <ion-menu side="start" menuId="first" contentId="main">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-avatar>
+          <img src="../assets/img/logo.png">
+        </ion-avatar>
+        <ion-title>Menú</ion-title>
+        <ion-label>jorg3lui5</ion-label>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle *ngFor="let c of componentes | async" autoHide="false">
+          <ion-item [routerLink]="c.redirectTo" detail>
+            <ion-icon [name]="c.icon" slot="start" color="primary"></ion-icon>
+            {{c.name}}
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-split-pane>

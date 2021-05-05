@@ -7,13 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { FiltrosPageRoutingModule } from './filtros-routing.module';
 
 import { FiltrosPage } from './filtros.page';
+import { ComponentesModule } from '../../componentes/componentes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FiltrosPageRoutingModule
+    FiltrosPageRoutingModule,
+    ComponentesModule,
+    
   ],
   declarations: [FiltrosPage]
 })

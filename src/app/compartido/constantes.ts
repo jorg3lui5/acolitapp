@@ -74,9 +74,12 @@ export class Constantes {
     public _no= 'No';
     public _tipoLicencia= 'Tipo de licencia';
     public _direccion= 'Dirección';
+    public _telefono= 'Teléfono';
     public _callePrincipal= 'Calle principal';
     public _calleSecundaria= 'Calle secundaria';
     public _barrio= 'Barrio';
     public _numeroCasa= 'Número de casa';
     public _referencia= 'Referencia';
+    public _expresionMail= '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
+    public _duracionToast= 2000;
 }

@@ -3,7 +3,7 @@ import { TipoVehiculo } from './tipoVehiculo';
 import { VehiculoPersona } from './vehiculoPersona';
 
 export class Vehiculo {
-    id: number;
+    id: string;
     nombre: string;
     placa: string;
     tipoVehiculo: TipoVehiculo;

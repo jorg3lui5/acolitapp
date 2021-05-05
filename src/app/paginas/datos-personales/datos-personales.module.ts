@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { DatosPersonalesPageRoutingModule } from './datos-personales-routing.module';
 
 import { DatosPersonalesPage } from './datos-personales.page';
+import { ComponentesModule } from '../../componentes/componentes.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DatosPersonalesPageRoutingModule
+    DatosPersonalesPageRoutingModule,
+    ComponentesModule,
+    ReactiveFormsModule
   ],
   declarations: [DatosPersonalesPage]
 })

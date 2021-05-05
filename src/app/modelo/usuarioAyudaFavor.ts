@@ -3,7 +3,7 @@ import { Favor } from './favor';
 import { Usuario } from './usuario';
 
 export class UsuarioAyudaFavor {
-    id: number;
+    id: string;
     estadoAceptacion: string;
     favor: Favor;
     usuario: Usuario;

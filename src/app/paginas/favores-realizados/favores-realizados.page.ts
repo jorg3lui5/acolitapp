@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Constantes } from '../../compartido/constantes';
 
 @Component({
   selector: 'app-favores-realizados',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./favores-realizados.page.scss'],
 })
 export class FavoresRealizadosPage implements OnInit {
+  item: any;
+  constantes: Constantes = new Constantes;
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  unread(item){
+
+  }
 }

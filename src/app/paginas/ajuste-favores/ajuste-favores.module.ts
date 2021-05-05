@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AjusteFavoresPageRoutingModule } from './ajuste-favores-routing.module';
 
 import { AjusteFavoresPage } from './ajuste-favores.page';
+import { ComponentesModule } from '../../componentes/componentes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AjusteFavoresPageRoutingModule
+    AjusteFavoresPageRoutingModule,
+    ComponentesModule,
   ],
   declarations: [AjusteFavoresPage]
 })

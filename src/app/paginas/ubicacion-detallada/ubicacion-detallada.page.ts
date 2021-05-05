@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Constantes } from '../../compartido/constantes';
 
 @Component({
   selector: 'app-ubicacion-detallada',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ubicacion-detallada.page.scss'],
 })
 export class UbicacionDetalladaPage implements OnInit {
+  constantes: Constantes = new Constantes;
 
   constructor() { }
 

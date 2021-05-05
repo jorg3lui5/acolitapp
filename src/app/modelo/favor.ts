@@ -7,7 +7,7 @@ import { Direccion } from './direccion';
 import { Usuario } from './usuario';
 
 export class Favor {
-    id: number;
+    id: string;
     titulo: string;
     descripcion: string;
     estado: String;

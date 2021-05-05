@@ -1,9 +1,43 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-cabecera [titulo]="constantes._inicioSesion"></app-cabecera>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+  <div class="logo">
+  </div>
+  <form (submit)="loguear()" [formGroup]="formularioLogin" errorTailor>
+      <ion-item>
+        <ion-label position="floating" for="correo">
+          {{constantes._correoElectronico}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="correo" id="correo" type="email" formControlName="correo"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="correo.invalid && (correo.dirty || correo.touched)">
+        <div *ngFor="let error of mensajesError.correo">
+          <small class="container-error-message" *ngIf="correo.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="contrasenia">
+          {{constantes._contrasenia}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="contrasenia" id="contrasenia" type="password" formControlName="contrasenia"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="contrasenia.invalid && (contrasenia.dirty || contrasenia.touched)">
+        <div *ngFor="let error of mensajesError.contrasenia">
+          <small class="container-error-message" *ngIf="contrasenia.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <div class="botones-inferiores">
+        <ion-button expand="block" type="submit">{{constantes._iniciarSesion}}</ion-button>
+      </div>
+  </form>
+  <ion-button expand="block" type="ion-button" (click)="abrirRegistro()">{{constantes._registrar}}</ion-button>
 </ion-content>
+
+<!-- <ion-footer>
+  <div>
+    <ion-button ion-padding expand="block" type="submit" (click)="loguear(usuario.usuario, usuario.contrasenia)" class="ion-no-margin">{{constantes._iniciarSesion}}</ion-button>
+  </div>
+  <div>
+    <ion-button ion-padding expand="block" type="ion-button" (click)="abrirRegistro()" class="ion-no-margin">{{constantes._registrar}}</ion-button>
+  </div>
+</ion-footer> -->

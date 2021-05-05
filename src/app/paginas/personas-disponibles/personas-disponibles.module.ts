@@ -7,13 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { PersonasDisponiblesPageRoutingModule } from './personas-disponibles-routing.module';
 
 import { PersonasDisponiblesPage } from './personas-disponibles.page';
+import { ComponentesModule } from '../../componentes/componentes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PersonasDisponiblesPageRoutingModule
+    PersonasDisponiblesPageRoutingModule,
+    ComponentesModule,
+    
   ],
   declarations: [PersonasDisponiblesPage]
 })

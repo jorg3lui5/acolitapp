@@ -2,7 +2,7 @@ import { Persona } from './persona';
 import { Trabajo } from './trabajo';
 
 export class Ocupacion {
-    id: number;
+    id: string;
     nombre: string;
     trabajoList: Trabajo[];
     personaList: Persona[];

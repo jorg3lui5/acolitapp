@@ -2,7 +2,7 @@ import { Persona } from './persona';
 import { Filtro } from './filtro';
 
 export class FiltroPersona {
-    id: number;
+    id: string;
     valorString: string;
     valorInt: number;
     tabla: number;
