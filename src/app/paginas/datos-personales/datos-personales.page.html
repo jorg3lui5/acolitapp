@@ -147,12 +147,12 @@
         </div>
       </div>
       <ion-item>
-        <ion-label position="floating" for="otros">{{constantes._otros}}</ion-label>
-        <ion-textarea  name="otros" id="otros" formControlName="otros"></ion-textarea>
+        <ion-label position="floating" for="informacionAdicional">{{constantes._informacionAdicional}}</ion-label>
+        <ion-textarea  name="informacionAdicional" id="informacionAdicional" formControlName="informacionAdicional"></ion-textarea>
       </ion-item>
-      <div class="alert-danger" *ngIf="otros.invalid && (otros.dirty || otros.touched)">
-        <div *ngFor="let error of mensajesError.otros">
-          <small class="container-error-message" *ngIf="otros.hasError(error.tipo)">{{error.mensaje}}</small>
+      <div class="alert-danger" *ngIf="informacionAdicional.invalid && (informacionAdicional.dirty || informacionAdicional.touched)">
+        <div *ngFor="let error of mensajesError.informacionAdicional">
+          <small class="container-error-message" *ngIf="informacionAdicional.hasError(error.tipo)">{{error.mensaje}}</small>
         </div>
       </div>
     </ion-list>
