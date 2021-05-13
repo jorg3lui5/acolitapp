@@ -6,6 +6,7 @@ export class Constantes {
     public _registro = 'Registro';
     public _registrar = 'Registrar';
     public _datosPersonales = 'Datos personales';
+    public _favor= 'Favor';
     public _favores= 'Favores';
     public _solicitud= 'Solicitud';
     public _notificaciones= 'Notificaciones';
@@ -82,4 +83,7 @@ export class Constantes {
     public _referencia= 'Referencia';
     public _expresionMail= '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$';
     public _duracionToast= 2000;
+    public _solicitar= 'Solicitar';
+    public _todos= 'Todos';
+    public _rechazar= 'Rechazar';
 }

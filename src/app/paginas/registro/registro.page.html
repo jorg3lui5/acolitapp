@@ -4,17 +4,6 @@
   <form (submit)="registrar()" [formGroup]="formularioRegistro" errorTailor>
     <ion-list lines="full" class="ion-no-margin ion-no-padding">        
       <ion-item>
-        <ion-label position="floating" for="identificacion">
-          {{constantes._identificacion}}<ion-text color="danger">*</ion-text>
-        </ion-label>
-        <ion-input name="identificacion" id="identificacion" formControlName="identificacion" type="text"></ion-input>
-      </ion-item>
-      <div class="alert-danger" *ngIf="identificacion.invalid && (identificacion.dirty || identificacion.touched)">
-        <div *ngFor="let error of mensajesError.identificacion">
-          <small class="container-error-message" *ngIf="identificacion.hasError(error.tipo)">{{error.mensaje}}</small>
-        </div>
-      </div>
-      <ion-item>
         <ion-label position="floating" for="correo">
           {{constantes._correoElectronico}}<ion-text color="danger">*</ion-text>
         </ion-label>

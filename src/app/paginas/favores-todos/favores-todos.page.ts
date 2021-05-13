@@ -1,0 +1,133 @@
+import { Component, OnChanges, OnInit } from '@angular/core';
+import { FavorDTO } from '../../modelo/dto/favor-dto';
+import { Constantes } from '../../compartido/constantes';
+import { FavorService } from '../../servicios/favor.service';
+import { UsuarioService } from '../../servicios/usuario.service';
+import { PersonaService } from '../../servicios/persona.service';
+import { Usuario } from '../../modelo/usuario';
+import { Persona } from '../../modelo/persona';
+import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
+import { ToastController } from '@ionic/angular';
+import { StorageService } from '../../servicios/librerias/storage.service';
+
+@Component({
+  selector: 'app-favores-todos',
+  templateUrl: './favores-todos.page.html',
+  styleUrls: ['./favores-todos.page.scss'],
+})
+export class FavoresTodosPage implements OnInit, OnChanges {
+  favores: FavorDTO[]=[];
+  constantes: Constantes = new Constantes;
+  tipoFavor: string=TipoFavorEnum.otro;
+  usuario: string;
+
+  sliderOpts = {
+    allowSlidePrev:false,
+    allowSlideNext: false
+  }
+
+  constructor(
+    public _favorService: FavorService,
+    public _usuarioService: UsuarioService,
+    public _personaService: PersonaService,
+    public toastController: ToastController,
+    private _storageService:StorageService,
+  ) {
+    console.log('recuper1');
+
+  }
+
+  ngOnInit() {
+    this.recuperarUsuario();
+  }
+
+  ngOnChanges(){
+    console.log('recuper2',this.usuario)
+
+  }
+
+  recuperarFavores(){
+    console.log('recuper');
+    this._favorService.listarTodos().subscribe(res => {
+      this.favores = res.map( (e:any) => {
+        return {
+          id: e.payload.doc.id,
+          ...<any>e.payload.doc.data()
+        } as FavorDTO;
+      });
+      for(let favor of this.favores){
+        if(favor.usuarioSolicita){
+          this._usuarioService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
+            let usuarios=[];
+            res.forEach((doc) => {
+              usuarios.push({
+                id: doc.id,
+                ...<any>doc.data()
+              } as Usuario);
+            });
+            this._personaService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
+              let personas=[];
+              res.forEach((doc) => {
+                personas.push( {
+                  id: doc.id,
+                  ...<any>doc.data()
+                } as Persona);
+              });
+              favor.usuarioSolicita=usuarios[0];
+              favor.usuarioSolicita.persona=personas[0];
+            }); 
+          }); 
+        }
+        if(favor.usuarioRealiza){
+          this._usuarioService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
+            let usuarios=[];
+            res.forEach((doc) => {
+              usuarios.push({
+                id: doc.id,
+                ...<any>doc.data()
+              } as Usuario);
+            });
+            this._personaService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
+              let personas=[];
+              res.forEach((doc) => {
+                personas.push( {
+                  id: doc.id,
+                  ...<any>doc.data()
+                } as Persona);
+              });
+              favor.usuarioRealiza=usuarios[0];
+              favor.usuarioRealiza.persona=personas[0];
+            }); 
+          }); 
+        }
+      }
+    });   
+  }
+
+  recuperarUsuario(){
+    this._storageService.recuperar(this.constantes._usuario).then(
+      (data:string)=>{
+        if(data){
+          this.usuario=data;
+          console.log('usuare,',this.usuario);
+          this.recuperarFavores();
+        }
+        else{
+          this.mostrarMensaje("No pudo recuperar el usuario");
+        }
+      }
+    )
+    .catch(err=>{
+        console.log("error: "+err);
+        this.mostrarMensaje(err.message);
+    });
+  }
+
+  async mostrarMensaje(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: this.constantes._duracionToast
+    });
+    toast.present();
+  }
+}

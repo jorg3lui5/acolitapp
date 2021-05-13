@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Constantes } from '../../compartido/constantes';
 import { UsuarioService } from '../../servicios/usuario.service';
+import { StorageService } from '../../servicios/librerias/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-favores',
@@ -10,14 +12,16 @@ import { UsuarioService } from '../../servicios/usuario.service';
 export class FavoresPage implements OnInit {
 
   constantes: Constantes = new Constantes;
-
   constructor(
-    private _usuarioService: UsuarioService,
+    private router: Router,
 
   ) { }
 
   ngOnInit() {
-    //this._usuarioService.logout();
+
   }
 
+  nuevoFavor(){
+    this.router.navigate(['/solicitud']);
+  }
 }

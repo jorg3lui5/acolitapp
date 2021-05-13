@@ -8,6 +8,7 @@ import { SolicitudPageRoutingModule } from './solicitud-routing.module';
 
 import { SolicitudPage } from './solicitud.page';
 import { ComponentesModule } from '../../componentes/componentes.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { ComponentesModule } from '../../componentes/componentes.module';
     IonicModule,
     SolicitudPageRoutingModule,
     ComponentesModule,
+    ReactiveFormsModule
     
   ],
   declarations: [SolicitudPage]

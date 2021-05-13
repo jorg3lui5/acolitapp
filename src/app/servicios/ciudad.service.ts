@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { RespuestaDTO } from 'src/app/modelo/dto/RespuestaDTO';
 import { Observable } from 'rxjs';
+import { CiudadesPorPaisPipe } from '../pipes/ciudades-por-pais.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class CiudadService {
   
   urlBase: string =environment.urlBase;
   servicio: string= "ciudad/";
+
+  ciudadesPorPaisPipe: CiudadesPorPaisPipe = new CiudadesPorPaisPipe();
   
   constructor(private http: HttpClient) {
 
@@ -44,5 +47,10 @@ export class CiudadService {
   listarPorIdPais(id): Observable<RespuestaDTO> {
     let apiURL = this.urlBase+this.servicio+'listarPorIdPais/'+id
     return this.http.get<RespuestaDTO>(apiURL)
+  }
+
+  listarPorPais(pais): string[] {
+    let objetos:string[]=this.ciudadesPorPaisPipe.transform(pais);
+    return objetos;
   }
 }

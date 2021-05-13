@@ -1,0 +1,35 @@
+.favores-subtitulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.favores-calificaciones {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.favores-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.favores-boton-mostrar-opciones {
+    display: flex;
+    justify-content: flex-end;
+}
+
+ion-button {
+    --padding-end: 0px !important;
+    --padding-start: 0px !important;
+}
+
+.favores-chip {
+    margin-left: 0px;
+}
+
+.favores-estado-calificaciones{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

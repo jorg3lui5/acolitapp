@@ -1,8 +1,19 @@
-<app-cabecera [titulo]="constantes._datosPersonales"></app-cabecera>
+<app-cabecera [titulo]="constantes._datosPersonales" [ocultarBotones]=true></app-cabecera>
 
 <ion-content class="ion-padding">
   <form (submit)="finalizar()" [formGroup]="formularioDatosPersonales" errorTailor>
-    <ion-list lines="full" class="ion-no-margin ion-no-padding">        
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-item>
+        <ion-label position="floating" for="identificacion">
+          {{constantes._identificacion}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="identificacion" id="identificacion" formControlName="identificacion" type="text"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="identificacion.invalid && (identificacion.dirty || identificacion.touched)">
+        <div *ngFor="let error of mensajesError.identificacion">
+          <small class="container-error-message" *ngIf="identificacion.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
       <ion-item>
         <ion-label position="floating" for="nombresApellidos">
           {{constantes._nombresApellidos}}<ion-text color="danger">*</ion-text>
@@ -15,11 +26,12 @@
         </div>
       </div>
       <ion-item>
-        <ion-label for="pais">
+        <ion-label position="floating" for="pais">
           {{constantes._pais}}
         </ion-label>
-        <ion-select [compareWith]="compareWith" name="pais" id="pais" formControlName="pais" 
-        placeholder="Seleccione un Pais" (ngModelChange)="seleccionarPais()">
+        <ion-select [compareWith]="compareWith" name="pais" id="pais" formControlName="pais" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.pais ? formularioDatosPersonales.value.pais : 'Seleccione un país'" (ngModelChange)="seleccionarPais()" [ngStyle]="{'opacity': formularioDatosPersonales.value.pais?1:0.3}">
+        <ion-select-option value="">Seleccione un país</ion-select-option>
           <ion-select-option *ngFor="let objPais of paises" [value]="objPais">
             {{objPais}}
           </ion-select-option>
@@ -30,11 +42,12 @@
           <small class="container-error-message" *ngIf="pais.hasError(error.tipo)">{{error.mensaje}}</small>
         </div>
       </div>
-      <ion-item *ngIf="pais">
-        <ion-label for="ciudad">{{constantes._ciudad}}</ion-label>
-        <ion-select [compareWith]="compareWith" name="ciudad" id="ciudad" formControlName="ciudad" 
-        [placeholder]="ciudad ? ciudad : 'Seleccione una Ciudad'">
-          <ion-select-option *ngFor="let objCiudad of ciudades" [value]="objCiudad">
+      <ion-item *ngIf="formularioDatosPersonales.value.pais">
+        <ion-label position="floating" for="ciudad">{{constantes._ciudad}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="ciudad" id="ciudad" formControlName="ciudad" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.ciudad ? formularioDatosPersonales.value.ciudad : 'Seleccione una ciudad'" [ngStyle]="{'opacity': formularioDatosPersonales.value.ciudad?1:0.3}">
+        <ion-select-option value="">Seleccione una ciudad</ion-select-option>  
+        <ion-select-option *ngFor="let objCiudad of ciudades" [value]="objCiudad">
             {{objCiudad}}
           </ion-select-option>
         </ion-select>
@@ -59,7 +72,7 @@
         <ion-label position="floating" for="telefono">
           {{constantes._telefono}}<ion-text color="danger">*</ion-text>
         </ion-label>
-        <ion-input name="telefono" id="telefono" formControlName="telefono" type="number"></ion-input>
+        <ion-input name="telefono" id="telefono" formControlName="telefono" type="tel"></ion-input>
       </ion-item>
       <div class="alert-danger" *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
         <div *ngFor="let error of mensajesError.telefono">
@@ -67,9 +80,10 @@
         </div>
       </div>
       <ion-item>
-        <ion-label for="nivelEstudios">{{constantes._nivelEstudios}}</ion-label>
-        <ion-select [compareWith]="compareWith" name="nivelEstudios" id="nivelEstudios" formControlName="nivelEstudios" 
-        [placeholder]="persona.nivelEstudios ? persona.nivelEstudios : 'Seleccione un nivel de estudios'" (ngModelChange)="seleccionarNivelEstudios()">
+        <ion-label position="floating" for="nivelEstudios">{{constantes._nivelEstudios}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="nivelEstudios" id="nivelEstudios" formControlName="nivelEstudios" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.nivelEstudios ? formularioDatosPersonales.value.nivelEstudios : 'Seleccione un nivel de estudios'" (ngModelChange)="seleccionarNivelEstudios()" [ngStyle]="{'opacity': formularioDatosPersonales.value.nivelEstudios?1:0.3}">
+          <ion-select-option value="">Seleccione un nivel de estudios</ion-select-option>  
           <ion-select-option *ngFor="let objNivelEstudios of nivelesEstudios" [value]="objNivelEstudios">
             {{objNivelEstudios}}
           </ion-select-option>
@@ -80,10 +94,11 @@
           <small class="container-error-message" *ngIf="nivelEstudios.hasError(error.tipo)">{{error.mensaje}}</small>
         </div>
       </div>
-      <ion-item *ngIf="persona.nivelEstudios && persona.nivelEstudios=='Profesional'">
-        <ion-label for="profesion">{{constantes._profesion}}</ion-label>
-        <ion-select [compareWith]="compareWith" name="profesion" id="profesion" formControlName="profesion" 
-        [placeholder]="persona.profesion ? persona.profesion : 'Seleccione una profesion'">
+      <ion-item *ngIf="formularioDatosPersonales.value.nivelEstudios && formularioDatosPersonales.value.nivelEstudios=='Profesional'">
+        <ion-label position="floating" for="profesion">{{constantes._profesion}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="profesion" id="profesion" formControlName="profesion" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.profesion ? formularioDatosPersonales.value.profesion : 'Seleccione una profesion'" [ngStyle]="{'opacity': formularioDatosPersonales.value.profesion?1:0.3}">
+          <ion-select-option value="">Seleccione una profesión</ion-select-option>
           <ion-select-option *ngFor="let objProfesion of profesiones" [value]="objProfesion">
             {{objProfesion}}
           </ion-select-option>
@@ -95,9 +110,12 @@
         </div>
       </div>
       <ion-item>
-        <ion-label for="ocupacion">{{constantes._ocupacion}}</ion-label>
-        <ion-select [compareWith]="compareWith" name="ocupacion" id="ocupacion" formControlName="ocupacion" 
-        [placeholder]="persona.ocupacion ? persona.ocupacion : 'Seleccione una ocupacion'">
+        <ion-label position="floating" for="ocupacion">
+          {{constantes._ocupacion}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-select [compareWith]="compareWith" name="ocupacion" id="ocupacion" formControlName="ocupacion" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.ocupacion ? formularioDatosPersonales.value.ocupacion : 'Seleccione una ocupacion'" [ngStyle]="{'opacity': formularioDatosPersonales.value.ocupacion?1:0.3}">
+          <ion-select-option value="">Seleccione una ocupación</ion-select-option>  
           <ion-select-option *ngFor="let objOcupacion of ocupaciones" [value]="objOcupacion">
             {{objOcupacion}}
           </ion-select-option>
@@ -109,9 +127,10 @@
         </div>
       </div>
       <ion-item>
-        <ion-label for="tipoLicencia">{{constantes._tipoLicencia}}</ion-label>
-        <ion-select [compareWith]="compareWith" name="tipoLicencia" id="tipoLicencia" formControlName="tipoLicencia" 
-        [placeholder]="persona.tipoLicencia ? persona.tipoLicencia : 'Seleccione un tipo de licencia'">
+        <ion-label position="floating" for="tipoLicencia">{{constantes._tipoLicencia}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="tipoLicencia" id="tipoLicencia" formControlName="tipoLicencia" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.tipoLicencia ? formularioDatosPersonales.value.tipoLicencia : 'Seleccione un tipo de licencia'" [ngStyle]="{'opacity': formularioDatosPersonales.value.tipoLicencia?1:0.3}">
+          <ion-select-option value="">Seleccione un tipo de licencia</ion-select-option>
           <ion-select-option *ngFor="let objTipoLicencia of tiposLicencia" [value]="objTipoLicencia">
             {{objTipoLicencia}}
           </ion-select-option>
@@ -123,9 +142,10 @@
         </div>
       </div>
       <ion-item>
-        <ion-label for="tipoVehiculo">{{constantes._tipoVehiculo}}</ion-label>
-        <ion-select [compareWith]="compareWith" name="tipoVehiculo" id="tipoVehiculo" formControlName="tipoVehiculo" 
-        [placeholder]="tipoVehiculo ? tipoVehiculo : 'Seleccione un tipo de vehículo'">
+        <ion-label position="floating" for="tipoVehiculo">{{constantes._tipoVehiculo}}</ion-label>
+        <ion-select [compareWith]="compareWith" name="tipoVehiculo" id="tipoVehiculo" formControlName="tipoVehiculo" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioDatosPersonales.value.tipoVehiculo ? formularioDatosPersonales.value.tipoVehiculo : 'Seleccione un tipo de vehículo'" (ngModelChange)="seleccionarTipoVehiculo()" [ngStyle]="{'opacity': formularioDatosPersonales.value.tipoVehiculo?1:0.3}">
+          <ion-select-option value="">Seleccione un tipo de vehículo</ion-select-option>
           <ion-select-option *ngFor="let objTipoVehiculo of tiposVehiculos" [value]="objTipoVehiculo">
             {{objTipoVehiculo}}
           </ion-select-option>
@@ -136,7 +156,7 @@
           <small class="container-error-message" *ngIf="tipoVehiculo.hasError(error.tipo)">{{error.mensaje}}</small>
         </div>
       </div>
-      <ion-item *ngIf="tipoVehiculo">
+      <ion-item *ngIf="formularioDatosPersonales.value.tipoVehiculo">
         <ion-label position="floating" for="placaVehiculo">{{constantes._placaVehiculo}}
         </ion-label>
         <ion-input name="placaVehiculo" id="placaVehiculo" formControlName="placaVehiculo" type="text"></ion-input>
@@ -148,7 +168,7 @@
       </div>
       <ion-item>
         <ion-label position="floating" for="informacionAdicional">{{constantes._informacionAdicional}}</ion-label>
-        <ion-textarea  name="informacionAdicional" id="informacionAdicional" formControlName="informacionAdicional"></ion-textarea>
+        <ion-textarea  name="informacionAdicional" id="informacionAdicional" formControlName="informacionAdicional" rows="5"></ion-textarea>
       </ion-item>
       <div class="alert-danger" *ngIf="informacionAdicional.invalid && (informacionAdicional.dirty || informacionAdicional.touched)">
         <div *ngFor="let error of mensajesError.informacionAdicional">

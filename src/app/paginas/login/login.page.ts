@@ -62,8 +62,10 @@ export class LoginPage implements OnInit {
 
   loguear() {
     if(this.formularioLogin.valid){
+      console.log('recuperi1',this.formularioLogin.value.correo);
       this._usuarioService.loguear(this.formularioLogin.value.correo,this.formularioLogin.value.contrasenia)
       .then((data:User)=>{
+        console.log('recuperi',data);
         this._storageService.guardar(this.constantes._usuario,data.email);
         this.router.navigate(['/favores']);
       })

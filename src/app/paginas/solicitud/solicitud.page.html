@@ -1,69 +1,104 @@
 <app-cabecera [titulo]="constantes._solicitud"></app-cabecera>
 
-<ion-content>
-  <ion-list lines="full" class="ion-no-margin ion-no-padding">        
-    <ion-item>
-      <ion-label position="floating" >{{constantes._titulo}}<ion-text color="danger">*</ion-text>
-      </ion-label>
-      <ion-input required [(ngModel)]=favor.titulo type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">{{constantes._descripcion}}<ion-text color="danger">*</ion-text></ion-label>
-      <ion-textarea [(ngModel)]=favor.descripcion maxlength="250"></ion-textarea>
-    </ion-item>
-    <ion-item>
-      <ion-label>{{constantes._formaPago}}<ion-text color="danger">*</ion-text></ion-label>
-      <ion-select [compareWith]="compareWith" [(ngModel)]="favor.detalleTipoPago.tipoPago" multiple="false" 
-      [placeholder]="favor.detalleTipoPago.tipoPago ? favor.detalleTipoPago.tipoPago : 'Seleccione una tipo de pago'">
-        <ion-select-option *ngFor="let objTipoPago of tiposPago" [value]="objTipoPago">
-          {{objTipoPago.nombre}}
-        </ion-select-option>
-      </ion-select>        
-    </ion-item>
-    <ion-item *ngIf="favor.detalleTipoPago.tipoPago && favor.detalleTipoPago.tipoPago.nombre!='Valor Monetario'">
-      <ion-label position="floating">{{favor.detalleTipoPago.tipoPago.nombre=='Obsequio'? constantes._detalleObsequio : constantes._detalleFavor}}<ion-text color="danger">*</ion-text></ion-label>
-      <ion-textarea [(ngModel)]=favor.detalleTipoPago.descripcion maxlength="50"></ion-textarea>
-    </ion-item>
-    <ion-item *ngIf="favor.detalleTipoPago.tipoPago && favor.detalleTipoPago.tipoPago.nombre=='Valor Monetario'">
-      <ion-label position="floating">{{constantes._valorPagar}} ($)<ion-text color="danger">*</ion-text></ion-label>
-      <ion-input required type="number" [(ngModel)]=favor.detalleTipoPago.valor></ion-input>
-    </ion-item>
-  </ion-list>
-  <!-- <ion-list>
-    <ion-list-header>{{constantes._filtros}}</ion-list-header>
-    <p>
-      <ion-chip  color="primary">
-        <ion-icon name="filtro1"></ion-icon>
-        <ion-label>Filtro 1</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-      <ion-chip outline color="secondary">
-        <ion-icon name="filtro2"></ion-icon>
-        <ion-label>Filtro 2</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-      <ion-chip outline color="tertiary">
-        <ion-icon name="filtro3"></ion-icon>
-        <ion-label>Filtro 3</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-      <ion-chip outline color="dark">
-        <ion-icon name="filtro4"></ion-icon>
-        <ion-label>Filtro 4</ion-label>
-        <ion-icon name="close-circle"></ion-icon>
-      </ion-chip>
-    </p>
-  </ion-list>
-  <ion-list>
-    <ion-item>
-      <ion-label >{{constantes._ubicacion}}</ion-label>
-    </ion-item>
-  </ion-list> -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="solicitar()">
-      <ion-icon name="redo" ></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+<ion-content class="ion-padding">
+  <form (submit)="nuevoFavor()" [formGroup]="formularioNuevoFavor" errorTailor>
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-item>
+        <ion-label position="floating" for="titulo">
+          {{constantes._titulo}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="titulo" id="titulo" formControlName="titulo" type="text"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="titulo.invalid && (titulo.dirty || titulo.touched)">
+        <div *ngFor="let error of mensajesError.titulo">
+          <small class="container-error-message" *ngIf="titulo.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="descripcion">
+          {{constantes._descripcion}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-textarea name="descripcion" id="descripcion" formControlName="descripcion" maxlength="500" rows="5"></ion-textarea>
+      </ion-item>
+      <div class="alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+        <div *ngFor="let error of mensajesError.descripcion">
+          <small class="container-error-message" *ngIf="descripcion.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item>
+        <ion-label position="floating" for="tipoPago">
+          {{constantes._formaPago}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-select [compareWith]="compareWith" name="tipoPago" id="tipoPago" formControlName="tipoPago" ok-text="Aceptar" cancel-text="Cancelar"
+        [placeholder]="formularioNuevoFavor.value.tipoPago ? formularioNuevoFavor.value.tipoPago : 'Seleccione una forma de pago'" (ngModelChange)="seleccionarTipoPago()" [ngStyle]="{'opacity': formularioNuevoFavor.value.tipoPago?1:0.3}">
+        <ion-select-option value="">Seleccione una forma de pago</ion-select-option>
+          <ion-select-option *ngFor="let objTipoPago of tiposPago" [value]="objTipoPago">
+            {{objTipoPago}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="alert-danger" *ngIf="tipoPago.invalid && (tipoPago.dirty || tipoPago.touched)">
+        <div *ngFor="let error of mensajesError.tipoPago">
+          <small class="container-error-message" *ngIf="tipoPago.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item *ngIf="formularioNuevoFavor.value.tipoPago && formularioNuevoFavor.value.tipoPago!=tipoPagoEnum.valorMonetario">
+        <ion-label position="floating" for="descripcionPago">
+          {{formularioNuevoFavor.value.tipoPago==tipoPagoEnum.obsequio? constantes._detalleObsequio : constantes._detalleFavor}}<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-textarea name="descripcionPago" id="descripcionPago" formControlName="descripcionPago" maxlength="500" rows="5"></ion-textarea>
+      </ion-item>
+      <div class="alert-danger" *ngIf="descripcionPago.invalid && (descripcionPago.dirty || descripcionPago.touched)">
+        <div *ngFor="let error of mensajesError.descripcionPago">
+          <small class="container-error-message" *ngIf="descripcionPago.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+      <ion-item *ngIf="formularioNuevoFavor.value.tipoPago && formularioNuevoFavor.value.tipoPago==tipoPagoEnum.valorMonetario">
+        <ion-label position="floating" for="valorPago">
+          {{constantes._valorPagar}} ($)<ion-text color="danger">*</ion-text>
+        </ion-label>
+        <ion-input name="valorPago" id="valorPago" formControlName="valorPago" type="transaction-amount"></ion-input>
+      </ion-item>
+      <div class="alert-danger" *ngIf="valorPago.invalid && (valorPago.dirty || valorPago.touched)">
+        <div *ngFor="let error of mensajesError.valorPago">
+          <small class="container-error-message" *ngIf="valorPago.hasError(error.tipo)">{{error.mensaje}}</small>
+        </div>
+      </div>
+    </ion-list>
+    <!-- <ion-list>
+      <ion-list-header>{{constantes._filtros}}</ion-list-header>
+      <p>
+        <ion-chip  color="primary">
+          <ion-icon name="filtro1"></ion-icon>
+          <ion-label>Filtro 1</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+        <ion-chip outline color="secondary">
+          <ion-icon name="filtro2"></ion-icon>
+          <ion-label>Filtro 2</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+        <ion-chip outline color="tertiary">
+          <ion-icon name="filtro3"></ion-icon>
+          <ion-label>Filtro 3</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+        <ion-chip outline color="dark">
+          <ion-icon name="filtro4"></ion-icon>
+          <ion-label>Filtro 4</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+      </p>
+    </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-label >{{constantes._ubicacion}}</ion-label>
+      </ion-item>
+    </ion-list> -->
+    <div class="botones-inferiores">
+      <ion-button expand="block" type="submit">{{constantes._solicitar}}</ion-button>
+    </div>
+  </form>
 </ion-content>
 
-<app-pie-pagina></app-pie-pagina>
+<!-- <app-pie-pagina></app-pie-pagina> -->

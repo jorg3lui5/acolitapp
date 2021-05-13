@@ -12,7 +12,6 @@ export class Usuario {
     foto: any;
     calificacion: number;
     estado: number;
-    calificacionList: Calificacion[];
     filtroConfiguracionUsuarioList: FiltroConfiguracionUsuario[];
     usuarioAyudaFavorList: UsuarioAyudaFavor[];
     favorList: Favor[];

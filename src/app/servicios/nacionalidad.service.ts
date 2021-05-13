@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { RespuestaDTO } from 'src/app/modelo/dto/RespuestaDTO';
 import { Observable } from 'rxjs';
+import { NacionalidadPorPaisPipe } from '../pipes/nacionalidad-por-pais.pipe';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class NacionalidadService {
   
   urlBase: string =environment.urlBase;
   servicio: string= "nacionalidad/";
+  nacionalidadPorPaisPipe: NacionalidadPorPaisPipe=new NacionalidadPorPaisPipe();
   
   constructor(private http: HttpClient) {
 
@@ -44,5 +46,10 @@ export class NacionalidadService {
   recuperarPorIdPais(id): Observable<RespuestaDTO> {
     let apiURL = this.urlBase+this.servicio+'recuperarPorIdPais/'+id
     return this.http.get<RespuestaDTO>(apiURL)
+  }
+
+  recuperarPorPais(pais): string {
+    let objeto:string=this.nacionalidadPorPaisPipe.transform(pais);
+    return objeto;
   }
 }

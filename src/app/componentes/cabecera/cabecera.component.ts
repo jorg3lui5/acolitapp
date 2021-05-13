@@ -8,6 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CabeceraComponent implements OnInit {
 
   @Input() titulo: string = '';
+  @Input() menuVisible: boolean = false;
+  @Input() ocultarBotones: boolean = false;
   
   constructor() { }
 

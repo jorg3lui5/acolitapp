@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { RespuestaDTO } from 'src/app/modelo/dto/RespuestaDTO';
 import { Observable } from 'rxjs';
+import { TipoLicenciaEnum } from '../modelo/enum/tipo-licencia-enum';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +32,17 @@ export class TipoLicenciaService {
     return this.http.get<RespuestaDTO>(apiURL)
   }
 
-  listarTodos(): Observable<RespuestaDTO> {
-    let apiURL = this.urlBase+this.servicio+'listarTodos'
-    return this.http.get<RespuestaDTO>(apiURL)
+  // listarTodos(): Observable<RespuestaDTO> {
+  //   let apiURL = this.urlBase+this.servicio+'listarTodos'
+  //   return this.http.get<RespuestaDTO>(apiURL)
+  // }
+
+  listarTodos(): string[] {
+    let objetos:string[]=[];
+    for(let objeto in TipoLicenciaEnum){
+      objetos.push(TipoLicenciaEnum[objeto] as string)
+    }
+    return objetos;
   }
 
   recuperarPorId(id): Observable<RespuestaDTO> {

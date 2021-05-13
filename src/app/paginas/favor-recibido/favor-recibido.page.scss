@@ -1,0 +1,51 @@
+.favor-calificacion-primaria {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.favor-calificacion-secundaria {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.favor-subtitulo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.favor-pago {
+    display: flex;
+    align-items: center;
+}
+
+
+.favor-pago-estado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+ion-item {
+    --padding-start: 0px !important;
+}
+
+ion-card {
+    margin-inline: 0px;
+}
+
+ion-card-header {
+    padding: 0px;
+    padding-inline: 20px;
+}
+
+ion-button {
+    --padding-end: 5px !important;
+    --padding-start: 5px !important;
+}
+
+.favor-estrella-primaria {
+    font-size: 50px;
+  }

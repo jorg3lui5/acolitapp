@@ -14,7 +14,7 @@
       <ion-content>
         <ion-list>
           <ion-menu-toggle *ngFor="let c of componentes | async" autoHide="false">
-            <ion-item [routerLink]="c.redirectTo" detail (click)="c.name=='CerrarSesion'?cerrarSesion():''">
+            <ion-item [routerLink]="c.redirectTo" detail (click)="c.icon=='log-out-outline'?cerrarSesion():''">
               <ion-icon [name]="c.icon" slot="start" color="primary"></ion-icon>
               {{c.name}}
             </ion-item>

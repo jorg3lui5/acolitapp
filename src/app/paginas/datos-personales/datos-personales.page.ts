@@ -18,7 +18,7 @@ import { OcupacionService } from '../../servicios/ocupacion.service';
 import { TipoVehiculo } from '../../modelo/tipoVehiculo';
 import { Persona } from '../../modelo/persona';
 import { ToastController, NavController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TipoLicenciaService } from '../../servicios/tipo-licencia.service';
 import { TipoVehiculoService } from '../../servicios/tipo-vehiculo.service';
 import { TipoLicencia } from '../../modelo/tipoLicencia';
@@ -36,21 +36,22 @@ import { StorageService } from '../../servicios/librerias/storage.service';
 export class DatosPersonalesPage implements OnInit {
 
   constantes: Constantes = new Constantes;
-  paises: Pais[];
-  ciudades: Ciudad[];
-  nivelesEstudios: NivelEstudios[];
-  profesiones: Profesion[];
-  ocupaciones: Ocupacion[];
-  tiposLicencia: TipoLicencia[];
-  tiposVehiculos: TipoVehiculo[];
+  paises: string[];
+  ciudades: string[];
+  nivelesEstudios: string[];
+  profesiones: string[];
+  ocupaciones: string[];
+  tiposLicencia: string[];
+  tiposVehiculos: string[];
 
   persona: Persona;
+  usuario: string;
 
   formularioDatosPersonales: FormGroup = this.formBuilder.group({
-    //identificacion: ['', Validators.required],
-    nombresApellidos: ['', Validators.compose([Validators.required])],
-    pais: ['', Validators.compose([Validators.required])],
-    ciudad: ['', Validators.compose([Validators.required])],
+    identificacion: ['', Validators.required],
+    nombresApellidos: ['', Validators.compose([Validators.required,Validators.minLength(5)])],
+    pais: ['', ],
+    ciudad: ['', ],
     direccion: ['', Validators.compose([Validators.required])],
     telefono: ['', Validators.compose([Validators.required])],
     nivelEstudios: ['', ],
@@ -59,9 +60,13 @@ export class DatosPersonalesPage implements OnInit {
     tipoLicencia: ['', ],
     tipoVehiculo: ['', ],
     placaVehiculo: ['',],
-    informacionAdicional: ['', ],
+    informacionAdicional: ['', Validators.compose([Validators.maxLength(500)])],
+    nacionalidad: ['', ],
   });
 
+  get identificacion() {
+    return this.formularioDatosPersonales.get('identificacion');
+  }
   get nombresApellidos() {
     return this.formularioDatosPersonales.get('nombresApellidos');
   }
@@ -98,13 +103,17 @@ export class DatosPersonalesPage implements OnInit {
   get informacionAdicional() {
     return this.formularioDatosPersonales.get('informacionAdicional');
   }
+  get nacionalidad() {
+    return this.formularioDatosPersonales.get('nacionalidad');
+  }
 
   mensajesError = {
-    // identificacion: [
-    //   {tipo: 'required', mensaje: 'La identificación es requerida'},
-    // ],
+    identificacion: [
+      {tipo: 'required', mensaje: 'La identificación es requerida'},
+    ],
     nombresApellidos: [
       {tipo: 'required', mensaje: 'Los nombres son requeridos'},
+      {tipo: 'minlength', mensaje: 'Debe tener mínimo 5 caracteres'},
     ],
     pais: [
       {tipo: 'required', mensaje: 'El país es requerido'},
@@ -139,7 +148,13 @@ export class DatosPersonalesPage implements OnInit {
     ],
     informacionAdicional: [
       {tipo: 'required', mensaje: 'La información adicional es requerida'},
+      {tipo: 'maxlength', mensaje: 'Debe ingresar máximo 500 caracteres'},
+
+    ],
+    nacionalidad: [
+      {tipo: 'required', mensaje: 'La nacionalidad requerida'},
     ]
+    
   }
 
   constructor(
@@ -158,261 +173,142 @@ export class DatosPersonalesPage implements OnInit {
     public navCtrl: NavController,
     private formBuilder: FormBuilder,
     private _storageService:StorageService,
+    private router: Router,
+
   )
   {
 
   }
 
   ngOnInit() {
-    if(this.nombreUsuario){
-      this.recuperarPersonaPorNombreUsuario(this.nombreUsuario);
-      this.recuperarNivelesEstudio();
-      this.recuperarOcupaciones();
-      this.recuperarPaises();
-      this.recuperarTiposLicencia();
-      this.recuperarTiposVehiculo();
-    }
+    this.recuperarPaises();
+    this.recuperarNivelesEstudio();
+    this.recuperarOcupaciones();
+    this.recuperarTiposLicencia();
+    this.recuperarTiposVehiculo();
+    this.recuperarUsuario();
+  }
+  
+  recuperarPaises(){
+    this.paises=this._paisService.listarTodos();
+  }
+
+  recuperarNivelesEstudio(){
+    this.nivelesEstudios=this._nivelEstudiosService.listarTodos();
+  }
+
+  recuperarOcupaciones(){
+    this.ocupaciones=this._ocupacionService.listarTodos();
+  }
+
+  recuperarTiposLicencia(){
+    this.tiposLicencia=this._tipoLicenciaService.listarTodos();
+  }
+
+  recuperarTiposVehiculo(){
+    this.tiposVehiculos=this._tipoVehiculoService.listarTodos();
+  }
+
+  recuperarProfesiones(){
+    this.profesiones=this._profesionService.listarTodos();
+  }
+  
+  recuperarCiudadesPorPais(pais){
+    this.ciudades=this._ciudadService.listarPorPais(pais);
+  }
+
+  recuperarNacionalidadPorPais(pais){
+    return this._nacionalidadService.recuperarPorPais(pais);
   }
 
   seleccionarPais(){
-    this.ciudad=null;
-    this.recuperarCiudadesPorIdPais(this.pais.id);
-    this.recuperarNacionalidadPorIdPais(this.pais.id);
+    this.ciudad.setValue('');
+    this.ciudad.updateValueAndValidity();
+    if(this.formularioDatosPersonales.value.pais){
+      this.recuperarCiudadesPorPais(this.formularioDatosPersonales.value.pais);
+      this.nacionalidad.setValue(this.recuperarNacionalidadPorPais(this.pais));
+    }
+    else{
+      this.nacionalidad.setValue('');
+    }
+    this.nacionalidad.updateValueAndValidity();
+
   }
   seleccionarNivelEstudios()
   {
-    if(this.persona.nivelEstudios && this.persona.nivelEstudios.nombre=='Profesional'){
+    this.profesion.setValue('');
+    this.profesion.updateValueAndValidity();
+    if(this.formularioDatosPersonales.value.nivelEstudios=='Profesional'){
       this.recuperarProfesiones();
     }
   }
 
+  seleccionarTipoVehiculo(){
+    // this.placaVehiculo.setValue('');
+    // this.placaVehiculo.updateValueAndValidity();
+    if(this.formularioDatosPersonales.value.tipoVehiculo){
+      this.placaVehiculo.setValidators([Validators.required]);
+    }
+    else{
+      this.placaVehiculo.clearValidators();
+    }
+    this.placaVehiculo.updateValueAndValidity();
+  }
+
   finalizar(){
-
-    if(this.persona.direccionList && this.persona.direccionList.length>0){
-     this.persona.direccionList[0].ciudad=this.ciudad;
+    if(this.formularioDatosPersonales.valid){
+      this.persona=this.formularioDatosPersonales.value;
+      this.persona.usuario=this.usuario;
+      console.log(this.persona);
+      this.crearPersona(this.persona);
     }
     else{
-        let direccion: Direccion=new Direccion();
-        direccion.ciudad=this.ciudad;
-        this.persona.direccionList=[];
-        this.persona.direccionList.push(direccion);
-    }
-    if(this.persona.vehiculoPersonaList && this.persona.vehiculoPersonaList.length>0 && this.persona.vehiculoPersonaList[0].vehiculo){
-      this.persona.vehiculoPersonaList[0].vehiculo.tipoVehiculo=this.tipoVehiculo;
-      this.persona.vehiculoPersonaList[0].vehiculo.placa=this.placaVehiculo;
-    }
-    else{
-      let vehiculo:Vehiculo=new Vehiculo();
-      vehiculo.tipoVehiculo=this.tipoVehiculo;
-      vehiculo.placa=this.placaVehiculo;
-      let vehiculoPersona:VehiculoPersona=new VehiculoPersona();
-      vehiculoPersona.vehiculo=vehiculo;
-      this.persona.vehiculoPersonaList=[];
-      this.persona.vehiculoPersonaList.push(vehiculoPersona);
-    }
-    this.actualizarPersona(this.persona);
-  }
-
-  actualizarPersona(persona) {
-    if(persona.nombresApellidos)
-    {
-      this._personaService.actualizar(persona).subscribe(
-        (data)=> {
-          if(data && data.status=="OK"){
-            if(data.objeto){
-              this.persona=data.objeto;
-              this.mostrarMensaje("Usuario registrado satisfactoriamente");
-              this.navCtrl.navigateForward("/favores")
-            }
-            else{
-              this.mostrarMensaje("No se pudo actualizar los datos de la persona");
-            }
-          }
-          else{
-            this.mostrarMensaje(data.message);
-          }
-        },
-        (error)=>{
-          console.log(error);
-          this.mostrarMensaje(error);
-        }
-      )
-    }
-    else{
-      this.mostrarMensaje("Los nombres y apellidos son obligatorios");
+      this.mostrarMensaje("Por favor llene los campos requeridos");
     }
   }
 
-  recuperarPersonaPorNombreUsuario(nombreUsuario){
-    // this._usuarioService.recuperarPorUsuario(nombreUsuario).subscribe(
-    //   (data)=> {
-    //     if(data && data.status=="OK"){
-    //       if(data.objeto){
-    //         this.persona=data.objeto;
-    //         if(this.persona.direccionList && this.persona.direccionList.length>0 && this.persona.direccionList[0].ciudad){
-    //          this.pais=this.persona.direccionList[0].ciudad.pais;
-    //          this.ciudad=this.persona.direccionList[0].ciudad;
-    //         }
-    //         if(this.persona.vehiculoPersonaList && this.persona.vehiculoPersonaList.length>0 && this.persona.vehiculoPersonaList[0].vehiculo){
-    //           this.tipoVehiculo=this.persona.vehiculoPersonaList[0].vehiculo.tipoVehiculo;
-    //           this.placaVehiculo=this.persona.vehiculoPersonaList[0].vehiculo.placa;
-    //         }
-    //       }
-    //       else{
-    //         this.persona=new Persona();
-    //       }
-    //     }
-    //     else{
-    //       this.mostrarMensaje(data.message);
-    //     }
-    //   },
-    //   (error)=>{
-    //     console.log(error);
-    //     this.mostrarMensaje(error);
-    //   }
-    // )
+  crearPersona(persona) {
+    this._personaService.crear(persona)
+    .then((data)=>{
+      console.log('data');
+      this.mostrarMensaje("Usuario registrado satisfactoriamente");
+      this.router.navigate(['/favores']);
+      // this.navCtrl.navigateForward("/favores")
+    })
+    .catch(err=>{
+        console.log("error: "+err);
+        this.mostrarMensaje(err.message);
+    });
   }
 
-  recuperarPaises(){
-    this._paisService.listarTodos().subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.paises=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-
-  recuperarNivelesEstudio(){
-    this._nivelEstudiosService.listarTodos().subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.nivelesEstudios=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-  recuperarProfesiones(){
-    this._profesionService.listarTodos().subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.profesiones=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-  recuperarTiposLicencia(){
-    this._tipoLicenciaService.listarTodos().subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.tiposLicencia=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-  recuperarTiposVehiculo(){
-    this._tipoVehiculoService.listarTodos().subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.tiposVehiculos=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-  recuperarOcupaciones(){
-    this._ocupacionService.listarTodos().subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.ocupaciones=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-  recuperarCiudadesPorIdPais(idPais){
-    this._ciudadService.listarPorIdPais(this.pais.id).subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.ciudades=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-
-  recuperarNacionalidadPorIdPais(idPais){
-    this._nacionalidadService.recuperarPorIdPais(idPais).subscribe(
-      (data)=> {
-        if(data && data.status=="OK"){
-            this.persona.nacionalidad=data.objeto;
-        }
-        else{
-          this.mostrarMensaje(data.message);
-        }
-      },
-      (error)=>{
-        console.log(error);
-        this.mostrarMensaje(error);
-      }
-    )
-  }
-
-  compareWith = (o1: Persona, o2:Persona) => {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  compareWith = (o1, o2) => {
+    return o1 && o2 ? o1 === o2 : o1 === o2;
   };
 
   async mostrarMensaje(mensaje: string) {
     const toast = await this.toastController.create({
       message: mensaje,
-      duration: 2000
+      duration: this.constantes._duracionToast
     });
     toast.present();
+  }
+
+  recuperarUsuario(){
+    this._storageService.recuperar(this.constantes._usuario).then(
+      (data:string)=>{
+        if(data){
+          console.log('est');
+          console.log(data);
+          this.usuario=data;
+        }
+        else{
+          this.mostrarMensaje("No pudo recuperar el usuario");
+        }
+      }
+    )
+    .catch(err=>{
+        console.log("error: "+err);
+        this.mostrarMensaje(err.message);
+    });
   }
 }

@@ -1,55 +1,28 @@
-<app-cabecera [titulo]="constantes._favores"></app-cabecera>
+<app-cabecera [titulo]="constantes._favores" [menuVisible]="true"></app-cabecera>
 
 <ion-content>
-  
   <ion-tabs>
     <ion-tab-bar slot="top">
-        <ion-tab-button tab="favores-solicitados">
-          <ion-icon name="redo"></ion-icon>
-          <ion-label>{{constantes._solicitados}}</ion-label>
-          <ion-badge>6</ion-badge>
-        </ion-tab-button>
-        <ion-tab-button tab="favores-realizados">
-          <ion-icon name="undo"></ion-icon>
-          <ion-label>{{constantes._realizados}}</ion-label>
-          <ion-badge>6</ion-badge>
-        </ion-tab-button>
-    </ion-tab-bar>
-    <!-- <ion-segment slot="top">
-      <ion-segment-button checked>
-        <ion-icon name="redo"></ion-icon>
+      <ion-tab-button tab="favores-todos">
+        <ion-icon name="swap-vertical-outline"></ion-icon>
+        <ion-label>{{constantes._todos}}</ion-label>
+        <!-- <ion-badge>6</ion-badge> -->
+      </ion-tab-button>
+      <ion-tab-button tab="favores-solicitados">
+        <ion-icon name="arrow-up-outline"></ion-icon>
         <ion-label>{{constantes._solicitados}}</ion-label>
-      </ion-segment-button>
-      <ion-segment-button >
-        <ion-icon name="undo"></ion-icon>
+        <!-- <ion-badge>6</ion-badge> -->
+      </ion-tab-button>
+      <ion-tab-button tab="favores-realizados">
+        <ion-icon name="arrow-down-outline"></ion-icon>
         <ion-label>{{constantes._realizados}}</ion-label>
-      </ion-segment-button>
-    </ion-segment> -->
+        <!-- <ion-badge>6</ion-badge> -->
+      </ion-tab-button>
+    </ion-tab-bar>
   </ion-tabs>
-  <!-- <ion-list>
-    <ion-item-sliding>
-      <ion-item>
-        <ion-label>Item</ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option (click)="unread(item)">Unread</ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  
-    <ion-item-sliding>
-      <ion-item>
-        <ion-label>Item</ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option (click)="unread(item)">Unread</ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list> -->
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
+      <ion-icon name="add-outline" (click)="nuevoFavor()"></ion-icon>
     </ion-fab-button>
-  </ion-fab> -->
+  </ion-fab>
 </ion-content>
-
-<app-pie-pagina></app-pie-pagina>

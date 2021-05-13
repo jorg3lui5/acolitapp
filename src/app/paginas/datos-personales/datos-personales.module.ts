@@ -9,6 +9,7 @@ import { DatosPersonalesPageRoutingModule } from './datos-personales-routing.mod
 import { DatosPersonalesPage } from './datos-personales.page';
 import { ComponentesModule } from '../../componentes/componentes.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     IonicModule,
     DatosPersonalesPageRoutingModule,
     ComponentesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
   declarations: [DatosPersonalesPage]
 })

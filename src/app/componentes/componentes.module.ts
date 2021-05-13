@@ -5,6 +5,8 @@ import { PiePaginaComponent } from './pie-pagina/pie-pagina.component';
 import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
 import { IonicModule } from '@ionic/angular';
 import { Routes, RouterModule } from '@angular/router';
+import { ItemFavorComponent } from './item-favor/item-favor.component';
+import { FavoresListaComponent } from './favores-lista/favores-lista.component';
 
 
 
@@ -13,7 +15,8 @@ import { Routes, RouterModule } from '@angular/router';
     CabeceraComponent,
     PiePaginaComponent,
     MenuLateralComponent,
-
+    ItemFavorComponent,
+    FavoresListaComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +28,8 @@ import { Routes, RouterModule } from '@angular/router';
     PiePaginaComponent,
     MenuLateralComponent,
     RouterModule,
+    ItemFavorComponent,
+    FavoresListaComponent
   ],
 })
 export class ComponentesModule { }

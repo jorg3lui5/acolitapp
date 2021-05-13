@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { RespuestaDTO } from 'src/app/modelo/dto/RespuestaDTO';
-import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -11,35 +10,52 @@ export class PersonaService {
   
   urlBase: string =environment.urlBase;
   servicio: string= "persona/";
+  coleccion: string = "personas";
   
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private angularFirestore: AngularFirestore,
+  ) {
 
   }
 
-  crear(objeto): Observable<RespuestaDTO> {
-    let apiURL = this.urlBase+this.servicio+'crear';
-    return this.http.post<RespuestaDTO>(apiURL,objeto)
+  crear(objeto) {
+    return this.angularFirestore
+      .collection(this.coleccion)
+      .add({...objeto})
   }
 
-  actualizar(objeto): Observable<RespuestaDTO> {
-    let apiURL = this.urlBase+this.servicio+'actualizar';
-    return this.http.post<RespuestaDTO>(apiURL,objeto)
+  actualizar(objeto) {
+    return this.angularFirestore
+      .collection(this.coleccion)
+      .doc(objeto.id)
+      .update({...objeto});
   }
 
-  eliminar(): Observable<RespuestaDTO> {
-    let apiURL = this.urlBase+this.servicio+'eliminar';
-    return this.http.get<RespuestaDTO>(apiURL)
+  eliminar(id) {
+    return this.angularFirestore
+      .collection(this.coleccion)
+      .doc(id)
+      .delete();
   }
 
-  listarTodos(): Observable<RespuestaDTO> {
-    let apiURL = this.urlBase+this.servicio+'listarTodos'
-    return this.http.get<RespuestaDTO>(apiURL)
+  listarTodos() { 
+    return this.angularFirestore
+    .collection(this.coleccion)
+    .snapshotChanges();
+  }
+    
+  recuperarPorId(id) {
+    return this.angularFirestore
+    .collection(this.coleccion)
+    .doc(id)
+    .valueChanges()
   }
 
-  recuperarPorId(id): Observable<RespuestaDTO> {
-    let apiURL = this.urlBase+this.servicio+'recuperarPorId/'+id
-    return this.http.get<RespuestaDTO>(apiURL)
+  recuperarPorUsuario(usuario) {
+    return this.angularFirestore
+    .collection(this.coleccion,(objeto) => objeto.where('usuario', '==', usuario))
+    .get();
   }
-
 
 }

@@ -1,28 +1,109 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component, OnChanges, OnInit } from '@angular/core';
+import { NavController, ToastController } from '@ionic/angular';
 import { Constantes } from '../../compartido/constantes';
+import { FavorService } from '../../servicios/favor.service';
+import { UsuarioService } from '../../servicios/usuario.service';
+import { PersonaService } from '../../servicios/persona.service';
+import { FavorDTO } from '../../modelo/dto/favor-dto';
+import { Favor } from '../../modelo/favor';
+import { Usuario } from '../../modelo/usuario';
+import { Persona } from '../../modelo/persona';
+import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
+import { StorageService } from '../../servicios/librerias/storage.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-favores-solicitados',
   templateUrl: './favores-solicitados.page.html',
   styleUrls: ['./favores-solicitados.page.scss'],
 })
-export class FavoresSolicitadosPage implements OnInit {
-  item: any;
+export class FavoresSolicitadosPage implements OnInit, OnChanges {
+  favores: FavorDTO[]=[];
   constantes: Constantes = new Constantes;
+  tipoFavor: string=TipoFavorEnum.solicitado;
+  usuario: string;  
+
+  sliderOpts = {
+    allowSlidePrev:false,
+    allowSlideNext: false
+  }
   
   constructor(
-    public navCtrl: NavController,
-  ) { }
-
+    public _favorService: FavorService,
+    public _usuarioService: UsuarioService,
+    public _personaService: PersonaService,
+    public toastController: ToastController,
+    private _storageService:StorageService,
+  ) { 
+    console.log('recupera1');
+  }
+  
   ngOnInit() {
+    this.recuperarUsuario();
   }
 
-  unread(item){
+  ngOnChanges(){
+    console.log('recupera2',this.usuario)
 
   }
 
-  nuevaSolicitud(){
-    this.navCtrl.navigateForward("/solicitud");
+  recuperarFavores(){
+    console.log('recupera',this.usuario)
+    this._favorService.recuperarPorUsuarioSolicita(this.usuario).subscribe(res => {
+      this.favores = res.map((e:any) => {
+        return {
+          id: e.payload.doc.id,
+          ...<any>e.payload.doc.data()
+        } as FavorDTO;
+      });
+      for(let favor of this.favores){
+        this._usuarioService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
+          let usuarios=[];
+          res.forEach((doc) => {
+            usuarios.push({
+              id: doc.id,
+              ...<any>doc.data()
+            } as Usuario);
+          });
+          this._personaService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
+            let personas=[];
+            res.forEach((doc) => {
+              personas.push( {
+                id: doc.id,
+                ...<any>doc.data()
+              } as Persona);
+            });
+            favor.usuarioSolicita=usuarios[0];
+            favor.usuarioSolicita.persona=personas[0];
+          }); 
+        }); 
+      }
+    });   
+  }
+
+  recuperarUsuario(){
+    this._storageService.recuperar(this.constantes._usuario).then(
+      (data:string)=>{
+        if(data){
+          this.usuario=data;
+          this.recuperarFavores();
+        }
+        else{
+          this.mostrarMensaje("No pudo recuperar el usuario");
+        }
+      }
+    )
+    .catch(err=>{
+        console.log("error: "+err);
+        this.mostrarMensaje(err.message);
+    });
+  }
+
+  async mostrarMensaje(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: this.constantes._duracionToast
+    });
+    toast.present();
   }
 }

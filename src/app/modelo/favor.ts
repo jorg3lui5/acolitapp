@@ -10,15 +10,18 @@ export class Favor {
     id: string;
     titulo: string;
     descripcion: string;
-    estado: String;
-    fechaSolicita: Date;
-    fechaRealiza: Date;
-    calificacionList: Calificacion[];
+    estado: string;
+    fechaSolicita: number;
+    fechaRealiza: number;
+    calificacionSolicita: number;
+    calificacionRealiza: number;
     filtroFavorList: FiltroFavor[];
     usuarioAyudaFavorList: UsuarioAyudaFavor[];
-    detalleTipoPago: DetalleTipoPago;
+    tipoPago: string;
+    descripcionPago: string;
+    valorPago: number;
     direccionFavor: Direccion;
-    usuarioRealiza: Usuario;
-    usuarioSolicita: Usuario;
+    usuarioRealiza: string;
+    usuarioSolicita: string;
     
 }

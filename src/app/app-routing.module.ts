@@ -26,7 +26,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'favor-recibido',
+    path: 'favor-recibido/:idFavor',
     loadChildren: () => import('./paginas/favor-recibido/favor-recibido.module').then( m => m.FavorRecibidoPageModule),
     canActivate: [AuthGuard]
   },
@@ -89,6 +89,10 @@ const routes: Routes = [
     path: 'ubicacion-detallada',
     loadChildren: () => import('./paginas/ubicacion-detallada/ubicacion-detallada.module').then( m => m.UbicacionDetalladaPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'favores-todos',
+    loadChildren: () => import('./paginas/favores-todos/favores-todos.module').then( m => m.FavoresTodosPageModule)
   },
 ];
 

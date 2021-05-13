@@ -61,7 +61,7 @@ export class UsuarioService {
     return this.angularFirestore
       .collection(this.coleccion)
       .doc(objeto.id)
-      .update(objeto);
+      .update({...objeto});
 
 
   }
@@ -113,7 +113,7 @@ export class UsuarioService {
   recuperarPorUsuario(usuario) {
     return this.angularFirestore
     .collection(this.coleccion,(objeto) => objeto.where('usuario', '==', usuario))
-    .snapshotChanges();
+    .get();
   }
 
   // loguear(usuario,contrasenia): Observable<RespuestaDTO> {

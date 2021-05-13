@@ -24,7 +24,7 @@ export class RegistroPage implements OnInit {
 
   expresionMail: RegExp = new RegExp(this.constantes._expresionMail);
   formularioRegistro: FormGroup = this.formBuilder.group({
-    identificacion: ['', Validators.required],
+    identificacion: ['', ],
     correo: ['', Validators.compose([Validators.required, Validators.pattern(this.expresionMail)])],
     contrasenia: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
     contraseniaConfirmada: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -98,6 +98,7 @@ export class RegistroPage implements OnInit {
           this._usuarioService.crear(this.usuario)
           .then((data)=>{
             console.log('ddddddd');
+            console.log(data);
             this._storageService.guardar(this.constantes._usuario,this.usuario.usuario);
             this.router.navigate(['/datos-personales']);
           })
@@ -114,7 +115,6 @@ export class RegistroPage implements OnInit {
             console.log("error: "+err);
             this.mostrarMensaje(err.message);
           }
-          
         });
       }
       else{
@@ -133,4 +133,5 @@ export class RegistroPage implements OnInit {
     });
     toast.present();
   }
+  
 }
