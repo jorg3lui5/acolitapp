@@ -52,26 +52,50 @@ export class FavoresRealizadosPage implements OnInit {
         } as FavorDTO;
       });
       for(let favor of this.favores){
-        this._usuarioService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
-          let usuarios=[];
-          res.forEach((doc) => {
-            usuarios.push({
-              id: doc.id,
-              ...<any>doc.data()
-            } as Usuario);
-          });
-          this._personaService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
-            let personas=[];
+        if(favor.usuarioSolicita){
+          this._usuarioService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
+            let usuarios=[];
             res.forEach((doc) => {
-              personas.push( {
+              usuarios.push({
                 id: doc.id,
                 ...<any>doc.data()
-              } as Persona);
+              } as Usuario);
             });
-            favor.usuarioSolicita=usuarios[0];
-            favor.usuarioSolicita.persona=personas[0];
+            this._personaService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
+              let personas=[];
+              res.forEach((doc) => {
+                personas.push( {
+                  id: doc.id,
+                  ...<any>doc.data()
+                } as Persona);
+              });
+              favor.usuarioSolicita=usuarios[0];
+              favor.usuarioSolicita.persona=personas[0];
+            }); 
           }); 
-        }); 
+        }
+        if(favor.usuarioRealiza){
+          this._usuarioService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
+            let usuarios=[];
+            res.forEach((doc) => {
+              usuarios.push({
+                id: doc.id,
+                ...<any>doc.data()
+              } as Usuario);
+            });
+            this._personaService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
+              let personas=[];
+              res.forEach((doc) => {
+                personas.push( {
+                  id: doc.id,
+                  ...<any>doc.data()
+                } as Persona);
+              });
+              favor.usuarioRealiza=usuarios[0];
+              favor.usuarioRealiza.persona=personas[0];
+            }); 
+          }); 
+        }
       }
     });   
   }

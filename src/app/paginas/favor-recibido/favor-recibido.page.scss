@@ -48,4 +48,11 @@ ion-button {
 
 .favor-estrella-primaria {
     font-size: 50px;
-  }
+}
+
+.label-favor-ayudante{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}

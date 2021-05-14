@@ -8,6 +8,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ItemFavorComponent } from './item-favor/item-favor.component';
 import { FavoresListaComponent } from './favores-lista/favores-lista.component';
 import { CalificacionComponent } from './calificacion/calificacion.component';
+import { PipesModule } from '../pipes/pipes.module';
 
 
 
@@ -18,12 +19,13 @@ import { CalificacionComponent } from './calificacion/calificacion.component';
     MenuLateralComponent,
     ItemFavorComponent,
     FavoresListaComponent,
-    CalificacionComponent
+    CalificacionComponent,
   ],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule,
+    PipesModule,
   ],
   exports: [
     CabeceraComponent,

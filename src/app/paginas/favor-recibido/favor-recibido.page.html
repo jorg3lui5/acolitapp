@@ -16,7 +16,7 @@
         <ion-label>
           <ion-text>
             <h2>
-              {{favor.usuarioSolicita?.persona?.nombresApellidos}} aaa
+              {{favor.usuarioSolicita?.persona?.nombresApellidos}}
             </h2>
           </ion-text>
           <div class="favor-calificacion-secundaria">
@@ -24,35 +24,32 @@
           </div>
         </ion-label>
       </ion-item>
-      <ion-item lines="none" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.usuarioRealiza">
-        <ion-avatar slot="start">
-          <ion-img src="../../../assets/img/logo.png"></ion-img>
-        </ion-avatar>
-        <ion-label>
-          <ion-text>
-            <h2>
-              {{favor.usuarioRealiza?.persona?.nombresApellidos}}
-            </h2>
-          </ion-text>
-          <div class="favor-calificacion-secundaria">
-            <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="primary" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
-          </div>
-        </ion-label>
-      </ion-item>
+      <div *ngIf="(!tipoFavor || tipoFavor==tipoFavorEnum.solicitado) && favor.usuarioRealiza">
+        <ion-item lines="none">
+          <ion-label class="label-favor-ayudante">
+            <ion-text>
+              <h2>
+                {{favor.usuarioRealiza?.persona?.nombresApellidos}}
+              </h2>
+            </ion-text>
+            <div class="favor-calificacion-secundaria">
+              <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="primary" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+            </div>
+          </ion-label>
+          <ion-avatar slot="end">
+            <ion-img src="../../../assets/img/logo.png"></ion-img>
+          </ion-avatar>
+        </ion-item>
+      </div>
+
       <p>
         {{favor.descripcion}}
       </p>
       <div *ngIf="favor.tipoPago==tipoPagoEnum.valorMonetario" class="favor-pago">
-        <div>
-          <h5>Pago: </h5>
-        </div>
-        <div>
-          <h4>
-            <span class="texto-primario">
-              ${{favor.valorPago}}
-            </span>
-          </h4>
-        </div>
+        <ion-item lines="none">
+          <ion-label>Pago:</ion-label>
+          <ion-badge color="primary" slot="end">$ {{favor.valorPago}}</ion-badge>
+        </ion-item>
       </div>
       <ion-card *ngIf="favor.tipoPago!==tipoPagoEnum.valorMonetario">
         <ion-card-header>
