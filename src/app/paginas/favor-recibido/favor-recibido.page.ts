@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FavorService } from '../../servicios/favor.service';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { PersonaService } from '../../servicios/persona.service';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 import { StorageService } from '../../servicios/librerias/storage.service';
 import { TipoPagoEnum } from 'src/app/modelo/enum/tipo-pago-enum';
 import { Usuario } from '../../modelo/usuario';
@@ -14,6 +14,7 @@ import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
 import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
 import { AccionFavorEnum } from '../../modelo/enum/accion-favor-enum';
 import { MensajeAdvertenciaDTO } from '../../modelo/dto/mensaje-advertencia-dto';
+import { CalificacionComponent } from '../../componentes/calificacion/calificacion.component';
 
 @Component({
   selector: 'app-favor-recibido',
@@ -40,7 +41,10 @@ export class FavorRecibidoPage implements OnInit {
     public toastController: ToastController,
     private _storageService:StorageService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private modalController: ModalController,
+    public popoverController: PopoverController
+
   ) { }
 
   ngOnInit() {
@@ -133,10 +137,6 @@ export class FavorRecibidoPage implements OnInit {
     toast.present();
   }
 
-  calificar(calificacion:number){
-    this.favor.calificacionSolicita=calificacion;
-  }
-
   eliminarFavor(mensaje: string, paginaRetorna:string){
     this._favorService.eliminar(this.idFavor)
     .then((data)=> {
@@ -179,13 +179,15 @@ export class FavorRecibidoPage implements OnInit {
     this.favor.usuarioRealiza=null;
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.rechazaSolicitante),null);
   }
-  finalizaSolicitante(){
+  finalizaSolicitante(calificacion:number){
     this.favor.estado=EstadofavorEnum.finalizado;
+    this.favor.calificacionSolicita=calificacion;
     this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.finalizaSolicitante),null);
   }
-  calificaSolicitante(){
+  calificaSolicitante(calificacion:number){
     this.favor.estado=EstadofavorEnum.calificado;
+    this.favor.calificacionSolicita=calificacion;
     this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.calificaSolicitante),null);
   }
@@ -201,29 +203,55 @@ export class FavorRecibidoPage implements OnInit {
     this.favor.usuarioRealiza=null;
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.cancelaAyudante),'favores');
   }
-  finalizaAyudante(){
+  finalizaAyudante(calificacion:number){
     this.favor.estado=EstadofavorEnum.finalizado;
+    this.favor.calificacionRealiza=calificacion;
     this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.finalizaAyudante),null);
   }
-  calificaAyudante(){
+  calificaAyudante(calificacion:number){
     this.favor.estado=EstadofavorEnum.calificado;
+    this.favor.calificacionRealiza=calificacion;
     this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.calificaAyudante),null);
   }
 
-  async realizarAccion(accion:string) {
-    if(accion==AccionFavorEnum.finalizaAyudante || accion==AccionFavorEnum.calificaAyudante){
-      if(this.favor.calificacionRealiza==0){
-        this.mostrarMensaje("Debe calificar a la persona que solicitó el favor");
-        return null;
+  async mostrarModal(accion:string,mensaje:string){
+    const modal = await this.modalController.create({
+      component: CalificacionComponent,
+      cssClass: 'dialog-modal',
+      componentProps: {
+        'mensaje': mensaje,
       }
+    });
+    await modal.present();
+
+    //const {data}= await modal.onDidDismiss();
+    
+    const {data}= await modal.onWillDismiss();
+    if(data){
+      this.ejecutarAccion(accion,data.calificacion);
     }
-    else if(accion==AccionFavorEnum.finalizaSolicitante || accion==AccionFavorEnum.finalizaSolicitante){
-      if(this.favor.calificacionSolicita==0){
-        this.mostrarMensaje("Debe calificar a la persona que le ayudó con el favor");
-        return null;
-      }
+  }
+
+  async realizarAccion(accion:string) {
+    console.log(accion);
+    if(accion==AccionFavorEnum.finalizaAyudante || accion==AccionFavorEnum.calificaAyudante){
+      await this.mostrarModal(accion,'Califica al usuario que solicitó el favor, otorgándole de 1 a 5 estrellas.');
+      return null;
+      // if(this.favor.calificacionRealiza==0){
+      //   this.mostrarMensaje("Debe calificar a la persona que solicitó el favor");
+      //   return null;
+      // }
+
+    }
+    else if(accion==AccionFavorEnum.finalizaSolicitante || accion==AccionFavorEnum.calificaSolicitante){
+      await this.mostrarModal(accion,'Califica al usuario que te ayudó con el favor, otorgándole de 1 a 5 estrellas.');
+      return null;
+      // if(this.favor.calificacionSolicita==0){
+      //   this.mostrarMensaje("Debe calificar a la persona que le ayudó con el favor");
+      //   return null;
+      // }
     }
     let mensajeAdvertenciaDTO:MensajeAdvertenciaDTO= this.devolverMensajeAdvertencia(accion);
     await this.confirmarAccion(accion, mensajeAdvertenciaDTO);
@@ -232,7 +260,7 @@ export class FavorRecibidoPage implements OnInit {
   async confirmarAccion(accion:string,mensajeAdvertenciaDTO: MensajeAdvertenciaDTO){
     const alert = await this.alertController.create({
       header: mensajeAdvertenciaDTO.titulo,
-      subHeader: mensajeAdvertenciaDTO.subtitulo,
+      //subHeader: mensajeAdvertenciaDTO.subtitulo,
       message: mensajeAdvertenciaDTO.mensaje,
       buttons: [
         {
@@ -262,30 +290,30 @@ export class FavorRecibidoPage implements OnInit {
   devolverMensajeAdvertencia(accion:string){
     switch(accion) {
       case AccionFavorEnum.cancelaSolicitante: 
-        return new MensajeAdvertenciaDTO('Favor','Cancelar Favor','Se va a ELIMINAR el favor solicitado. ¿Está seguro de elimarlo?','Si, eliminar','No');
+        return new MensajeAdvertenciaDTO('Cancelar Favor','Cancelar Favor','Se va a ELIMINAR el favor solicitado. ¿Está seguro de elimarlo?','Si, eliminar','No');
       case AccionFavorEnum.aceptaSolicitante: 
-        return new MensajeAdvertenciaDTO('Favor','Aceptar Ayuda','¿Está seguro de ACEPTAR la ayuda de ' +this.favor.usuarioRealiza.persona.nombresApellidos+'?','Si, aceptar','Cancelar');
+        return new MensajeAdvertenciaDTO('Aceptar Ayuda','Aceptar Ayuda','¿Está seguro de ACEPTAR la ayuda de ' +this.favor.usuarioRealiza.persona.nombresApellidos+'?','Si, aceptar','Cancelar');
       case AccionFavorEnum.rechazaSolicitante: 
-        return new MensajeAdvertenciaDTO('Favor','Rechazar Ayuda','¿Está seguro de RECHAZAR la ayuda de ' +this.favor.usuarioRealiza.persona.nombresApellidos+'?','Si, rechazar','Cancelar');
+        return new MensajeAdvertenciaDTO('Rechazar Ayuda','Rechazar Ayuda','¿Está seguro de RECHAZAR la ayuda de ' +this.favor.usuarioRealiza.persona.nombresApellidos+'?','Si, rechazar','Cancelar');
       case AccionFavorEnum.finalizaSolicitante: 
-        return new MensajeAdvertenciaDTO('Favor','Finalizar Favor','Usted CALIFICARÁ con '+this.favor.calificacionSolicita+ ' estrellas al usuario que le ayudó con el favor.','Aceptar','Cancelar');
+        return new MensajeAdvertenciaDTO('Finalizar Favor','Finalizar Favor','Usted CALIFICARÁ con '+this.favor.calificacionSolicita+ ' estrellas al usuario que le ayudó con el favor.','Aceptar','Cancelar');
       case AccionFavorEnum.calificaSolicitante: 
-        return new MensajeAdvertenciaDTO('Favor','Calificar Favor','Usted CALIFICARÁ con '+this.favor.calificacionSolicita+ ' estrellas al usuario que le ayudó con el favor.','Aceptar','Cancelar');
+        return new MensajeAdvertenciaDTO('Calificar Favor','Calificar Favor','Usted CALIFICARÁ con '+this.favor.calificacionSolicita+ ' estrellas al usuario que le ayudó con el favor.','Aceptar','Cancelar');
       case AccionFavorEnum.aceptaAyudante: 
-        return new MensajeAdvertenciaDTO('Favor','Ayudar Favor','Usted deberá REALIZAR el favor solicitado. ¿Está seguro de ayudar?','Si, ayudar','No');
+        return new MensajeAdvertenciaDTO('Ayudar Favor','Ayudar Favor','Usted deberá REALIZAR el favor solicitado. ¿Está seguro de ayudar?','Si, ayudar','No');
       case AccionFavorEnum.cancelaAyudante: 
-        return new MensajeAdvertenciaDTO('Favor','Cancelar Favor','¿Está seguro de CANCELAR su ayuda en el favor solicitado?','Si, cancelar','No');
+        return new MensajeAdvertenciaDTO('Cancelar Favor','Cancelar Favor','¿Está seguro de CANCELAR su ayuda en el favor solicitado?','Si, cancelar','No');
       case AccionFavorEnum.finalizaAyudante: 
-        return new MensajeAdvertenciaDTO('Favor','Finalizar Ayuda','Usted CALIFICARÁ con '+this.favor.calificacionRealiza+ ' estrellas al usuario que solicitó el favor.','Aceptar','Cancelar');
+        return new MensajeAdvertenciaDTO('Finalizar Ayuda','Finalizar Ayuda','Usted CALIFICARÁ con '+this.favor.calificacionRealiza+ ' estrellas al usuario que solicitó el favor.','Aceptar','Cancelar');
       case AccionFavorEnum.calificaAyudante: 
-        return new MensajeAdvertenciaDTO('Favor','Finalizar Favor','Usted CALIFICARÁ con '+this.favor.calificacionRealiza+ ' estrellas al usuario que solicitó el favor.','Aceptar','Cancelar');
+        return new MensajeAdvertenciaDTO('Finalizar Favor','Finalizar Favor','Usted CALIFICARÁ con '+this.favor.calificacionRealiza+ ' estrellas al usuario que solicitó el favor.','Aceptar','Cancelar');
       default: { 
         return null;
       } 
     }
   }
 
-  ejecutarAccion(accion:string){
+  ejecutarAccion(accion:string, calificacion?:number){
     switch(accion) {
       case AccionFavorEnum.cancelaSolicitante: 
         return this.cancelaSolicitante();
@@ -294,17 +322,17 @@ export class FavorRecibidoPage implements OnInit {
       case AccionFavorEnum.rechazaSolicitante: 
         return this.rechazaSolicitante();
       case AccionFavorEnum.finalizaSolicitante: 
-        return this.finalizaSolicitante();
+        return this.finalizaSolicitante(calificacion);
       case AccionFavorEnum.calificaSolicitante: 
-        return this.calificaSolicitante();
+        return this.calificaSolicitante(calificacion);
       case AccionFavorEnum.aceptaAyudante: 
         return this.aceptaAyudante();
       case AccionFavorEnum.cancelaAyudante: 
         return this.cancelaAyudante();
       case AccionFavorEnum.finalizaAyudante: 
-        return this.finalizaAyudante();
+        return this.finalizaAyudante(calificacion);
       case AccionFavorEnum.calificaAyudante: 
-        return this.calificaAyudante();
+        return this.calificaAyudante(calificacion);
       default: { 
         return null;
       } 

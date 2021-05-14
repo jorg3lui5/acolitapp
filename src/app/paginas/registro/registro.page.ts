@@ -99,8 +99,14 @@ export class RegistroPage implements OnInit {
           .then((data)=>{
             console.log('ddddddd');
             console.log(data);
-            this._storageService.guardar(this.constantes._usuario,this.usuario.usuario);
-            this.router.navigate(['/datos-personales']);
+            this._storageService.guardar(this.constantes._usuario,this.usuario.usuario).then(
+              (data:string)=>{
+                this.router.navigate(['/datos-personales']);
+              }
+            )
+            .catch(err=>{
+                console.log("error: "+err);
+            });
           })
           .catch(err=>{
               console.log("error: "+err);

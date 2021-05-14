@@ -1,0 +1,14 @@
+
+<h2 class="calificacion-titulo">Calificar Favor</h2>
+<div class="calificacion-descripcion">
+  Califique al usuario que le ayudó con el favor.
+</div>
+<div class="favor-calificacion-primaria">
+  <ion-button (click)="calificar(i)" class="boton-estrella" fill="clear" *ngFor="let i of [1,2,3,4,5]">
+    <ion-icon class="favor-estrella-primaria" slot="icon-only" [name]="i<=calificacion?'star':'star-outline'" color="primary"></ion-icon>
+  </ion-button>
+</div>
+<div class="botones-inferiores calificacion-botones">
+  <ion-button expand="block" (click)="aceptar()" fill="clear" class="ion-text-uppercase calificacion-boton">{{constantes._aceptar}}</ion-button>
+  <ion-button expand="block" (click)="cancelar()" fill="clear"  class="ion-text-uppercase calificacion-boton">{{constantes._cancelar}}</ion-button>
+</div>

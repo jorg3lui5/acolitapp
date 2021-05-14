@@ -33,8 +33,14 @@ export class AppComponent  implements OnInit{
   cerrarSesion(){
     this._usuarioService.desloguear()
     .then(()=>{
-      this._storageService.guardar(this.constantes._usuario,'');
-      this.router.navigate(['/login']);
+      this._storageService.guardar(this.constantes._usuario,'').then(
+        (data:string)=>{
+          this.router.navigate(['/login']);
+        }
+      )
+      .catch(err=>{
+          console.log("error: "+err);
+      });
     })
     .catch(err=>{
         console.log("error: "+err);

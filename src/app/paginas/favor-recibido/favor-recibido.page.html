@@ -79,11 +79,11 @@
       <div>
         {{favor.estado}}
       </div>
-      <div class="favor-calificacion-primaria">
+      <!-- <div class="favor-calificacion-primaria">
         <ion-button (click)="calificar(i)" fill="clear" *ngFor="let i of [1,2,3,4,5]">
           <ion-icon class="favor-estrella-primaria" slot="icon-only" [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="primary"></ion-icon>
         </ion-button>
-      </div>
+      </div> -->
       <div class="botones-inferiores" *ngIf="tipoFavor==tipoFavorEnum.solicitado">
         <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.solicitado" (click)="realizarAccion(accionFavorEnum.cancelaSolicitante)">{{constantes._cancelar}}</ion-button>
         <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.aceptado" (click)="realizarAccion(accionFavorEnum.aceptaSolicitante)">{{constantes._aceptar}}</ion-button>
