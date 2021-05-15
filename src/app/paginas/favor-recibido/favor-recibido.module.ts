@@ -8,6 +8,7 @@ import { FavorRecibidoPageRoutingModule } from './favor-recibido-routing.module'
 
 import { FavorRecibidoPage } from './favor-recibido.page';
 import { ComponentesModule } from '../../componentes/componentes.module';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { ComponentesModule } from '../../componentes/componentes.module';
     IonicModule,
     FavorRecibidoPageRoutingModule,
     ComponentesModule,
+    PipesModule
     
   ],
   declarations: [FavorRecibidoPage]

@@ -43,7 +43,7 @@
       </div>
       <div>
         <div class="favores-calificaciones" *ngIf="favor.calificacionSolicita">
-          <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="primary" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+          <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
         </div>
         <ion-badge [color]="favor.estado|colorEstadoPipe" [class]="favor.calificacionSolicita?'favores-estado':''">
           {{favor.estado==estadofavorEnum.calificado?estadofavorEnum.finalizado:favor.estado}}

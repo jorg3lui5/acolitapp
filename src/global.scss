@@ -81,3 +81,10 @@ ion-modal.dialog-modal {
         }
     }
 }
+
+.loadingPersonalizado {
+    height: 100%;
+    width: 100%;
+    --background: white;
+    --backdrop-opacity: 1;
+}

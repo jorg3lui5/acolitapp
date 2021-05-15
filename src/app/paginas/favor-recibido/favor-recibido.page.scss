@@ -56,3 +56,36 @@ ion-button {
     justify-content: flex-end;
     align-items: flex-end;
 }
+
+.favores-estado {
+    margin-top: 0px;
+}
+
+.div-favor-estado {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.div-favor-fecha {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.div-estado-fecha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.favor-mi-calificacion {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5px ;
+    padding-bottom: 10px;
+}
+
+.estrella-mio {
+    font-size: 50px;
+}

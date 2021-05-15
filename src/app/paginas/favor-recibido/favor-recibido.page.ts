@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FavorService } from '../../servicios/favor.service';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { PersonaService } from '../../servicios/persona.service';
-import { AlertController, ModalController, PopoverController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 import { StorageService } from '../../servicios/librerias/storage.service';
 import { TipoPagoEnum } from 'src/app/modelo/enum/tipo-pago-enum';
 import { Usuario } from '../../modelo/usuario';
@@ -22,6 +22,7 @@ import { CalificacionComponent } from '../../componentes/calificacion/calificaci
   styleUrls: ['./favor-recibido.page.scss'],
 })
 export class FavorRecibidoPage implements OnInit {
+  loading: HTMLIonLoadingElement;
   constantes: Constantes = new Constantes;
   favor: FavorDTO;
   idFavor:string;
@@ -43,11 +44,13 @@ export class FavorRecibidoPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private modalController: ModalController,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private loadingController: LoadingController
 
   ) { }
 
   ngOnInit() {
+    this.mostrarLoading(this.constantes._cargandoDatos);
     this.idFavor=this.activatedRoute.snapshot.paramMap.get('idFavor');
     console.log(this.idFavor);
     this.recuperarUsuario();
@@ -79,36 +82,67 @@ export class FavorRecibidoPage implements OnInit {
             if(this.usuario==this.favor.usuarioSolicita.usuario){
               this.tipoFavor=TipoFavorEnum.solicitado;
             }
-          }); 
-        }); 
-      }
-      if(this.favor.usuarioRealiza){
-        this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-          let usuarios=[];
-          res.forEach((doc) => {
-            usuarios.push({
-              id: doc.id,
-              ...<any>doc.data()
-            } as Usuario);
-          });
-          this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-            let personas=[];
-            res.forEach((doc) => {
-              personas.push( {
-                id: doc.id,
-                ...<any>doc.data()
-              } as Persona);
-            });
-            this.favor.usuarioRealiza=usuarios[0];
-            this.favor.usuarioRealiza.persona=personas[0];
-
-            if(this.usuario==this.favor.usuarioRealiza.usuario){
-              this.tipoFavor=TipoFavorEnum.realizado;
+            if(this.favor.usuarioRealiza){
+              this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+                let usuarios=[];
+                res.forEach((doc) => {
+                  usuarios.push({
+                    id: doc.id,
+                    ...<any>doc.data()
+                  } as Usuario);
+                });
+                this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+                  let personas=[];
+                  res.forEach((doc) => {
+                    personas.push( {
+                      id: doc.id,
+                      ...<any>doc.data()
+                    } as Persona);
+                  });
+                  this.favor.usuarioRealiza=usuarios[0];
+                  this.favor.usuarioRealiza.persona=personas[0];
+      
+                  if(this.usuario==this.favor.usuarioRealiza.usuario){
+                    this.tipoFavor=TipoFavorEnum.realizado;
+                  }
+                  this.ocultarLoading();
+                },
+                (error)=>{
+                  this.ocultarLoading();
+                  console.log(error);
+                }
+                ); 
+              },
+              (error)=>{
+                this.ocultarLoading();
+                console.log(error);
+              }
+              ); 
+            }else{
+              this.ocultarLoading();
             }
-          }); 
-        }); 
+          },
+          (error)=>{
+            this.ocultarLoading();
+            console.log(error);
+          }
+          ); 
+        },
+        (error)=>{
+          this.ocultarLoading();
+          console.log(error);
+        }
+        ); 
       }
-    });   
+      else{
+          this.ocultarLoading();
+      }
+    },
+    (error)=>{
+      this.ocultarLoading();
+      console.log(error);
+    }
+    ); 
   }
 
   recuperarUsuario(){
@@ -119,13 +153,15 @@ export class FavorRecibidoPage implements OnInit {
           this.recuperarFavor();
         }
         else{
+          this.ocultarLoading();
           this.mostrarMensaje("No pudo recuperar el usuario");
         }
       }
     )
     .catch(err=>{
-        console.log("error: "+err);
-        this.mostrarMensaje(err.message);
+      this.ocultarLoading();
+      console.log("error: "+err);
+      this.mostrarMensaje(err.message);
     });
   }
 
@@ -363,5 +399,20 @@ export class FavorRecibidoPage implements OnInit {
         return null;
       } 
     }
+  }
+
+  async mostrarLoading(message: string) {
+    this.loading = await this.loadingController.create({
+      message:message,
+      showBackdrop: true,
+      cssClass: 'loadingPersonalizado',
+    });
+    await this.loading.present();
+    console.log('despues ml',this.loading);
+  }
+
+  ocultarLoading(){
+    this.loading.dismiss();
+
   }
 }

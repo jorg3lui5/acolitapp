@@ -86,4 +86,5 @@ export class Constantes {
     public _solicitar= 'Solicitar';
     public _todos= 'Todos';
     public _rechazar= 'Rechazar';
+    public _cargandoDatos = 'Cargando datos...';
 }

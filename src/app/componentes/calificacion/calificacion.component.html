@@ -5,7 +5,7 @@
 </div>
 <div class="favor-calificacion-primaria">
   <ion-button (click)="calificar(i)" class="boton-estrella" fill="clear" *ngFor="let i of [1,2,3,4,5]">
-    <ion-icon class="favor-estrella-primaria" slot="icon-only" [name]="i<=calificacion?'star':'star-outline'" color="primary"></ion-icon>
+    <ion-icon class="favor-estrella-primaria" slot="icon-only" [name]="i<=calificacion?'star':'star-outline'" color="warning"></ion-icon>
   </ion-button>
 </div>
 <div class="botones-inferiores calificacion-botones">
