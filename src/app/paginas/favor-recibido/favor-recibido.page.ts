@@ -15,6 +15,7 @@ import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
 import { AccionFavorEnum } from '../../modelo/enum/accion-favor-enum';
 import { MensajeAdvertenciaDTO } from '../../modelo/dto/mensaje-advertencia-dto';
 import { CalificacionComponent } from '../../componentes/calificacion/calificacion.component';
+import firebase from 'firebase';
 
 @Component({
   selector: 'app-favor-recibido',
@@ -32,7 +33,7 @@ export class FavorRecibidoPage implements OnInit {
   tipoFavorEnum = TipoFavorEnum;
   estadofavorEnum = EstadofavorEnum;
   accionFavorEnum = AccionFavorEnum;
-
+  storageRef = firebase.storage().ref();
 
   constructor(
     private activatedRoute:ActivatedRoute,
@@ -45,7 +46,8 @@ export class FavorRecibidoPage implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     public popoverController: PopoverController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    
 
   ) { }
 
@@ -68,6 +70,7 @@ export class FavorRecibidoPage implements OnInit {
               ...<any>doc.data()
             } as Usuario);
           });
+          console.log('solicita' +this.favor.usuarioSolicita);
           this._personaService.recuperarPorUsuario(this.favor.usuarioSolicita).subscribe(res => {
             let personas=[];
             res.forEach((doc) => {
@@ -82,45 +85,65 @@ export class FavorRecibidoPage implements OnInit {
             if(this.usuario==this.favor.usuarioSolicita.usuario){
               this.tipoFavor=TipoFavorEnum.solicitado;
             }
-            if(this.favor.usuarioRealiza){
-              this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-                let usuarios=[];
-                res.forEach((doc) => {
-                  usuarios.push({
-                    id: doc.id,
-                    ...<any>doc.data()
-                  } as Usuario);
-                });
-                this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-                  let personas=[];
+
+            const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioSolicita.usuario}.jpg`);
+            imageRef.getDownloadURL().then(url=> {
+              console.log('si foto')
+              this.favor.usuarioSolicita.foto=url;
+              if(this.favor.usuarioRealiza){
+                this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+                  let usuarios=[];
                   res.forEach((doc) => {
-                    personas.push( {
+                    usuarios.push({
                       id: doc.id,
                       ...<any>doc.data()
-                    } as Persona);
+                    } as Usuario);
                   });
-                  this.favor.usuarioRealiza=usuarios[0];
-                  this.favor.usuarioRealiza.persona=personas[0];
-      
-                  if(this.usuario==this.favor.usuarioRealiza.usuario){
-                    this.tipoFavor=TipoFavorEnum.realizado;
+                  this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+                    let personas=[];
+                    res.forEach((doc) => {
+                      personas.push( {
+                        id: doc.id,
+                        ...<any>doc.data()
+                      } as Persona);
+                    });
+                    this.favor.usuarioRealiza=usuarios[0];
+                    this.favor.usuarioRealiza.persona=personas[0];
+        
+                    if(this.usuario==this.favor.usuarioRealiza.usuario){
+                      this.tipoFavor=TipoFavorEnum.realizado;
+                    }
+                    const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioRealiza.usuario}.jpg`);
+
+                    imageRef.getDownloadURL().then(url=> {
+                      this.favor.usuarioRealiza.foto=url;
+                      this.ocultarLoading();
+                    })
+                    .catch(error=> {
+                      this.ocultarLoading();
+                      console.error('error');
+                    });
+                  },
+                  (error)=>{
+                    this.ocultarLoading();
+                    console.log(error);
                   }
-                  this.ocultarLoading();
+                  ); 
                 },
                 (error)=>{
                   this.ocultarLoading();
                   console.log(error);
                 }
                 ); 
-              },
-              (error)=>{
+              }else{
                 this.ocultarLoading();
-                console.log(error);
               }
-              ); 
-            }else{
+            })
+            .catch(error=> {
               this.ocultarLoading();
-            }
+              console.error('error');
+            });
+
           },
           (error)=>{
             this.ocultarLoading();

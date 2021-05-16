@@ -4,11 +4,17 @@
     <ion-menu side="start" menuId="first" contentId="main">
       <ion-header>
         <ion-toolbar color="primary">
-          <ion-avatar>
-            <img src="../assets/img/logo.png">
-          </ion-avatar>
-          <ion-title>Menú</ion-title>
-          <ion-label>jorg3lui5</ion-label>
+          <div class="cabecera-menu">
+            <ion-avatar class="foto-avatar">
+              <img [src]="usuarioDTO?.foto" *ngIf="usuarioDTO?.foto">
+            </ion-avatar>
+            <div>
+              <label>{{usuarioDTO?.persona?.nombresApellidos}}</label>
+            </div>
+            <div>
+              <small>{{usuarioDTO?.usuario}}</small>
+            </div>
+          </div>
         </ion-toolbar>
       </ion-header>
       <ion-content>

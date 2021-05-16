@@ -1,11 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnChanges, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Componente } from 'src/app/interfaces/interfaces';
 import { Constantes } from './compartido/constantes';
 import { OpcionesMenuService } from './servicios/menu/opciones-menu.service';
 import { UsuarioService } from './servicios/usuario.service';
 import { StorageService } from './servicios/librerias/storage.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { UsuarioDTO } from './modelo/dto/usuario-dto';
+import { Persona } from './modelo/persona';
+import { Usuario } from './modelo/usuario';
+import { PersonaService } from './servicios/persona.service';
+import firebase from 'firebase';
+import { ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-root',
@@ -16,17 +23,34 @@ export class AppComponent  implements OnInit{
   componentes: Observable<Componente[]>;
   constantes: Constantes = new Constantes;
 
+  usuario: string;
+  usuarioDTO: Usuario;
+  storageRef = firebase.storage().ref();
+  private _storage: Storage | null = null;
+
   constructor(
     private _opcionesMenuService: OpcionesMenuService,
-    private _usuarioService: UsuarioService,
     private _storageService:StorageService,
     private router: Router,
-
-  ) {
-
+    public _usuarioService: UsuarioService,
+    public _personaService: PersonaService,
+    public toastController: ToastController,
+    private storage: Storage,
+    private  ngZone:NgZone,
+  ) { 
+    router.events.subscribe((val) => {
+        if(val instanceof NavigationEnd){
+          this.iniciar();
+        }
+    });
   }
 
   ngOnInit() {
+    this.iniciar();
+  }
+
+  iniciar(){
+    this.recuperarUsuario();
     this.componentes=this._opcionesMenuService.getOpcionesMenu();
   }
 
@@ -46,5 +70,74 @@ export class AppComponent  implements OnInit{
         console.log("error: "+err);
         //this.mostrarMensaje(err);
     });
+  }
+
+  recuperarDatosUsuario(){
+    this._usuarioService.recuperarPorUsuario(this.usuario).subscribe(res => {
+      let usuarios=[];
+      res.forEach((doc) => {
+        usuarios.push({
+          id: doc.id,
+          ...<any>doc.data()
+        } as Usuario);
+      });
+      this._personaService.recuperarPorUsuario(this.usuario).subscribe(res => {
+        let personas=[];
+        res.forEach((doc) => {
+          personas.push( {
+            id: doc.id,
+            ...<any>doc.data()
+          } as Persona);
+        });
+        this.usuarioDTO=usuarios[0];
+        this.usuarioDTO.persona=personas[0];
+        const imageRef = this.storageRef.child(`fotoPerfil/${this.usuario}.jpg`);
+        imageRef.getDownloadURL().then(url=> {
+          this.usuarioDTO.foto=url;
+        })
+        .catch(error=> {
+          console.error('error');
+        });
+      },
+      (error)=>{
+        console.log(error);
+      }
+      ); 
+    },
+    (error)=>{
+      console.log(error);
+    }
+    ); 
+  }
+
+  async recuperarUsuario(){
+    const storage = await this.storage.create();    
+    this._storage = storage;
+    this._storage.get(this.constantes._usuario).then(
+      (data:string)=>{
+        if(data){
+          this.usuario=data;
+          if(!this.usuarioDTO){
+            this.recuperarDatosUsuario();
+          }
+        }
+        else{
+          this.usuarioDTO=null;
+          //this.mostrarMensaje("No pudo recuperar el usuario");
+        }
+      }
+    )
+    .catch(err=>{
+      console.log("error: "+err);
+      this.mostrarMensaje(err.message);
+    });
+  }
+
+  async mostrarMensaje(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: this.constantes._duracionToast
+    });
+    toast.present();
   }
 }

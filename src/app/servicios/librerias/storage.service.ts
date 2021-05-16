@@ -15,6 +15,7 @@ export class StorageService {
   }
 
   async init() {
+    console.log('estorag');
     const storage = await this.storage.create();    
     console.log('estorag');
     console.log(storage);
@@ -26,6 +27,11 @@ export class StorageService {
   }
 
   recuperar(clave:string): Promise<any>{
+    console.log('eee3')
+    console.log(this._storage);
+    console.log('aaa');
+    console.log(this._storage.get(clave));
+    console.log('eee4');
     return this._storage.get(clave);
   }
 }

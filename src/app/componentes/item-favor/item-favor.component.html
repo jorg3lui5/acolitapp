@@ -4,7 +4,7 @@
       <div>
         <ion-chip class="favores-chip">
           <ion-avatar>
-            <ion-img src="../../../assets/img/logo.png"></ion-img>
+            <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
           </ion-avatar>
           <span>
             {{favor.usuarioSolicita?.persona?.nombresApellidos}}

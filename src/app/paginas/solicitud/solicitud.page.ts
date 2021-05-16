@@ -169,6 +169,8 @@ export class SolicitudPage implements OnInit {
   }
 
   recuperarUsuario(){
+
+    console.error(this._storageService);
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{
         if(data){

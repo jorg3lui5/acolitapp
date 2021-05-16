@@ -87,4 +87,5 @@ export class Constantes {
     public _todos= 'Todos';
     public _rechazar= 'Rechazar';
     public _cargandoDatos = 'Cargando datos...';
+    public _fotoPerfil = 'Foto del Perfil'
 }

@@ -12,6 +12,7 @@ import { _ParseAST } from '@angular/compiler';
 import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
 import { ToastController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
+import firebase from 'firebase';
 
 @Component({
   selector: 'app-favores-realizados',
@@ -23,6 +24,7 @@ export class FavoresRealizadosPage implements OnInit {
   constantes: Constantes = new Constantes;
   tipoFavor: string=TipoFavorEnum.realizado;
   usuario: string;
+  storageRef = firebase.storage().ref();
 
   sliderOpts = {
     allowSlidePrev:false,
@@ -71,28 +73,44 @@ export class FavoresRealizadosPage implements OnInit {
               });
               favor.usuarioSolicita=usuarios[0];
               favor.usuarioSolicita.persona=personas[0];
-            }); 
-          }); 
-        }
-        if(favor.usuarioRealiza){
-          this._usuarioService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
-            let usuarios=[];
-            res.forEach((doc) => {
-              usuarios.push({
-                id: doc.id,
-                ...<any>doc.data()
-              } as Usuario);
-            });
-            this._personaService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
-              let personas=[];
-              res.forEach((doc) => {
-                personas.push( {
-                  id: doc.id,
-                  ...<any>doc.data()
-                } as Persona);
+
+              const imageRef = this.storageRef.child(`fotoPerfil/${favor.usuarioSolicita.usuario}.jpg`);
+              imageRef.getDownloadURL().then(url=> {
+                favor.usuarioSolicita.foto=url;
+                if(favor.usuarioRealiza){
+                  this._usuarioService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
+                    let usuarios=[];
+                    res.forEach((doc) => {
+                      usuarios.push({
+                        id: doc.id,
+                        ...<any>doc.data()
+                      } as Usuario);
+                    });
+                    this._personaService.recuperarPorUsuario(favor.usuarioRealiza).subscribe(res => {
+                      let personas=[];
+                      res.forEach((doc) => {
+                        personas.push( {
+                          id: doc.id,
+                          ...<any>doc.data()
+                        } as Persona);
+                      });
+                      favor.usuarioRealiza=usuarios[0];
+                      favor.usuarioRealiza.persona=personas[0];
+
+                      const imageRef = this.storageRef.child(`fotoPerfil/${favor.usuarioRealiza.usuario}.jpg`);
+                      imageRef.getDownloadURL().then(url=> {
+                        favor.usuarioRealiza.foto=url;
+                      })
+                      .catch(error=> {
+                        console.error('error');
+                      });
+                    }); 
+                  }); 
+                }
+              })
+              .catch(error=> {
+                console.error('error');
               });
-              favor.usuarioRealiza=usuarios[0];
-              favor.usuarioRealiza.persona=personas[0];
             }); 
           }); 
         }

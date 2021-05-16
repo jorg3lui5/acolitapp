@@ -17,7 +17,7 @@
       </div>
       <ion-item lines="none" *ngIf="!tipoFavor || tipoFavor==tipoFavorEnum.realizado">
         <ion-avatar slot="start">
-          <ion-img src="../../../assets/img/logo.png"></ion-img>
+          <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
         </ion-avatar>
         <ion-label>
           <ion-text color="medium">
@@ -39,7 +39,7 @@
             </div>
           </ion-label>
           <ion-avatar slot="end">
-            <ion-img src="../../../assets/img/logo.png"></ion-img>
+            <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
           </ion-avatar>
         </ion-item>
       </div>

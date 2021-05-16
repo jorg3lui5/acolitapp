@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Constantes } from '../..//compartido/constantes';
 import { DatosPersonalesPage } from '../datos-personales/datos-personales.page';
-import { NavController, ToastController } from '@ionic/angular';
+import { ActionSheetController, NavController, ToastController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
 import { Router } from '@angular/router';
 import { Persona } from '../../modelo/persona';
@@ -10,6 +10,10 @@ import { UsuarioService } from '../../servicios/usuario.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from '../../servicios/librerias/storage.service';
 import { User } from '../../interfaces/firebase/User';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { TipoFotoEnum } from '../../modelo/enum/tipo-foto-enum';
+import firebase from 'firebase';
+
 
 @Component({
   selector: 'app-registro',
@@ -24,6 +28,7 @@ export class RegistroPage implements OnInit {
 
   expresionMail: RegExp = new RegExp(this.constantes._expresionMail);
   formularioRegistro: FormGroup = this.formBuilder.group({
+    foto: [null,Validators.required],
     identificacion: ['', ],
     correo: ['', Validators.compose([Validators.required, Validators.pattern(this.expresionMail)])],
     contrasenia: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
@@ -31,6 +36,9 @@ export class RegistroPage implements OnInit {
   });
 
   mensajesError = {
+    foto: [
+      {tipo: 'required', mensaje: 'La foto del perfil es requerida'},
+    ],
     identificacion: [
       {tipo: 'required', mensaje: 'La identificación es requerida'},
     ],
@@ -63,6 +71,10 @@ export class RegistroPage implements OnInit {
   get contraseniaConfirmada() {
     return this.formularioRegistro.get('contraseniaConfirmada');
   }
+
+  get foto() {
+    return this.formularioRegistro.get('foto');
+  }
   
   constructor(
     private router: Router,
@@ -71,6 +83,8 @@ export class RegistroPage implements OnInit {
     public navCtrl: NavController,
     private formBuilder: FormBuilder,
     private _storageService:StorageService,
+    private camera: Camera,
+    private actionSheetController: ActionSheetController
     ) 
   {
       
@@ -80,10 +94,8 @@ export class RegistroPage implements OnInit {
   }
 
   registrar() {
-    console.log('aaaaaa');
     if(this.formularioRegistro.valid){
       if(this.formularioRegistro.value.contrasenia==this.formularioRegistro.value.contraseniaConfirmada){
-        console.log('bbbbbbb');
         this.usuario=new Usuario();
         this.usuario.contrasenia=this.formularioRegistro.value.contrasenia;
         this.usuario.usuario=this.formularioRegistro.value.correo;
@@ -93,19 +105,27 @@ export class RegistroPage implements OnInit {
         
         this._usuarioService.registrar(this.usuario.usuario,this.usuario.contrasenia)
         .then((data:User)=>{
-          console.log('cccccc');
-
           this._usuarioService.crear(this.usuario)
           .then((data)=>{
-            console.log('ddddddd');
-            console.log(data);
             this._storageService.guardar(this.constantes._usuario,this.usuario.usuario).then(
               (data:string)=>{
-                this.router.navigate(['/datos-personales']);
+                let storageRef = firebase.storage().ref();
+                const imageRef = storageRef.child(`fotoPerfil/${this.usuario.usuario}.jpg`);
+                imageRef.putString(this.formularioRegistro.value.foto, firebase.storage.StringFormat.DATA_URL)
+                  .then((snapshot)=> {
+                    
+                    this.router.navigate(['/datos-personales']);
+                    // Do something here when the data is succesfully uploaded!
+                  })
+                  .catch(error=>{
+                    console.error(error);
+                    this.mostrarMensaje(error.message);
+                  });
               }
             )
             .catch(err=>{
                 console.log("error: "+err);
+                this.mostrarMensaje(err.message);
             });
           })
           .catch(err=>{
@@ -128,7 +148,10 @@ export class RegistroPage implements OnInit {
       }
     }
     else{
-      this.mostrarMensaje("Por favor llene los campos requeridos");
+      if(!this.formularioRegistro.value.foto){
+        return this.mostrarMensaje("Por favor seleccione una foto de perfil.");
+      }
+      this.mostrarMensaje("Por favor llene los campos requeridos.");
     }
   }
 
@@ -139,5 +162,63 @@ export class RegistroPage implements OnInit {
     });
     toast.present();
   }
+
+  abrirCamaraGaleria(opcionesCamara: CameraOptions){
+    this.camera.getPicture(opcionesCamara).then((imageData) => {
+      this.foto.setValue('data:image/jpeg;base64,' + imageData);
+      this.foto.updateValueAndValidity();
+      //this.subirFotoPerfilFirebase(this.formularioRegistro.value.foto,'lolita');
+    })
+    .catch(error=>{
+      console.log(error);
+    });
+  }
+
+  subirFoto(){
+    this.seleccionarTipoFoto();
+  }
+
+  async seleccionarTipoFoto() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Foto del perfil',
+      backdropDismiss: true,
+      buttons: [
+        {
+          text: 'Galería',
+          icon: 'image-outline',
+          handler: () => {
+            const opcionesCamara=this.obtenerOpcionesSubidaFoto(TipoFotoEnum.galeria);
+            this.abrirCamaraGaleria(opcionesCamara);
+          }
+        }, {
+          text: 'Cámara',
+          icon: 'camera-outline',
+          handler: () => {
+            const opcionesCamara=this.obtenerOpcionesSubidaFoto(TipoFotoEnum.camara);
+            this.abrirCamaraGaleria(opcionesCamara);
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  obtenerOpcionesSubidaFoto(tipoFoto: string){
+    const opcionesCamara: CameraOptions = {
+      quality: 100,
+      mediaType: this.camera.MediaType.PICTURE,
+      encodingType: this.camera.EncodingType.JPEG,
+      //destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
   
+      sourceType: tipoFoto==TipoFotoEnum.camara?this.camera.PictureSourceType.CAMERA:this.camera.PictureSourceType.PHOTOLIBRARY,
+      //allowEdit: false,
+      // targetHeight: 1024,
+      // targetWidth: 1024,
+      // correctOrientation: true,
+      // saveToPhotoAlbum: true,
+      
+    }
+    return opcionesCamara;
+  }
 }

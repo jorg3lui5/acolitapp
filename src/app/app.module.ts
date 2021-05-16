@@ -15,6 +15,8 @@ import { Drivers, Storage } from '@ionic/storage';
 import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Camera } from '@ionic-native/camera/ngx';
+
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+
     IonicStorageModule.forRoot({
       name: 'acolitapp',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
@@ -50,6 +53,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Camera,
     
   ],
   bootstrap: [

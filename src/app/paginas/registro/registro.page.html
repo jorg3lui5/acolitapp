@@ -2,7 +2,17 @@
 
 <ion-content class="ion-padding">
   <form (submit)="registrar()" [formGroup]="formularioRegistro" errorTailor>
-    <ion-list lines="full" class="ion-no-margin ion-no-padding">        
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">    
+      <div class="registro-foto">
+        <ion-avatar (click)="subirFoto()" class="foto-avatar" name="foto" id="foto">
+          <ion-img [src]="formularioRegistro.value.foto?formularioRegistro.value.foto:'../../../assets/img/avatar.png'">
+          </ion-img>
+        </ion-avatar>
+        <small for="foto" class="texto-foto-perfil">
+          {{constantes._fotoPerfil}}
+          <ion-text color="danger">*</ion-text>
+        </small>
+      </div>
       <ion-item>
         <ion-label position="floating" for="correo">
           {{constantes._correoElectronico}}<ion-text color="danger">*</ion-text>
