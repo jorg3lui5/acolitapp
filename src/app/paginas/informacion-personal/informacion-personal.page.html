@@ -2,7 +2,7 @@
 <ion-content class="ion-padding">
   <ion-list lines="full" class="ion-no-margin ion-no-padding" *ngIf="persona">   
     <ion-item lines="none">
-      <ion-avatar slot="start" (click)="verFoto()" class="foto-avatar" name="foto" id="foto">
+      <ion-avatar slot="start" (click)="verFoto(foto)" class="foto-avatar" name="foto" id="foto">
         <ion-img [src]="foto?foto:'../../../assets/img/avatar.png'"></ion-img>
       </ion-avatar>
       <ion-label>

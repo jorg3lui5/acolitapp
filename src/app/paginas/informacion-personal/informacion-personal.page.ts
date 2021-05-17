@@ -4,6 +4,8 @@ import { Persona } from '../../modelo/persona';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase';
 import { PersonaService } from '../../servicios/persona.service';
+import { FullScreenImage } from '@ionic-native/full-screen-image/ngx';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 @Component({
   selector: 'app-informacion-personal',
@@ -16,13 +18,15 @@ export class InformacionPersonalPage implements OnInit {
   foto: any;
   storageRef = firebase.storage().ref();
   desabilitado: boolean = false;
+  usuario:string;
+
   constructor(
     private activatedRoute:ActivatedRoute,
     public _personaService: PersonaService,
     private router: Router,
-
+    private fullScreenImage: FullScreenImage,
+    private photoViewer: PhotoViewer,
   ) { }
-  usuario:string;
 
   ngOnInit() {
     this.usuario=this.activatedRoute.snapshot.paramMap.get('usuario');
@@ -46,6 +50,8 @@ export class InformacionPersonalPage implements OnInit {
       imageRef.getDownloadURL().then(url=> {
         this.persona=personas[0];
         this.foto=url;
+        console.log('foto');
+        console.log(this.foto);
       })
       .catch(error=> {
       });
@@ -57,7 +63,18 @@ export class InformacionPersonalPage implements OnInit {
     ); 
   }
 
-  verFoto(){
-
+  verFoto(foto: any){
+    let opciones = {
+      share: true, // default is false
+      closeButton: true, // default is true
+      copyToReference: true, // default is false
+      headers: 'NO se puede vissualizar',  // If this is not provided, an exception will be triggered
+      piccasoOptions: { } // If this is not provided, an exception will be triggered
+    }
+    this.photoViewer.show(
+      foto,
+      'Foto de Perfil', 
+      opciones
+    );
   }
 }

@@ -16,7 +16,8 @@ import { ErrorTailorModule } from '@ngneat/error-tailor';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Camera } from '@ionic-native/camera/ngx';
-
+import { FullScreenImage } from '@ionic-native/full-screen-image/ngx';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { Camera } from '@ionic-native/camera/ngx';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Camera,
-    
+    FullScreenImage,
+    PhotoViewer,
   ],
   bootstrap: [
     AppComponent

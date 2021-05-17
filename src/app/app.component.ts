@@ -13,6 +13,7 @@ import { PersonaService } from './servicios/persona.service';
 import firebase from 'firebase';
 import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +37,7 @@ export class AppComponent  implements OnInit{
     public _personaService: PersonaService,
     public toastController: ToastController,
     private storage: Storage,
-    private  ngZone:NgZone,
+    private photoViewer: PhotoViewer,
   ) { 
     router.events.subscribe((val) => {
         if(val instanceof NavigationEnd){
@@ -141,12 +142,29 @@ export class AppComponent  implements OnInit{
     toast.present();
   }
 
-  verInformacionPersonal(usuario:any){
-    if(usuario?.usuario){
-      this.router.navigate(['/informacion-personal', usuario.usuario]);
-    }
-    else if(usuario){
-      this.router.navigate(['/informacion-personal', usuario]);
+  // verInformacionPersonal(usuario:any){
+  //   if(usuario?.usuario){
+  //     this.router.navigate(['/informacion-personal', usuario.usuario]);
+  //   }
+  //   else if(usuario){
+  //     this.router.navigate(['/informacion-personal', usuario]);
+  //   }
+  // }
+
+  verFoto(foto:any){
+    if(foto){
+      let opciones = {
+        share: true, // default is false
+        closeButton: true, // default is true
+        copyToReference: true, // default is false
+        headers: 'NO se puede vissualizar',  // If this is not provided, an exception will be triggered
+        piccasoOptions: { } // If this is not provided, an exception will be triggered
+      }
+      this.photoViewer.show(
+        foto, 
+        'Foto de Perfil', 
+        opciones
+      );
     }
   }
 }
