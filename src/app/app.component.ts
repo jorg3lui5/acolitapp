@@ -140,4 +140,13 @@ export class AppComponent  implements OnInit{
     });
     toast.present();
   }
+
+  verInformacionPersonal(usuario:any){
+    if(usuario?.usuario){
+      this.router.navigate(['/informacion-personal', usuario.usuario]);
+    }
+    else if(usuario){
+      this.router.navigate(['/informacion-personal', usuario]);
+    }
+  }
 }

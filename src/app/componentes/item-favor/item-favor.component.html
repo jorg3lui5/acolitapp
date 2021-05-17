@@ -10,7 +10,7 @@
         <ion-card-header>
           <ion-card-subtitle class="favores-subtitulo">
             <div>
-              <ion-chip class="favores-chip">
+              <ion-chip class="favores-chip" (click)="verInformacionPersonal(favor.usuarioSolicita)">
                 <ion-avatar>
                   <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
                 </ion-avatar>
@@ -45,7 +45,7 @@
           </p>
           <div class="favores-usuarioRealiza-calificaciones">
             <div>
-              <p class="texto-primario"> 
+              <p class="texto-primario" *ngIf="favor.usuarioRealiza" (click)="verInformacionPersonal(favor.usuarioRealiza)"> 
                 {{favor.usuarioRealiza?.persona?.nombresApellidos}}
               </p>
             </div>

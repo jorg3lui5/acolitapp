@@ -5,10 +5,10 @@
       <ion-header>
         <ion-toolbar color="primary">
           <div class="cabecera-menu">
-            <ion-avatar class="foto-avatar">
+            <ion-avatar class="foto-avatar" (click)="verInformacionPersonal(usuarioDTO?.usuario)">
               <img [src]="usuarioDTO?.foto" *ngIf="usuarioDTO?.foto">
             </ion-avatar>
-            <div>
+            <div (click)="verInformacionPersonal(usuarioDTO?.usuario)">
               <label>{{usuarioDTO?.persona?.nombresApellidos}}</label>
             </div>
             <div>

@@ -1,73 +1,100 @@
 <app-cabecera [titulo]="constantes._informacionPersonal"></app-cabecera>
-<ion-content>
-    <ion-list lines="full" class="ion-no-margin ion-no-padding">   
-        <ion-item>
-            <h1>cedula</h1>
-        </ion-item>     
-        <ion-item>
-            <h1>nombre</h1>
-        </ion-item> 
-        <ion-item>
-          <ion-thumbnail>
-            <ion-img src="../../assets/img/logo.png"></ion-img>
-          </ion-thumbnail>
-        </ion-item>
-        <ion-item>
-            <ion-label>{{constantes._nombresApellidos}}
-            </ion-label>
-            <ion-label>{{constantes._nombresApellidos}}
-              </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._nacionalidad}}
-            </ion-label>
-            <ion-label>{{constantes._nacionalidad}}
-              </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._nivelEstudios}}
-            </ion-label>
-            <ion-label>{{constantes._nivelEstudios}}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._profesion}}
-            </ion-label>
-            <ion-label>{{constantes._profesion}}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._ocupacion}}
-            </ion-label>
-            <ion-label>{{constantes._ocupacion}}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._licencia}}
-            </ion-label>
-            <ion-label>{{constantes._licencia}}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._placaVehiculo}}
-            </ion-label>
-            <ion-label>{{constantes._placaVehiculo}}
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._ubicacion}}:
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>{{constantes._otros}}
-            </ion-label>
-            <ion-label>{{constantes._otros}}
-            </ion-label>
-          </ion-item>
-      </ion-list>
-      <div>
-        <ion-button expand="block" type="submit" class="ion-no-margin">{{constantes._aceptar}}</ion-button>
-      </div>
+<ion-content class="ion-padding">
+  <ion-list lines="full" class="ion-no-margin ion-no-padding" *ngIf="persona">   
+    <ion-item lines="none">
+      <ion-avatar slot="start" (click)="verFoto()" class="foto-avatar" name="foto" id="foto">
+        <ion-img [src]="foto?foto:'../../../assets/img/avatar.png'"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <ion-text color="primary">
+          <i>{{persona?.nombresApellidos}}</i>
+        </ion-text>
+        <div>
+          <ion-text color="primary">
+            <p>{{persona?.usuario}}</p>
+          </ion-text>
+        </div>
+        <div>
+          <ion-text color="primary">
+            <p>ID: {{persona?.identificacion}}</p>
+          </ion-text>
+        </div>
+        <div class="favor-calificacion-secundaria">
+          <ion-icon [name]="i<=5?'star':'star-outline'" size="large" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+        </div>
+      </ion-label>
+    </ion-item>
+    <!-- <ion-item lines="none" *ngIf="persona.identificacion">
+      <ion-label position="floating" for="identificacion" color="primary">
+        {{constantes._identificacion}}
+      </ion-label>
+      <ion-input name="identificacion" id="identificacion" [disabled]="desabilitado" [(ngModel)]="persona.identificacion" readonly></ion-input>
+    </ion-item> -->
+    <ion-item lines="none" *ngIf="persona.pais">
+      <ion-label position="floating" for="pais" color="primary">
+        {{constantes._pais}}
+      </ion-label>
+      <ion-input name="pais" id="pais" [disabled]="desabilitado" [(ngModel)]="persona.pais" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.nacionalidad">
+      <ion-label position="floating" for="nacionalidad" color="primary">
+        {{constantes._nacionalidad}}
+      </ion-label>
+      <ion-input name="nacionalidad" id="nacionalidad" [disabled]="desabilitado" [(ngModel)]="persona.nacionalidad" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.ciudad">
+      <ion-label position="floating" for="ciudad" color="primary">
+        {{constantes._ciudad}}
+      </ion-label>
+      <ion-input name="ciudad" id="ciudad" [disabled]="desabilitado" [(ngModel)]="persona.ciudad" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.direccion">
+      <ion-label position="floating" for="direccion" color="primary">
+        {{constantes._direccion}}
+      </ion-label>
+      <ion-input name="direccion" id="direccion" [disabled]="desabilitado" [(ngModel)]="persona.direccion" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.nivelEstudios">
+      <ion-label position="floating" for="nivelEstudios" color="primary">
+        {{constantes._nivelEstudios}}
+      </ion-label>
+      <ion-input name="nivelEstudios" id="nivelEstudios" [disabled]="desabilitado" [(ngModel)]="persona.nivelEstudios" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.profesion">
+      <ion-label position="floating" for="profesion" color="primary">
+        {{constantes._profesion}}
+      </ion-label>
+      <ion-input name="profesion" id="profesion" [disabled]="desabilitado" [(ngModel)]="persona.profesion" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.ocupacion">
+      <ion-label position="floating" for="ocupacion" color="primary">
+        {{constantes._ocupacion}}
+      </ion-label>
+      <ion-input name="ocupacion" id="ocupacion" [disabled]="desabilitado" [(ngModel)]="persona.ocupacion" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.tipoLicencia">
+      <ion-label position="floating" for="tipoLicencia" color="primary">
+        {{constantes._tipoLicencia}}
+      </ion-label>
+      <ion-input name="tipoLicencia" id="tipoLicencia" [disabled]="desabilitado" [(ngModel)]="persona.tipoLicencia" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.tipoVehiculo">
+      <ion-label position="floating" for="tipoVehiculo" color="primary">
+        {{constantes._tipoVehiculo}}
+      </ion-label>
+      <ion-input name="tipoVehiculo" id="tipoVehiculo" [disabled]="desabilitado" [(ngModel)]="persona.tipoVehiculo" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.placaVehiculo">
+      <ion-label position="floating" for="placaVehiculo" color="primary">
+        {{constantes._placaVehiculo}}
+      </ion-label>
+      <ion-input name="placaVehiculo" id="placaVehiculo" [disabled]="desabilitado" [(ngModel)]="persona.placaVehiculo" readonly></ion-input>
+    </ion-item>
+    <ion-item lines="none" *ngIf="persona.informacionAdicional">
+      <ion-label position="floating" for="informacionAdicional" color="primary">
+        {{constantes._informacionAdicional}}
+      </ion-label>
+      <ion-textarea name="informacionAdicional" id="informacionAdicional" [disabled]="desabilitado" [(ngModel)]="persona.informacionAdicional" readonly rows="5"></ion-textarea>
+    </ion-item>
+  </ion-list>
 </ion-content>
-
-<app-pie-pagina></app-pie-pagina>

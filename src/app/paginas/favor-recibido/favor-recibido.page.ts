@@ -431,4 +431,13 @@ export class FavorRecibidoPage implements OnInit {
     this.loading.dismiss();
 
   }
+
+  verInformacionPersonal(usuario:any){
+    if(usuario.usuario){
+      this.router.navigate(['/informacion-personal', usuario.usuario]);
+    }
+    else{
+      this.router.navigate(['/informacion-personal', usuario]);
+    }
+  }
 }

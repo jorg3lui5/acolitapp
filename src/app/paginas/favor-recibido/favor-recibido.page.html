@@ -17,10 +17,10 @@
         </ion-text>
       </div>
       <ion-item lines="none" *ngIf="!tipoFavor || tipoFavor==tipoFavorEnum.realizado">
-        <ion-avatar slot="start">
+        <ion-avatar slot="start" (click)="verInformacionPersonal(favor.usuarioSolicita)">
           <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
         </ion-avatar>
-        <ion-label>
+        <ion-label (click)="verInformacionPersonal(favor.usuarioSolicita)">
           <div>
             <small class="texto-primario">Solicita:</small>
           </div>
@@ -34,7 +34,7 @@
       </ion-item>
       <div *ngIf="(!tipoFavor || tipoFavor==tipoFavorEnum.solicitado) && favor.usuarioRealiza">
         <ion-item lines="none">
-          <ion-label class="label-favor-ayudante">
+          <ion-label class="label-favor-ayudante" (click)="verInformacionPersonal(favor.usuarioRealiza)">
             <div>
               <small class="texto-primario">Ayuda:</small>
             </div>
@@ -45,7 +45,7 @@
               <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
             </div>
           </ion-label>
-          <ion-avatar slot="end">
+          <ion-avatar slot="end" (click)="verInformacionPersonal(favor.usuarioRealiza)">
             <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
           </ion-avatar>
         </ion-item>

@@ -105,4 +105,13 @@ export class ItemFavorComponent implements OnInit {
     this.router.navigate(['/solicitud', this.favor.id]);
 
   }
+
+  verInformacionPersonal(usuario:any){
+    if(usuario.usuario){
+      this.router.navigate(['/informacion-personal', usuario.usuario]);
+    }
+    else{
+      this.router.navigate(['/informacion-personal', usuario]);
+    }
+  }
 }
