@@ -29,6 +29,13 @@
 .botones-inferiores {
     padding-top: 5px;
 }
+.botones-inferiores-dos-botones {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-content: flex-end;
+    height: 90px;
+}
 
 .alert-danger {
     color: #721c24;

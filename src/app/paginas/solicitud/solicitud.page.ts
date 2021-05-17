@@ -9,7 +9,7 @@ import { FavorService } from '../../servicios/favor.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from '../../servicios/librerias/storage.service';
 import { TipoPagoEnum } from '../../modelo/enum/tipo-pago-enum';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
 
 @Component({
@@ -25,6 +25,7 @@ export class SolicitudPage implements OnInit {
   tiposPago: string[];
   tipoPagoEnum = TipoPagoEnum;
   usuario: string;
+  idFavor:string;
 
 
   formularioNuevoFavor: FormGroup = this.formBuilder.group({
@@ -85,6 +86,7 @@ export class SolicitudPage implements OnInit {
     public _favorService: FavorService,
     private formBuilder: FormBuilder,
     private router: Router,
+    private activatedRoute:ActivatedRoute,
 
   ) 
   {
@@ -93,8 +95,13 @@ export class SolicitudPage implements OnInit {
 
   ngOnInit() {
     this.listarTiposPago();
-    this.recuperarUsuario();
-
+    this.idFavor=this.activatedRoute.snapshot.paramMap.get('idFavor');
+    if(this.idFavor){
+      this.recuperarFavor();
+    }
+    else{
+      this.recuperarUsuario();
+    }
   }
 
   seleccionarTipoPago(){
@@ -137,11 +144,38 @@ export class SolicitudPage implements OnInit {
       this.mostrarMensaje("Por favor llene los campos requeridos");
     }
   }
+  
+  modificaFavor(){
+    if(this.formularioNuevoFavor.valid){
+      this.favor.titulo=this.formularioNuevoFavor.value.titulo;
+      this.favor.descripcion=this.formularioNuevoFavor.value.descripcion;
+      this.favor.tipoPago=this.formularioNuevoFavor.value.tipoPago;
+      this.favor.descripcionPago=this.formularioNuevoFavor.value.descripcionPago;
+      this.favor.valorPago=this.formularioNuevoFavor.value.valorPago;
+
+      this.actualizarFavor(this.favor);
+    }
+    else{
+      this.mostrarMensaje("Por favor llene los campos requeridos");
+    }
+  }
 
   crearFavor(favor){
     this._favorService.crear(favor)
     .then((data)=> {
       this.mostrarMensaje("Favor registrado satisfactoriamente");
+      this.router.navigate(['/favores']);
+    })
+    .catch(err=>{
+      console.log("error: "+err);
+      this.mostrarMensaje(err.message);
+    });
+  }
+
+  actualizarFavor(favor){
+    this._favorService.actualizar(favor,this.idFavor)
+    .then((data)=> {
+      this.mostrarMensaje("Favor modificado correctamente");
       this.router.navigate(['/favores']);
     })
     .catch(err=>{
@@ -186,4 +220,41 @@ export class SolicitudPage implements OnInit {
         this.mostrarMensaje(err.message);
     });
   }
+
+  recuperarFavor(){
+    this._favorService.recuperarPorId(this.idFavor).subscribe(res => {
+      this.favor= {...<any>res};
+      this.actualizarCampos(this.favor);
+      this.seleccionarTipoPago();
+    },
+    (error)=>{
+      console.log(error);
+    }
+    ); 
+  }
+
+  actualizarCampos(favor:Favor){
+
+    this.formularioNuevoFavor.patchValue({
+      titulo: favor.titulo,
+      descripcion: favor.descripcion,
+      tipoPago: favor.tipoPago,
+      descripcionPago: favor.descripcionPago,
+      valorPago: favor.valorPago,
+    });
+
+    if(this.formularioNuevoFavor.value.tipoPago==this.tipoPagoEnum.valorMonetario){
+      this.descripcionPago.setValue('');
+      this.descripcionPago.clearValidators();
+      this.valorPago.setValidators(Validators.compose([Validators.required,Validators.min(1)]));
+    }
+    else{
+      this.valorPago.setValue(0);
+      this.valorPago.clearValidators();
+      this.descripcionPago.setValidators(Validators.compose([Validators.required,Validators.maxLength(500)]));
+    }
+    this.descripcionPago.updateValueAndValidity();
+    this.valorPago.updateValueAndValidity();
+  }
+
 }

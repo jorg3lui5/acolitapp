@@ -1,7 +1,8 @@
 <app-cabecera [titulo]="constantes._favor"></app-cabecera>
 
 <ion-content class="ion-padding">
-  <div fixed  *ngIf="favor">
+  <div fixed *ngIf="favor">
+    <div class="datos-formulario">
       <div class="div-estado-fecha">
           <small>{{favor.fechaSolicita | date:'mediumDate'}}</small>
           <ion-badge [color]="favor.estado|colorEstadoPipe" [class]="favor.calificacionSolicita?'favores-estado':''">
@@ -20,6 +21,9 @@
           <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
         </ion-avatar>
         <ion-label>
+          <div>
+            <small class="texto-primario">Solicita:</small>
+          </div>
           <ion-text color="medium">
             <i>{{favor.usuarioSolicita?.persona?.nombresApellidos}}</i>
           </ion-text>
@@ -31,6 +35,9 @@
       <div *ngIf="(!tipoFavor || tipoFavor==tipoFavorEnum.solicitado) && favor.usuarioRealiza">
         <ion-item lines="none">
           <ion-label class="label-favor-ayudante">
+            <div>
+              <small class="texto-primario">Ayuda:</small>
+            </div>
             <ion-text color="medium">
               <i>{{favor.usuarioRealiza?.persona?.nombresApellidos}}</i>
             </ion-text>
@@ -86,21 +93,29 @@
           <ion-icon class="favor-estrella-primaria" slot="icon-only" [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="primary"></ion-icon>
         </ion-button>
       </div> -->
-      <div class="botones-inferiores" *ngIf="tipoFavor==tipoFavorEnum.solicitado">
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.solicitado" (click)="realizarAccion(accionFavorEnum.cancelaSolicitante)">{{constantes._cancelar}}</ion-button>
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.aceptado" (click)="realizarAccion(accionFavorEnum.aceptaSolicitante)">{{constantes._aceptar}}</ion-button>
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.aceptado" (click)="realizarAccion(accionFavorEnum.rechazaSolicitante)">{{constantes._rechazar}}</ion-button>
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.realizando" (click)="realizarAccion(accionFavorEnum.finalizaSolicitante)">{{constantes._finalizar}}</ion-button>
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.finalizado && favor.calificacionRealiza>0" (click)="realizarAccion(accionFavorEnum.calificaSolicitante)">{{constantes._calificar}}</ion-button>
-      </div>
-      <div class="botones-inferiores" *ngIf="tipoFavor==tipoFavorEnum.realizado">
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.aceptado" (click)="realizarAccion(accionFavorEnum.cancelaAyudante)">{{constantes._cancelar}}</ion-button>
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.realizando" (click)="realizarAccion(accionFavorEnum.finalizaAyudante)">{{constantes._finalizar}}</ion-button>
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.finalizado && favor.calificacionSolicita>0" (click)="realizarAccion(accionFavorEnum.calificaAyudante)">{{constantes._calificar}}</ion-button>
-      </div>
-      <div class="botones-inferiores" *ngIf="!tipoFavor">
-        <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.solicitado" (click)="realizarAccion(accionFavorEnum.aceptaAyudante)">{{constantes._aceptar}}</ion-button>
-      </div>
+    </div>
+    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.estado!==estadofavorEnum.aceptado">
+      <div></div>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.solicitado" (click)="realizarAccion(accionFavorEnum.cancelaSolicitante)">{{constantes._cancelarSolicitud}}</ion-button>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.realizando" (click)="realizarAccion(accionFavorEnum.finalizaSolicitante)">{{constantes._finalizar}}</ion-button>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.finalizado && favor.calificacionRealiza>0" (click)="realizarAccion(accionFavorEnum.calificaSolicitante)">{{constantes._calificar}}</ion-button>
+    </div>
+    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.estado==estadofavorEnum.aceptado">
+      <ion-button expand="block" (click)="realizarAccion(accionFavorEnum.aceptaSolicitante)">{{constantes._aceptarAyuda}}</ion-button>
+      <ion-button expand="block" (click)="realizarAccion(accionFavorEnum.rechazaSolicitante)">{{constantes._rechazarAyuda}}</ion-button>
+    </div>
+    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.realizado">
+      <div></div>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.aceptado" (click)="realizarAccion(accionFavorEnum.cancelaAyudante)">{{constantes._cancelarAyudar}}</ion-button>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.realizando" (click)="realizarAccion(accionFavorEnum.finalizaAyudante)">{{constantes._finalizar}}</ion-button>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.finalizado && favor.calificacionSolicita>0" (click)="realizarAccion(accionFavorEnum.calificaAyudante)">{{constantes._calificar}}</ion-button>
+      
+    </div>
+    <div class="botones-inferiores-dos-botones" *ngIf="!tipoFavor">
+      <div></div>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.solicitado" (click)="realizarAccion(accionFavorEnum.aceptaAyudante)">{{constantes._ayudar}}</ion-button>
+      
+    </div>
   </div>
 
 

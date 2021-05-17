@@ -81,6 +81,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'solicitud/:idFavor',
+    loadChildren: () => import('./paginas/solicitud/solicitud.module').then( m => m.SolicitudPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'ubicacion-actual',
     loadChildren: () => import('./paginas/ubicacion-actual/ubicacion-actual.module').then( m => m.UbicacionActualPageModule),
     canActivate: [AuthGuard]

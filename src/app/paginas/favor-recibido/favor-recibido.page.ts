@@ -70,7 +70,6 @@ export class FavorRecibidoPage implements OnInit {
               ...<any>doc.data()
             } as Usuario);
           });
-          console.log('solicita' +this.favor.usuarioSolicita);
           this._personaService.recuperarPorUsuario(this.favor.usuarioSolicita).subscribe(res => {
             let personas=[];
             res.forEach((doc) => {
@@ -80,80 +79,77 @@ export class FavorRecibidoPage implements OnInit {
               } as Persona);
             });
             this.favor.usuarioSolicita=usuarios[0];
-            this.favor.usuarioSolicita.persona=personas[0];
+            if(this.favor.usuarioSolicita){
+              this.favor.usuarioSolicita.persona=personas[0];
 
-            if(this.usuario==this.favor.usuarioSolicita.usuario){
-              this.tipoFavor=TipoFavorEnum.solicitado;
-            }
+              if(this.usuario==this.favor.usuarioSolicita.usuario){
+                this.tipoFavor=TipoFavorEnum.solicitado;
+              }
+              const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioSolicita.usuario}.jpg`);
+              imageRef.getDownloadURL().then(url=> {
+                this.favor.usuarioSolicita.foto=url;
 
-            const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioSolicita.usuario}.jpg`);
-            imageRef.getDownloadURL().then(url=> {
-              console.log('si foto')
-              this.favor.usuarioSolicita.foto=url;
-              if(this.favor.usuarioRealiza){
-                this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-                  let usuarios=[];
-                  res.forEach((doc) => {
-                    usuarios.push({
-                      id: doc.id,
-                      ...<any>doc.data()
-                    } as Usuario);
-                  });
-                  this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-                    let personas=[];
+                if(this.favor.usuarioRealiza){
+                  this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+                    let usuarios=[];
                     res.forEach((doc) => {
-                      personas.push( {
+                      usuarios.push({
                         id: doc.id,
                         ...<any>doc.data()
-                      } as Persona);
+                      } as Usuario);
                     });
-                    this.favor.usuarioRealiza=usuarios[0];
-                    this.favor.usuarioRealiza.persona=personas[0];
-        
-                    if(this.usuario==this.favor.usuarioRealiza.usuario){
-                      this.tipoFavor=TipoFavorEnum.realizado;
+                    this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+                      let personas=[];
+                      res.forEach((doc) => {
+                        personas.push( {
+                          id: doc.id,
+                          ...<any>doc.data()
+                        } as Persona);
+                      });
+                      this.favor.usuarioRealiza=usuarios[0];
+  
+                      if(this.favor.usuarioRealiza){
+                        this.favor.usuarioRealiza.persona=personas[0];
+          
+                        if(this.usuario==this.favor.usuarioRealiza.usuario){
+                          this.tipoFavor=TipoFavorEnum.realizado;
+                        }
+                        const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioRealiza.usuario}.jpg`);
+    
+                        imageRef.getDownloadURL().then(url=> {
+                          this.favor.usuarioRealiza.foto=url;
+                          this.ocultarLoading();
+                        })
+                        .catch(error=> {
+                          this.ocultarLoading();
+                        });
+                      }
+                    },
+                    (error)=>{
+                      this.ocultarLoading();
                     }
-                    const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioRealiza.usuario}.jpg`);
-
-                    imageRef.getDownloadURL().then(url=> {
-                      this.favor.usuarioRealiza.foto=url;
-                      this.ocultarLoading();
-                    })
-                    .catch(error=> {
-                      this.ocultarLoading();
-                      console.error('error');
-                    });
+                    ); 
                   },
                   (error)=>{
                     this.ocultarLoading();
-                    console.log(error);
                   }
                   ); 
-                },
-                (error)=>{
+                }else{
                   this.ocultarLoading();
-                  console.log(error);
                 }
-                ); 
-              }else{
+              })
+              .catch(error=> {
                 this.ocultarLoading();
-              }
-            })
-            .catch(error=> {
-              this.ocultarLoading();
-              console.error('error');
-            });
-
+              });
+            }
           },
           (error)=>{
             this.ocultarLoading();
-            console.log(error);
           }
           ); 
         },
         (error)=>{
           this.ocultarLoading();
-          console.log(error);
         }
         ); 
       }

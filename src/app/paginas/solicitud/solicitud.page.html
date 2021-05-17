@@ -1,7 +1,7 @@
 <app-cabecera [titulo]="constantes._solicitud"></app-cabecera>
 
 <ion-content class="ion-padding">
-  <form (submit)="nuevoFavor()" [formGroup]="formularioNuevoFavor" errorTailor>
+  <form (submit)="idFavor?modificaFavor():nuevoFavor()" [formGroup]="formularioNuevoFavor" errorTailor>
     <ion-list lines="full" class="ion-no-margin ion-no-padding">
       <ion-item>
         <ion-label position="floating" for="titulo">
@@ -96,7 +96,7 @@
       </ion-item>
     </ion-list> -->
     <div class="botones-inferiores">
-      <ion-button expand="block" type="submit">{{constantes._solicitar}}</ion-button>
+      <ion-button expand="block" type="submit">{{idFavor?constantes._guardar:constantes._solicitar}}</ion-button>
     </div>
   </form>
 </ion-content>

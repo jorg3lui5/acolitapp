@@ -89,3 +89,8 @@ ion-button {
 .estrella-mio {
     font-size: 50px;
 }
+
+.datos-formulario {
+    height: calc(100vh - (180px));
+    overflow: scroll;
+}

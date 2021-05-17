@@ -88,4 +88,12 @@ export class Constantes {
     public _rechazar= 'Rechazar';
     public _cargandoDatos = 'Cargando datos...';
     public _fotoPerfil = 'Foto del Perfil'
+    public _brindarAyuda= 'Brindar ayuda';
+    public _ayudar= 'Ayudar';
+    public _aceptarAyuda= 'Aceptar ayuda';
+    public _rechazarAyuda= 'Rechazar ayuda';
+    public _cancelarSolicitud= 'Cancelar solicitud';
+    public _cancelarAyudar= 'Cancelar ayuda';
+    public _guardar= 'Guardar';
+
 }
