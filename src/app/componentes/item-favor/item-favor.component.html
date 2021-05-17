@@ -29,10 +29,10 @@
               {{favor.titulo}}
             </div>
             <span *ngIf="favor.tipoPago==tipoPagoEnum.obsequio" class="texto-primario">
-              <ion-icon name="gift-outline"></ion-icon>
+              <ion-icon name="gift-outline" slot="icon-only" (click)="verDescripcionPago()"></ion-icon>
             </span>
             <span *ngIf="favor.tipoPago==tipoPagoEnum.favor"  class="texto-primario">
-              <ion-icon name="hand-left-outline"></ion-icon>
+              <ion-icon name="hand-left-outline"  slot="icon-only" (click)="verDescripcionPago()"></ion-icon>
             </span >
             <span *ngIf="favor.tipoPago==tipoPagoEnum.valorMonetario"  class="texto-primario">
               ${{favor.valorPago}}

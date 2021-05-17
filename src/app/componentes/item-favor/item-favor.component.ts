@@ -3,7 +3,7 @@ import { FavorDTO } from '../../modelo/dto/favor-dto';
 import { TipoPagoEnum } from '../../modelo/enum/tipo-pago-enum';
 import { Router } from '@angular/router';
 import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
-import { ActionSheetController, IonList } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonList } from '@ionic/angular';
 import { StorageService } from 'src/app/servicios/librerias/storage.service';
 import { Constantes } from '../../compartido/constantes';
 import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
@@ -28,6 +28,7 @@ export class ItemFavorComponent implements OnInit {
     private router: Router,
     private actionSheetController: ActionSheetController,
     private _storageService:StorageService,
+    private alertController: AlertController,
 
   ) { }
 
@@ -113,5 +114,20 @@ export class ItemFavorComponent implements OnInit {
     else{
       this.router.navigate(['/informacion-personal', usuario]);
     }
+  }
+
+  async verDescripcionPago(){
+      const alert = await this.alertController.create({
+        header: 'Pago: '+this.favor.tipoPago,
+        //subHeader: mensajeAdvertenciaDTO.subtitulo,
+        message: this.favor.descripcionPago,
+        buttons: [
+          {
+            text: 'Aceptar',
+            role: 'cancel',
+          }
+        ]
+      });
+      await alert.present();
   }
 }
