@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FavorDTO } from '../../modelo/dto/favor-dto';
 import { TipoPagoEnum } from '../../modelo/enum/tipo-pago-enum';
 import { Router } from '@angular/router';
 import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, IonList } from '@ionic/angular';
 import { StorageService } from 'src/app/servicios/librerias/storage.service';
 import { Constantes } from '../../compartido/constantes';
 import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
@@ -14,6 +14,7 @@ import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
   styleUrls: ['./item-favor.component.scss'],
 })
 export class ItemFavorComponent implements OnInit {
+  @ViewChild(IonList) ionList: IonList;
 
   @Input() favor: FavorDTO;
   @Input() tipoFavor: string;
@@ -42,7 +43,7 @@ export class ItemFavorComponent implements OnInit {
       text: 'Visualizar',
       icon: 'eye-outline',
       handler: () => {
-        this.router.navigate(['/favor-recibido', this.favor.id]);
+        this.visualizar();
       }
     }];
     if(this.tipoFavor==TipoFavorEnum.solicitado){
@@ -50,7 +51,7 @@ export class ItemFavorComponent implements OnInit {
         text: 'Editar',
         icon: 'create-outline',
         handler: () => {
-          this.router.navigate(['/solicitud', this.favor.id]);
+          this.editar();
         }
       })
     }
@@ -58,7 +59,7 @@ export class ItemFavorComponent implements OnInit {
   }
 
   abrirFavor(){
-    this.router.navigate(['/favor-recibido', this.favor.id]);
+    this.visualizar();
   }
 
   async pesentarOpciones(opciones: any[]) {
@@ -92,5 +93,16 @@ export class ItemFavorComponent implements OnInit {
       (this.favor.usuarioRealiza.usuario && this.usuario==this.favor.usuarioRealiza.usuario)){
       this.tipoFavor=TipoFavorEnum.realizado;
     }
+  }
+
+  visualizar(){
+    this.ionList.closeSlidingItems(); 
+    this.router.navigate(['/favor-recibido', this.favor.id]);
+  }
+
+  editar(){
+    this.ionList.closeSlidingItems();
+    this.router.navigate(['/solicitud', this.favor.id]);
+
   }
 }

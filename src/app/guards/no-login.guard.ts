@@ -27,8 +27,6 @@ export class NoLoginGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       return this._angularFireAuth.authState.pipe(
         map(auth => {
-          console.log(auth);
-          console.log(this._router.url);
           if(auth){
             if(this._router.url=='/'){
               this._router.navigate(['/favores']);

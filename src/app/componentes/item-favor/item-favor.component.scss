@@ -39,3 +39,36 @@ ion-button {
 .favores-estado {
     margin-top: 6px;
 }
+
+ion-card {
+    margin-inline: 5px;
+    margin: 5px;
+}
+
+list-item-favor {
+    padding: 0px;
+    margin: 0px;
+}
+
+label-item-favor {
+    margin: 0px;
+    white-space: break-spaces !important;
+    padding: 0px;
+}
+
+ion-list {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+ion-label {
+    white-space: break-spaces !important;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+}
+
+ion-item {
+    --padding-start: 0px;
+    --inner-padding-end: 0px;
+}

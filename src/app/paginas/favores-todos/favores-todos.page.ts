@@ -35,7 +35,6 @@ export class FavoresTodosPage implements OnInit, OnChanges {
     public toastController: ToastController,
     private _storageService:StorageService,
   ) {
-    console.log('recuper1');
 
   }
 
@@ -44,12 +43,10 @@ export class FavoresTodosPage implements OnInit, OnChanges {
   }
 
   ngOnChanges(){
-    console.log('recuper2',this.usuario)
 
   }
 
   recuperarFavores(){
-    console.log('recuper');
     this._favorService.listarTodos().subscribe(res => {
       this.favores = res.map( (e:any) => {
         return {
@@ -127,7 +124,6 @@ export class FavoresTodosPage implements OnInit, OnChanges {
       (data:string)=>{
         if(data){
           this.usuario=data;
-          console.log('usuare,',this.usuario);
           this.recuperarFavores();
         }
         else{

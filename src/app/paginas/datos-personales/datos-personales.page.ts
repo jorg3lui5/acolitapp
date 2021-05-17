@@ -259,7 +259,6 @@ export class DatosPersonalesPage implements OnInit {
     if(this.formularioDatosPersonales.valid){
       this.persona=this.formularioDatosPersonales.value;
       this.persona.usuario=this.usuario;
-      console.log(this.persona);
       this.crearPersona(this.persona);
     }
     else{
@@ -270,7 +269,6 @@ export class DatosPersonalesPage implements OnInit {
   crearPersona(persona) {
     this._personaService.crear(persona)
     .then((data)=>{
-      console.log('data');
       this.mostrarMensaje("Usuario registrado satisfactoriamente");
       this.router.navigate(['/favores']);
       // this.navCtrl.navigateForward("/favores")

@@ -54,7 +54,6 @@ export class FavorRecibidoPage implements OnInit {
   ngOnInit() {
     this.mostrarLoading(this.constantes._cargandoDatos);
     this.idFavor=this.activatedRoute.snapshot.paramMap.get('idFavor');
-    console.log(this.idFavor);
     this.recuperarUsuario();
   }
 
@@ -290,7 +289,6 @@ export class FavorRecibidoPage implements OnInit {
   }
 
   async realizarAccion(accion:string) {
-    console.log(accion);
     if(accion==AccionFavorEnum.finalizaAyudante || accion==AccionFavorEnum.calificaAyudante){
       await this.mostrarModal(accion,'Califica al usuario que solicitó el favor, otorgándole de 1 a 5 estrellas.');
       return null;
@@ -427,7 +425,6 @@ export class FavorRecibidoPage implements OnInit {
       cssClass: 'loadingPersonalizado',
     });
     await this.loading.present();
-    console.log('despues ml',this.loading);
   }
 
   ocultarLoading(){

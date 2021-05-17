@@ -122,7 +122,6 @@ export class UsuarioService {
   // }
 
   async loguear(usuario:string, contrasenia:string): Promise<User> {
-    console.log(usuario, contrasenia);
       const { user } = await this.angularFireAuth.signInWithEmailAndPassword(usuario, contrasenia);
       return user;
   }

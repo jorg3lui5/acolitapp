@@ -37,7 +37,6 @@ export class FavoresSolicitadosPage implements OnInit, OnChanges {
     public toastController: ToastController,
     private _storageService:StorageService,
   ) { 
-    console.log('recupera1');
   }
   
   ngOnInit() {
@@ -45,7 +44,6 @@ export class FavoresSolicitadosPage implements OnInit, OnChanges {
   }
 
   ngOnChanges(){
-    console.log('recupera2',this.usuario)
 
   }
 

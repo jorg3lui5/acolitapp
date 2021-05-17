@@ -1,54 +1,74 @@
-<ion-card>
-  <ion-card-header>
-    <ion-card-subtitle class="favores-subtitulo">
-      <div>
-        <ion-chip class="favores-chip">
-          <ion-avatar>
-            <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
-          </ion-avatar>
-          <span>
-            {{favor.usuarioSolicita?.persona?.nombresApellidos}}
-          </span>
-        </ion-chip>
-      </div>
-      <ion-button (click)="mostrarOpciones()" fill="clear" class="favores-boton-mostrar-opciones">
-        <ion-icon slot="end" name="ellipsis-vertical"></ion-icon>
-      </ion-button>
-    </ion-card-subtitle>
-    <small>{{favor.fechaSolicita | date:'mediumDate'}}</small>
-    <ion-card-title  class="favores-titulo">
-      <div (click)="abrirFavor()">
-        {{favor.titulo}}
-      </div>
-      <span *ngIf="favor.tipoPago==tipoPagoEnum.obsequio" class="texto-primario">
-        <ion-icon name="gift-outline"></ion-icon>
-      </span>
-      <span *ngIf="favor.tipoPago==tipoPagoEnum.favor"  class="texto-primario">
-        <ion-icon name="hand-left-outline"></ion-icon>
-      </span >
-      <span *ngIf="favor.tipoPago==tipoPagoEnum.valorMonetario"  class="texto-primario">
-        ${{favor.valorPago}}
-      </span>
-    </ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <p>
-      {{favor.descripcion}}
-    </p>
-    <div class="favores-usuarioRealiza-calificaciones">
-      <div>
-        <p class="texto-primario"> 
-          {{favor.usuarioRealiza?.persona?.nombresApellidos}}
-        </p>
-      </div>
-      <div>
-        <div class="favores-calificaciones" *ngIf="favor.calificacionSolicita">
-          <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
-        </div>
-        <ion-badge [color]="favor.estado|colorEstadoPipe" [class]="favor.calificacionSolicita?'favores-estado':''">
-          {{favor.estado==estadofavorEnum.calificado?estadofavorEnum.finalizado:favor.estado}}
-        </ion-badge>
-      </div>
-    </div>
-  </ion-card-content>
-</ion-card>
+<ion-list class="list-item-favor">
+  <ion-item-sliding>
+  <!-- <ion-item-options side="start">
+    <ion-item-option (click)="item()">Favorite</ion-item-option> -->
+    <!-- <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option> -->
+  <!-- </ion-item-options> -->
+  <ion-item lines="none" class="item-item-favor">
+    <ion-label class="label-item-favor">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle class="favores-subtitulo">
+            <div>
+              <ion-chip class="favores-chip">
+                <ion-avatar>
+                  <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
+                </ion-avatar>
+                <span>
+                  {{favor.usuarioSolicita?.persona?.nombresApellidos}}
+                </span>
+              </ion-chip>
+            </div>
+            <ion-button (click)="mostrarOpciones()" fill="clear" class="favores-boton-mostrar-opciones">
+              <ion-icon slot="end" name="ellipsis-vertical"></ion-icon>
+            </ion-button>
+          </ion-card-subtitle>
+          <small>{{favor.fechaSolicita | date:'mediumDate'}}</small>
+          <ion-card-title  class="favores-titulo">
+            <div (click)="abrirFavor()">
+              {{favor.titulo}}
+            </div>
+            <span *ngIf="favor.tipoPago==tipoPagoEnum.obsequio" class="texto-primario">
+              <ion-icon name="gift-outline"></ion-icon>
+            </span>
+            <span *ngIf="favor.tipoPago==tipoPagoEnum.favor"  class="texto-primario">
+              <ion-icon name="hand-left-outline"></ion-icon>
+            </span >
+            <span *ngIf="favor.tipoPago==tipoPagoEnum.valorMonetario"  class="texto-primario">
+              ${{favor.valorPago}}
+            </span>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            {{favor.descripcion}}
+          </p>
+          <div class="favores-usuarioRealiza-calificaciones">
+            <div>
+              <p class="texto-primario"> 
+                {{favor.usuarioRealiza?.persona?.nombresApellidos}}
+              </p>
+            </div>
+            <div>
+              <div class="favores-calificaciones" *ngIf="favor.calificacionSolicita">
+                <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+              </div>
+              <ion-badge [color]="favor.estado|colorEstadoPipe" [class]="favor.calificacionSolicita?'favores-estado':''">
+                {{favor.estado==estadofavorEnum.calificado?estadofavorEnum.finalizado:favor.estado}}
+              </ion-badge>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-label>
+  </ion-item>
+<ion-item-options side="end">
+  <ion-item-option (click)="visualizar()" color="primary">
+    <ion-icon slot="icon-only" name="eye-outline" size="large"></ion-icon>
+  </ion-item-option>
+  <ion-item-option (click)="editar()" color="danger">
+    <ion-icon slot="icon-only" name="create-outline" size="large"></ion-icon>
+  </ion-item-option>
+</ion-item-options>
+</ion-item-sliding>
+</ion-list>
