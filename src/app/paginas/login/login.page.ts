@@ -62,7 +62,7 @@ export class LoginPage implements OnInit {
 
   loguear() {
     if(this.formularioLogin.valid){
-      this._usuarioService.loguear(this.formularioLogin.value.correo,this.formularioLogin.value.contrasenia)
+      this._usuarioService.loguear(this.formularioLogin.value.correo.toLowerCase().trim(),this.formularioLogin.value.contrasenia)
       .then((data:User)=>{
         this._storageService.guardar(this.constantes._usuario,data.email).then(
           (data:string)=>{

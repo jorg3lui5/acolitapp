@@ -141,7 +141,7 @@ export class SolicitudPage implements OnInit {
       this.crearFavor(this.favor);
     }
     else{
-      this.mostrarMensaje("Por favor llene los campos requeridos");
+      this.mostrarMensaje("Por favor llene los campos requeridos (*).");
     }
   }
   
@@ -156,7 +156,7 @@ export class SolicitudPage implements OnInit {
       this.actualizarFavor(this.favor);
     }
     else{
-      this.mostrarMensaje("Por favor llene los campos requeridos");
+      this.mostrarMensaje("Por favor llene los campos requeridos (*).");
     }
   }
 

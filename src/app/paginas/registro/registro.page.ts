@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Constantes } from '../..//compartido/constantes';
 import { DatosPersonalesPage } from '../datos-personales/datos-personales.page';
-import { ActionSheetController, NavController, ToastController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
 import { Router } from '@angular/router';
 import { Persona } from '../../modelo/persona';
@@ -23,6 +23,7 @@ import firebase from 'firebase';
 export class RegistroPage implements OnInit {
 
   constantes: Constantes = new Constantes;
+  loading: HTMLIonLoadingElement;
 
   usuario: Usuario;
 
@@ -84,7 +85,9 @@ export class RegistroPage implements OnInit {
     private formBuilder: FormBuilder,
     private _storageService:StorageService,
     private camera: Camera,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private loadingController: LoadingController,
+
     ) 
   {
       
@@ -93,13 +96,15 @@ export class RegistroPage implements OnInit {
   ngOnInit() {
   }
 
-  registrar() {
+  async registrar() {
+    await this.mostrarLoading(this.constantes._guardandoDatos);
+
     if(this.formularioRegistro.valid){
       if(this.formularioRegistro.value.contrasenia==this.formularioRegistro.value.contraseniaConfirmada){
         this.usuario=new Usuario();
         this.usuario.contrasenia=this.formularioRegistro.value.contrasenia;
-        this.usuario.usuario=this.formularioRegistro.value.correo;
-        this.usuario.correo=this.formularioRegistro.value.correo;
+        this.usuario.usuario=this.formularioRegistro.value.correo.toLowerCase().trim();
+        this.usuario.correo=this.formularioRegistro.value.correo.toLowerCase().trim();
         //this.usuario.persona=new Persona();
         //this.usuario.persona.identificacion=this.formularioRegistro.value.identificacion;
         
@@ -113,27 +118,31 @@ export class RegistroPage implements OnInit {
                 const imageRef = storageRef.child(`fotoPerfil/${this.usuario.usuario}.jpg`);
                 imageRef.putString(this.formularioRegistro.value.foto, firebase.storage.StringFormat.DATA_URL)
                   .then((snapshot)=> {
-                    
+                    this.ocultarLoading();
                     this.router.navigate(['/datos-personales']);
                     // Do something here when the data is succesfully uploaded!
                   })
                   .catch(error=>{
+                    this.ocultarLoading();
                     console.error(error);
                     this.mostrarMensaje(error.message);
                   });
               }
             )
             .catch(err=>{
+                this.ocultarLoading();
                 console.log("error: "+err);
                 this.mostrarMensaje(err.message);
             });
           })
           .catch(err=>{
+              this.ocultarLoading();
               console.log("error: "+err);
               this.mostrarMensaje(err.message);
           });
         })
         .catch(err=>{
+          this.ocultarLoading();
           if(err.code=='auth/email-already-in-use'){
             this.mostrarMensaje("Ya existe un usuario registrado con este correo");
           }
@@ -144,14 +153,16 @@ export class RegistroPage implements OnInit {
         });
       }
       else{
+        this.ocultarLoading();
         this.mostrarMensaje("Las contraseñas no coinciden");
       }
     }
     else{
+      this.ocultarLoading();
       if(!this.formularioRegistro.value.foto){
         return this.mostrarMensaje("Por favor seleccione una foto de perfil.");
       }
-      this.mostrarMensaje("Por favor llene los campos requeridos.");
+      this.mostrarMensaje("Por favor llene los campos requeridos (*).");
     }
   }
 
@@ -220,5 +231,18 @@ export class RegistroPage implements OnInit {
       
     }
     return opcionesCamara;
+  }
+
+  async mostrarLoading(message: string) {
+    this.loading = await this.loadingController.create({
+      message:message,
+      showBackdrop: true,
+    });
+    await this.loading.present();
+  }
+
+  ocultarLoading(){
+    this.loading.dismiss();
+
   }
 }

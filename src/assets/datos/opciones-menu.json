@@ -2,7 +2,7 @@
   {
     "icon": "person-outline",
     "name": "Cuenta",
-    "redirectTo": "/datos-personales"
+    "redirectTo": "/informacion-personal"
   },
   {
     "icon": "hand-left-outline",

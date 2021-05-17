@@ -8,6 +8,7 @@ export class Constantes {
     public _datosPersonales = 'Datos personales';
     public _favor= 'Favor';
     public _favores= 'Favores';
+    public _nuevoFavor= 'Nuevo Favor';
     public _solicitud= 'Solicitud';
     public _notificaciones= 'Notificaciones';
     public _favorRecibido= 'Favor recibido';
@@ -87,6 +88,7 @@ export class Constantes {
     public _todos= 'Todos';
     public _rechazar= 'Rechazar';
     public _cargandoDatos = 'Cargando datos...';
+    public _guardandoDatos = 'Guardando datos...';
     public _fotoPerfil = 'Foto del Perfil'
     public _brindarAyuda= 'Brindar ayuda';
     public _ayudar= 'Ayudar';
@@ -95,5 +97,8 @@ export class Constantes {
     public _cancelarSolicitud= 'Cancelar solicitud';
     public _cancelarAyudar= 'Cancelar ayuda';
     public _guardar= 'Guardar';
+    public _eliminando= 'Eliminando'
+    public _cancelandoSolicitud= '_cancelandoSolicitud'
+
 
 }

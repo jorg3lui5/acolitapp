@@ -56,6 +56,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'informacion-personal',
+    loadChildren: () => import('./paginas/informacion-personal/informacion-personal.module').then( m => m.InformacionPersonalPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'login',
     loadChildren: () => import('./paginas/login/login.module').then( m => m.LoginPageModule),
     canActivate: [NoLoginGuard]

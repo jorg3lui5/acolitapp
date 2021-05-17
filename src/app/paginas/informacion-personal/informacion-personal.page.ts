@@ -6,6 +6,8 @@ import firebase from 'firebase';
 import { PersonaService } from '../../servicios/persona.service';
 import { FullScreenImage } from '@ionic-native/full-screen-image/ngx';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { StorageService } from '../../servicios/librerias/storage.service';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-informacion-personal',
@@ -13,6 +15,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
   styleUrls: ['./informacion-personal.page.scss'],
 })
 export class InformacionPersonalPage implements OnInit {
+  loading: HTMLIonLoadingElement;
   constantes: Constantes = new Constantes;
   persona: Persona;
   foto: any;
@@ -26,12 +29,23 @@ export class InformacionPersonalPage implements OnInit {
     private router: Router,
     private fullScreenImage: FullScreenImage,
     private photoViewer: PhotoViewer,
+    private _storageService:StorageService,
+    private loadingController: LoadingController,
+    public toastController: ToastController,
   ) { }
 
   ngOnInit() {
+    this.iniciar();
+  } 
+
+  async iniciar(){
+    await this.mostrarLoading(this.constantes._cargandoDatos);
     this.usuario=this.activatedRoute.snapshot.paramMap.get('usuario');
     if(this.usuario){
       this.recuperarPersona(this.usuario);
+    }
+    else{
+      this.recuperarUsuario();
     }
   }
 
@@ -50,14 +64,16 @@ export class InformacionPersonalPage implements OnInit {
       imageRef.getDownloadURL().then(url=> {
         this.persona=personas[0];
         this.foto=url;
-        console.log('foto');
-        console.log(this.foto);
+        this.ocultarLoading();
       })
       .catch(error=> {
+        this.ocultarLoading();
+        console.log(error);
       });
 
     },
     (error)=>{
+      this.ocultarLoading();
       console.log(error);
     }
     ); 
@@ -76,5 +92,45 @@ export class InformacionPersonalPage implements OnInit {
       'Foto de Perfil', 
       opciones
     );
+  }
+
+  recuperarUsuario(){
+    this._storageService.recuperar(this.constantes._usuario).then(
+      (data:string)=>{
+        if(data){
+          this.usuario=data;
+          this.recuperarPersona(this.usuario);
+        }
+        else{
+          this.ocultarLoading();
+          this.mostrarMensaje("No pudo recuperar el usuario");
+        }
+      }
+    )
+    .catch(err=>{
+      this.ocultarLoading();
+      console.log("error: "+err);
+      this.mostrarMensaje(err.message);
+    });
+  }
+
+  async mostrarLoading(message: string) {
+    this.loading = await this.loadingController.create({
+      message:message,
+      showBackdrop: true,
+    });
+    await this.loading.present();
+  }
+
+  ocultarLoading(){
+    this.loading.dismiss();
+  }
+
+  async mostrarMensaje(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: this.constantes._duracionToast
+    });
+    toast.present();
   }
 }

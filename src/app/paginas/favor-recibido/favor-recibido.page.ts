@@ -40,19 +40,23 @@ export class FavorRecibidoPage implements OnInit {
     public _favorService: FavorService,
     public _usuarioService: UsuarioService,
     public _personaService: PersonaService,
-    public toastController: ToastController,
-    private _storageService:StorageService,
     private router: Router,
     private alertController: AlertController,
     private modalController: ModalController,
     public popoverController: PopoverController,
+    public toastController: ToastController,
+    private _storageService:StorageService,
     private loadingController: LoadingController,
     
 
   ) { }
 
   ngOnInit() {
-    this.mostrarLoading(this.constantes._cargandoDatos);
+    this.iniciar();
+  }
+
+  async iniciar(){
+    await this.mostrarLoading(this.constantes._cargandoDatos);
     this.idFavor=this.activatedRoute.snapshot.paramMap.get('idFavor');
     this.recuperarUsuario();
   }
@@ -191,29 +195,35 @@ export class FavorRecibidoPage implements OnInit {
     toast.present();
   }
 
-  eliminarFavor(mensaje: string, paginaRetorna:string){
+  async eliminarFavor(mensaje: string, paginaRetorna:string){
+    await this.mostrarLoading(this.constantes._cancelandoSolicitud);
     this._favorService.eliminar(this.idFavor)
     .then((data)=> {
+      this.ocultarLoading();
       this.mostrarMensaje(mensaje);
       if(paginaRetorna){
         this.router.navigate(['/'+paginaRetorna]);
       }
     })
     .catch(err=>{
+      this.ocultarLoading();
       console.log("error: "+err);
       this.mostrarMensaje(err.message);
     });
   }
 
-  actualizarFavor(mensaje: string, paginaRetorna:string){
+  async actualizarFavor(mensaje: string, paginaRetorna:string){
+    await this.mostrarLoading(this.constantes._guardandoDatos);
     this._favorService.actualizar(this.favor,this.idFavor)
     .then((data)=> {
+      this.ocultarLoading();
       this.mostrarMensaje(mensaje);
       if(paginaRetorna){
         this.router.navigate(['/'+paginaRetorna]);
       }
     })
     .catch(err=>{
+      this.ocultarLoading();
       console.log("error: "+err);
       this.mostrarMensaje(err.message);
     });

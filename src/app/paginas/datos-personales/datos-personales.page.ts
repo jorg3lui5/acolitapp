@@ -17,7 +17,7 @@ import { Ocupacion } from '../../modelo/ocupacion';
 import { OcupacionService } from '../../servicios/ocupacion.service';
 import { TipoVehiculo } from '../../modelo/tipoVehiculo';
 import { Persona } from '../../modelo/persona';
-import { ToastController, NavController } from '@ionic/angular';
+import { ToastController, NavController, LoadingController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TipoLicenciaService } from '../../servicios/tipo-licencia.service';
 import { TipoVehiculoService } from '../../servicios/tipo-vehiculo.service';
@@ -43,6 +43,7 @@ export class DatosPersonalesPage implements OnInit {
   ocupaciones: string[];
   tiposLicencia: string[];
   tiposVehiculos: string[];
+  loading: HTMLIonLoadingElement;
 
   persona: Persona;
   usuario: string;
@@ -174,6 +175,7 @@ export class DatosPersonalesPage implements OnInit {
     private formBuilder: FormBuilder,
     private _storageService:StorageService,
     private router: Router,
+    private loadingController: LoadingController,
 
   )
   {
@@ -255,25 +257,29 @@ export class DatosPersonalesPage implements OnInit {
     this.placaVehiculo.updateValueAndValidity();
   }
 
-  finalizar(){
+  async finalizar(){
+    await this.mostrarLoading(this.constantes._guardandoDatos);
     if(this.formularioDatosPersonales.valid){
       this.persona=this.formularioDatosPersonales.value;
       this.persona.usuario=this.usuario;
       this.crearPersona(this.persona);
     }
     else{
-      this.mostrarMensaje("Por favor llene los campos requeridos");
+      this.ocultarLoading();
+      this.mostrarMensaje("Por favor llene los campos requeridos (*).");
     }
   }
 
   crearPersona(persona) {
     this._personaService.crear(persona)
     .then((data)=>{
+      this.ocultarLoading();
       this.mostrarMensaje("Usuario registrado satisfactoriamente");
       this.router.navigate(['/favores']);
       // this.navCtrl.navigateForward("/favores")
     })
     .catch(err=>{
+        this.ocultarLoading();
         console.log("error: "+err);
         this.mostrarMensaje(err.message);
     });
@@ -308,5 +314,18 @@ export class DatosPersonalesPage implements OnInit {
         console.log("error: "+err);
         this.mostrarMensaje(err.message);
     });
+  }
+
+  async mostrarLoading(message: string) {
+    this.loading = await this.loadingController.create({
+      message:message,
+      showBackdrop: true,
+    });
+    await this.loading.present();
+  }
+
+  ocultarLoading(){
+    this.loading.dismiss();
+
   }
 }

@@ -158,7 +158,8 @@
           </div>
         </div>
         <ion-item *ngIf="formularioDatosPersonales.value.tipoVehiculo">
-          <ion-label position="floating" for="placaVehiculo">{{constantes._placaVehiculo}}
+          <ion-label position="floating" for="placaVehiculo">
+            {{constantes._placaVehiculo}}<ion-text color="danger">*</ion-text>
           </ion-label>
           <ion-input name="placaVehiculo" id="placaVehiculo" formControlName="placaVehiculo" type="text"></ion-input>
         </ion-item>
