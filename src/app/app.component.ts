@@ -118,7 +118,7 @@ export class AppComponent  implements OnInit{
       (data:string)=>{
         if(data){
           this.usuario=data;
-          if(!this.usuarioDTO){
+          if(!this.usuarioDTO || !this.usuarioDTO.persona){
             this.recuperarDatosUsuario();
           }
         }

@@ -114,19 +114,25 @@ export class RegistroPage implements OnInit {
           .then((data)=>{
             this._storageService.guardar(this.constantes._usuario,this.usuario.usuario).then(
               (data:string)=>{
-                let storageRef = firebase.storage().ref();
-                const imageRef = storageRef.child(`fotoPerfil/${this.usuario.usuario}.jpg`);
-                imageRef.putString(this.formularioRegistro.value.foto, firebase.storage.StringFormat.DATA_URL)
-                  .then((snapshot)=> {
-                    this.ocultarLoading();
-                    this.router.navigate(['/datos-personales']);
-                    // Do something here when the data is succesfully uploaded!
-                  })
-                  .catch(error=>{
-                    this.ocultarLoading();
-                    console.error(error);
-                    this.mostrarMensaje(error.message);
-                  });
+                // var file = '../../../assets/img/logo.png';
+                // fetch(file)
+                //   .then (res => res.blob()) // Gets the response and returns it as a blob
+                //   .then (blob => {
+                    let storageRef = firebase.storage().ref();
+                    const imageRef = storageRef.child(`fotoPerfil/${this.usuario.usuario}.jpg`);
+                    //imageRef.put(blob)
+                    imageRef.putString(this.formularioRegistro.value.foto, firebase.storage.StringFormat.DATA_URL)
+                      .then((snapshot)=> {
+                        this.ocultarLoading();
+                        this.router.navigate(['/datos-personales']);
+                        // Do something here when the data is succesfully uploaded!
+                      })
+                      .catch(error=>{
+                        this.ocultarLoading();
+                        console.error(error);
+                        this.mostrarMensaje(error.message);
+                      });
+                // });
               }
             )
             .catch(err=>{
