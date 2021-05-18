@@ -16,7 +16,7 @@
           </h2>
         </ion-text>
       </div>
-      <ion-item lines="none" *ngIf="!tipoFavor || tipoFavor==tipoFavorEnum.realizado">
+      <ion-item lines="none">
         <ion-avatar slot="start" (click)="verInformacionPersonal(favor.usuarioSolicita)">
           <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
         </ion-avatar>
@@ -28,11 +28,11 @@
             <i>{{favor.usuarioSolicita?.persona?.nombresApellidos}}</i>
           </ion-text>
           <div class="favor-calificacion-secundaria">
-            <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+            <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
           </div>
         </ion-label>
       </ion-item>
-      <div *ngIf="(!tipoFavor || tipoFavor==tipoFavorEnum.solicitado) && favor.usuarioRealiza">
+      <div *ngIf="favor.usuarioRealiza">
         <ion-item lines="none">
           <ion-label class="label-favor-ayudante" (click)="verInformacionPersonal(favor.usuarioRealiza)">
             <div>
@@ -42,11 +42,11 @@
               <i>{{favor.usuarioRealiza?.persona?.nombresApellidos}}</i>
             </ion-text>
             <div class="favor-calificacion-secundaria">
-              <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+              <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
             </div>
           </ion-label>
           <ion-avatar slot="end" (click)="verInformacionPersonal(favor.usuarioRealiza)">
-            <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
+            <ion-img [src]="favor.usuarioRealiza?.foto"></ion-img>
           </ion-avatar>
         </ion-item>
       </div>
