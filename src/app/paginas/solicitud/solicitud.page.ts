@@ -4,7 +4,7 @@ import { Favor } from '../../modelo/favor';
 import { DetalleTipoPago } from '../../modelo/detalleTipoPago';
 import { TipoPagoService } from '../../servicios/tipo-pago.service';
 import { TipoPago } from '../../modelo/tipoPago';
-import { ToastController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
 import { FavorService } from '../../servicios/favor.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from '../../servicios/librerias/storage.service';
@@ -20,6 +20,7 @@ import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
 export class SolicitudPage implements OnInit {
 
   constantes: Constantes = new Constantes;
+  loading: HTMLIonLoadingElement;
 
   favor: Favor= new Favor();
   tiposPago: string[];
@@ -87,6 +88,7 @@ export class SolicitudPage implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedRoute:ActivatedRoute,
+    private loadingController: LoadingController,
 
   ) 
   {
@@ -94,6 +96,11 @@ export class SolicitudPage implements OnInit {
   }
 
   ngOnInit() {
+    this.iniciar();
+  }
+
+  async iniciar(){
+    await this.mostrarLoading(this.constantes._cargandoDatos);
     this.listarTiposPago();
     this.idFavor=this.activatedRoute.snapshot.paramMap.get('idFavor');
     if(this.idFavor){
@@ -161,24 +168,30 @@ export class SolicitudPage implements OnInit {
   }
 
   crearFavor(favor){
+    this.mostrarLoading(this.constantes._guardandoDatos);
     this._favorService.crear(favor)
     .then((data)=> {
+      this.ocultarLoading();
       this.mostrarMensaje("Favor registrado satisfactoriamente");
       this.router.navigate(['/favores']);
     })
     .catch(err=>{
+      this.ocultarLoading();
       console.log("error: "+err);
       this.mostrarMensaje(err.message);
     });
   }
 
   actualizarFavor(favor){
+    this.mostrarLoading(this.constantes._actualizandoDatos);
     this._favorService.actualizar(favor,this.idFavor)
     .then((data)=> {
+      this.ocultarLoading();
       this.mostrarMensaje("Favor modificado correctamente");
       this.router.navigate(['/favores']);
     })
     .catch(err=>{
+      this.ocultarLoading();
       console.log("error: "+err);
       this.mostrarMensaje(err.message);
     });
@@ -207,15 +220,18 @@ export class SolicitudPage implements OnInit {
       (data:string)=>{
         if(data){
           this.usuario=data;
+          this.ocultarLoading();
         }
         else{
+          this.ocultarLoading();
           this.mostrarMensaje("No pudo recuperar el usuario");
         }
       }
     )
     .catch(err=>{
-        console.log("error: "+err);
-        this.mostrarMensaje(err.message);
+      this.ocultarLoading();
+      console.log("error: "+err);
+      this.mostrarMensaje(err.message);
     });
   }
 
@@ -223,9 +239,10 @@ export class SolicitudPage implements OnInit {
     this._favorService.recuperarPorId(this.idFavor).subscribe(res => {
       this.favor= {...<any>res};
       this.actualizarCampos(this.favor);
-      this.seleccionarTipoPago();
+      this.ocultarLoading();
     },
     (error)=>{
+      this.ocultarLoading();
       console.log(error);
     }
     ); 
@@ -255,4 +272,15 @@ export class SolicitudPage implements OnInit {
     this.valorPago.updateValueAndValidity();
   }
 
+  async mostrarLoading(message: string) {
+    this.loading = await this.loadingController.create({
+      message:message,
+      showBackdrop: true,
+    });
+    await this.loading.present();
+  }
+
+  ocultarLoading(){
+    this.loading.dismiss();
+  }
 }

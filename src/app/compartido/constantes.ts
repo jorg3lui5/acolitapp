@@ -97,8 +97,9 @@ export class Constantes {
     public _cancelarSolicitud= 'Cancelar solicitud';
     public _cancelarAyudar= 'Cancelar ayuda';
     public _guardar= 'Guardar';
-    public _eliminando= 'Eliminando'
-    public _cancelandoSolicitud= '_cancelandoSolicitud'
+    public _eliminando= 'Eliminando';
+    public _cancelandoSolicitud= 'Cancelando solicitud';
+    public _actualizandoDatos= 'Actualizando datos';
 
 
 }

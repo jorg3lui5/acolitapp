@@ -35,6 +35,7 @@ import { StorageService } from '../../servicios/librerias/storage.service';
 })
 export class DatosPersonalesPage implements OnInit {
 
+  colorearLabel: boolean=false;
   constantes: Constantes = new Constantes;
   paises: string[];
   ciudades: string[];
@@ -301,8 +302,6 @@ export class DatosPersonalesPage implements OnInit {
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{
         if(data){
-          console.log('est');
-          console.log(data);
           this.usuario=data;
         }
         else{

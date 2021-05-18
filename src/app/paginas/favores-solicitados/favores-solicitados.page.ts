@@ -44,7 +44,6 @@ export class FavoresSolicitadosPage implements OnInit, OnChanges {
   }
 
   ngOnChanges(){
-
   }
 
   recuperarFavores(){
@@ -55,6 +54,7 @@ export class FavoresSolicitadosPage implements OnInit, OnChanges {
           ...<any>e.payload.doc.data()
         } as FavorDTO;
       });
+
       for(let favor of this.favores){
         if(favor.usuarioSolicita){
           this._usuarioService.recuperarPorUsuario(favor.usuarioSolicita).subscribe(res => {
@@ -106,17 +106,36 @@ export class FavoresSolicitadosPage implements OnInit, OnChanges {
                       .catch(error=> {
                         console.error('error');
                       });
-                    }); 
-                  }); 
+                    },
+                    (error)=>{
+                      console.log(error);
+                    });
+
+                  },
+                  (error)=>{
+                    console.log(error);
+                  }
+                  ); 
                 }
               })
               .catch(error=> {
                 console.error('error');
               });
-            }); 
-          }); 
+            },
+            (error)=>{
+              console.log(error);
+            }
+            ); 
+          },
+          (error)=>{
+            console.log(error);
+          }
+          ); 
         }
       }
+    },
+    (error)=>{
+      console.log(error);
     });   
   }
 

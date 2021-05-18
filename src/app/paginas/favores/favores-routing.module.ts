@@ -28,7 +28,11 @@ const routes: Routes = [
         path: 'favores-realizados',
         loadChildren: () => import('../favores-realizados/favores-realizados.module').then(m=>m.FavoresRealizadosPageModule)
       },
-
+      // {
+      //   path: '',
+      //   redirectTo: '/favores/favores-todos',
+      //   pathMatch: 'full'
+      // }
     ]
   }
 ];

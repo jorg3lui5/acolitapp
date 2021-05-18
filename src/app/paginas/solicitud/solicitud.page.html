@@ -57,7 +57,7 @@
         <ion-label position="floating" for="valorPago">
           {{constantes._valorPagar}} ($)<ion-text color="danger">*</ion-text>
         </ion-label>
-        <ion-input name="valorPago" id="valorPago" formControlName="valorPago" type="transaction-amount"></ion-input>
+        <ion-input name="valorPago" id="valorPago" formControlName="valorPago" type="number"></ion-input>
       </ion-item>
       <div class="alert-danger" *ngIf="valorPago.invalid && (valorPago.dirty || valorPago.touched)">
         <div *ngFor="let error of mensajesError.valorPago">

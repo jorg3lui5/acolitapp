@@ -81,18 +81,21 @@ export class ItemFavorComponent implements OnInit {
       }
     )
     .catch(err=>{
-      console.log("error: "+err);
+      console.log("error: ",err);
     });
   }
 
   establecerTipoFavor(){
-    if((this.favor.usuarioSolicita && this.usuario==(this.favor.usuarioSolicita as any) ) || 
-      (this.favor.usuarioSolicita.usuario && this.usuario==this.favor.usuarioSolicita.usuario)){
-      this.tipoFavor=TipoFavorEnum.solicitado;
+    if(this.favor.usuarioSolicita){
+      if(this.usuario==(this.favor.usuarioSolicita as any) || (this.favor.usuarioSolicita.usuario && this.usuario==this.favor.usuarioSolicita.usuario)){
+        this.tipoFavor=TipoFavorEnum.solicitado;
+      }
     }
-    if((this.favor.usuarioRealiza && this.usuario==(this.favor.usuarioRealiza as any) ) || 
-      (this.favor.usuarioRealiza.usuario && this.usuario==this.favor.usuarioRealiza.usuario)){
-      this.tipoFavor=TipoFavorEnum.realizado;
+
+    if(this.favor.usuarioRealiza){
+      if(this.usuario==(this.favor.usuarioRealiza as any) || (this.favor.usuarioRealiza.usuario && this.usuario==this.favor.usuarioRealiza.usuario)){
+        this.tipoFavor=TipoFavorEnum.realizado;
+      }
     }
   }
 

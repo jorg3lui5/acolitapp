@@ -61,7 +61,7 @@ export class FavorRecibidoPage implements OnInit {
     this.recuperarUsuario();
   }
 
-  recuperarFavor(){
+  async recuperarFavor(){
     this._favorService.recuperarPorId(this.idFavor).subscribe(res => {
       this.favor= {...<any>res};
       if(this.favor.usuarioSolicita){

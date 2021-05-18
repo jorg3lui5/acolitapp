@@ -249,6 +249,5 @@ export class RegistroPage implements OnInit {
 
   ocultarLoading(){
     this.loading.dismiss();
-
   }
 }

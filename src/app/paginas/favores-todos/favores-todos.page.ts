@@ -10,6 +10,7 @@ import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
 import { ToastController } from '@ionic/angular';
 import { StorageService } from '../../servicios/librerias/storage.service';
 import firebase from 'firebase';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-favores-todos',
@@ -34,8 +35,15 @@ export class FavoresTodosPage implements OnInit, OnChanges {
     public _personaService: PersonaService,
     public toastController: ToastController,
     private _storageService:StorageService,
-  ) {
+    private router: Router,
 
+  ) {
+    // router.events.subscribe((val) => {
+    //     if(val instanceof NavigationEnd){
+    //       console.log('baaa');
+    //       this.recuperarUsuario();
+    //     }
+    // });
   }
 
   ngOnInit() {
@@ -43,7 +51,6 @@ export class FavoresTodosPage implements OnInit, OnChanges {
   }
 
   ngOnChanges(){
-
   }
 
   recuperarFavores(){
