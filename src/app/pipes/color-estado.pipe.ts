@@ -13,11 +13,11 @@ export class ColorEstadoPipe implements PipeTransform {
       case EstadofavorEnum.solicitado: { 
          return 'medium';
       } 
-      case EstadofavorEnum.aceptado: { 
+      case EstadofavorEnum.pendiente: { 
         return 'danger';
       } 
       case EstadofavorEnum.realizando: { 
-        return 'primary';
+        return 'warning';
       } 
       case EstadofavorEnum.finalizado: { 
         return 'success';

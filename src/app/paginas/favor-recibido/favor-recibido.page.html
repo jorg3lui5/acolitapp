@@ -18,16 +18,16 @@
       </div>
       <ion-item lines="none">
         <ion-avatar slot="start" (click)="verInformacionPersonal(favor.usuarioSolicita)">
-          <ion-img [src]="favor.usuarioSolicita?.foto"></ion-img>
+          <ion-img [src]="fotoSolicita"></ion-img>
         </ion-avatar>
         <ion-label (click)="verInformacionPersonal(favor.usuarioSolicita)">
           <div>
             <small class="texto-primario">Solicita:</small>
           </div>
           <ion-text color="medium">
-            <i>{{favor.usuarioSolicita?.persona?.nombresApellidos}}</i>
+            <i>{{personaSolicita?.nombresApellidos}}</i>
           </ion-text>
-          <div class="favor-calificacion-secundaria">
+          <div class="favor-calificacion-secundaria" *ngIf="favor.calificacionRealiza>0">
             <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
           </div>
         </ion-label>
@@ -39,14 +39,14 @@
               <small class="texto-primario">Ayuda:</small>
             </div>
             <ion-text color="medium">
-              <i>{{favor.usuarioRealiza?.persona?.nombresApellidos}}</i>
+              <i>{{personaRealiza?.nombresApellidos}}</i>
             </ion-text>
-            <div class="favor-calificacion-secundaria">
+            <div class="favor-calificacion-secundaria" *ngIf="favor.calificacionSolicita>0">
               <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
             </div>
           </ion-label>
           <ion-avatar slot="end" (click)="verInformacionPersonal(favor.usuarioRealiza)">
-            <ion-img [src]="favor.usuarioRealiza?.foto"></ion-img>
+            <ion-img [src]="fotoRealiza"></ion-img>
           </ion-avatar>
         </ion-item>
       </div>
@@ -81,32 +81,20 @@
           {{favor.descripcionPago}}
         </ion-card-content>
       </ion-card>
-      <div class="favor-mi-calificacion" *ngIf="tipoFavor==tipoFavorEnum.realizado && favor.calificacionRealiza">
-        <ion-icon [name]="i<=favor.calificacionRealiza?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
-      </div>
-      <div class="favor-mi-calificacion" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.calificacionSolicita">
-        <ion-icon [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="warning" *ngFor="let i of [1,2,3,4,5]" class="estrella-mio"></ion-icon>
-      </div>
-
-      <!-- <div class="favor-calificacion-primaria">
-        <ion-button (click)="calificar(i)" fill="clear" *ngFor="let i of [1,2,3,4,5]">
-          <ion-icon class="favor-estrella-primaria" slot="icon-only" [name]="i<=favor.calificacionSolicita?'star':'star-outline'" color="primary"></ion-icon>
-        </ion-button>
-      </div> -->
     </div>
-    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.estado!==estadofavorEnum.aceptado">
+    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.estado!==estadofavorEnum.pendiente">
       <div></div>
       <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.solicitado" (click)="realizarAccion(accionFavorEnum.cancelaSolicitante)">{{constantes._cancelarSolicitud}}</ion-button>
       <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.realizando" (click)="realizarAccion(accionFavorEnum.finalizaSolicitante)">{{constantes._finalizar}}</ion-button>
       <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.finalizado && favor.calificacionRealiza>0" (click)="realizarAccion(accionFavorEnum.calificaSolicitante)">{{constantes._calificar}}</ion-button>
     </div>
-    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.estado==estadofavorEnum.aceptado">
+    <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.solicitado && favor.estado==estadofavorEnum.pendiente">
       <ion-button expand="block" (click)="realizarAccion(accionFavorEnum.aceptaSolicitante)">{{constantes._aceptarAyuda}}</ion-button>
       <ion-button expand="block" (click)="realizarAccion(accionFavorEnum.rechazaSolicitante)">{{constantes._rechazarAyuda}}</ion-button>
     </div>
     <div class="botones-inferiores-dos-botones" *ngIf="tipoFavor==tipoFavorEnum.realizado">
       <div></div>
-      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.aceptado" (click)="realizarAccion(accionFavorEnum.cancelaAyudante)">{{constantes._cancelarAyudar}}</ion-button>
+      <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.pendiente" (click)="realizarAccion(accionFavorEnum.cancelaAyudante)">{{constantes._cancelarAyudar}}</ion-button>
       <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.realizando" (click)="realizarAccion(accionFavorEnum.finalizaAyudante)">{{constantes._finalizar}}</ion-button>
       <ion-button expand="block" *ngIf="favor.estado==estadofavorEnum.finalizado && favor.calificacionSolicita>0" (click)="realizarAccion(accionFavorEnum.calificaAyudante)">{{constantes._calificar}}</ion-button>
       

@@ -35,6 +35,8 @@ export class FavorService {
   }
 
   eliminar(id) {
+    console.log('dss');
+    console.log('id');
     return this.angularFirestore
       .collection(this.coleccion)
       .doc(id)
@@ -43,7 +45,7 @@ export class FavorService {
 
   listarTodos() { 
     return this.angularFirestore
-    .collection(this.coleccion) 
+    .collection(this.coleccion,(objeto) => objeto.orderBy('fechaSolicita','desc')) 
     .snapshotChanges();
   }
     
@@ -56,12 +58,12 @@ export class FavorService {
 
   recuperarPorUsuarioSolicita(usuarioSolicita) {
     return this.angularFirestore
-    .collection(this.coleccion,(objeto) => objeto.where('usuarioSolicita', '==', usuarioSolicita))
+    .collection(this.coleccion,(objeto) => objeto.where('usuarioSolicita', '==', usuarioSolicita).orderBy('fechaSolicita','desc'))
     .snapshotChanges();
   }
   recuperarPorUsuarioRealiza(usuarioRealiza) {
     return this.angularFirestore
-    .collection(this.coleccion,(objeto) => objeto.where('usuarioRealiza', '==', usuarioRealiza))
+    .collection(this.coleccion,(objeto) => objeto.where('usuarioRealiza', '==', usuarioRealiza).orderBy('fechaSolicita','desc'))
     .snapshotChanges();
   }
 }

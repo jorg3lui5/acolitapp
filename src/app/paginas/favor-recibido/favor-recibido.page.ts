@@ -16,6 +16,7 @@ import { AccionFavorEnum } from '../../modelo/enum/accion-favor-enum';
 import { MensajeAdvertenciaDTO } from '../../modelo/dto/mensaje-advertencia-dto';
 import { CalificacionComponent } from '../../componentes/calificacion/calificacion.component';
 import firebase from 'firebase';
+import { Favor } from '../../modelo/favor';
 
 @Component({
   selector: 'app-favor-recibido',
@@ -25,7 +26,7 @@ import firebase from 'firebase';
 export class FavorRecibidoPage implements OnInit {
   loading: HTMLIonLoadingElement;
   constantes: Constantes = new Constantes;
-  favor: FavorDTO;
+  favor: Favor;
   idFavor:string;
   usuario: string;
   tipoFavor: string;
@@ -34,6 +35,10 @@ export class FavorRecibidoPage implements OnInit {
   estadofavorEnum = EstadofavorEnum;
   accionFavorEnum = AccionFavorEnum;
   storageRef = firebase.storage().ref();
+  personaSolicita: Persona;
+  personaRealiza: Persona;
+  fotoRealiza: any;
+  fotoSolicita: any;
 
   constructor(
     private activatedRoute:ActivatedRoute,
@@ -61,113 +66,64 @@ export class FavorRecibidoPage implements OnInit {
     this.recuperarUsuario();
   }
 
-  recuperarFavor(){
+  async recuperarFavor(){
     this._favorService.recuperarPorId(this.idFavor).subscribe(res => {
       this.favor= {...<any>res};
+      if(this.usuario==this.favor.usuarioSolicita){
+        this.tipoFavor=TipoFavorEnum.solicitado;
+      }
+      else if(this.usuario==this.favor.usuarioRealiza){
+        this.tipoFavor=TipoFavorEnum.realizado;
+      }
       if(this.favor.usuarioSolicita){
-        this._usuarioService.recuperarPorUsuario(this.favor.usuarioSolicita).subscribe(res => {
-          let usuarios=[];
+        this._personaService.recuperarPorUsuario(this.favor.usuarioSolicita).subscribe(res => {
+          let personas=[];
           res.forEach((doc) => {
-            usuarios.push({
+            personas.push( {
               id: doc.id,
               ...<any>doc.data()
-            } as Usuario);
+            } as Persona);
           });
-          this._personaService.recuperarPorUsuario(this.favor.usuarioSolicita).subscribe(res => {
-            let personas=[];
-            res.forEach((doc) => {
-              personas.push( {
-                id: doc.id,
-                ...<any>doc.data()
-              } as Persona);
-            });
-            this.favor.usuarioSolicita=usuarios[0];
-            if(this.favor.usuarioSolicita){
-              this.favor.usuarioSolicita.persona=personas[0];
-
-              if(this.usuario==this.favor.usuarioSolicita.usuario){
-                this.tipoFavor=TipoFavorEnum.solicitado;
-              }
-              const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioSolicita.usuario}.jpg`);
-              imageRef.getDownloadURL().then(url=> {
-                this.favor.usuarioSolicita.foto=url;
-
-                if(this.favor.usuarioRealiza){
-                  this._usuarioService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-                    let usuarios=[];
-                    res.forEach((doc) => {
-                      usuarios.push({
-                        id: doc.id,
-                        ...<any>doc.data()
-                      } as Usuario);
-                    });
-                    this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
-                      let personas=[];
-                      res.forEach((doc) => {
-                        personas.push( {
-                          id: doc.id,
-                          ...<any>doc.data()
-                        } as Persona);
-                      });
-                      this.favor.usuarioRealiza=usuarios[0];
+          this.personaSolicita=personas[0];
   
-                      if(this.favor.usuarioRealiza){
-                        this.favor.usuarioRealiza.persona=personas[0];
-          
-                        if(this.usuario==this.favor.usuarioRealiza.usuario){
-                          this.tipoFavor=TipoFavorEnum.realizado;
-                        }
-                        const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioRealiza.usuario}.jpg`);
-    
-                        imageRef.getDownloadURL().then(url=> {
-                          this.favor.usuarioRealiza.foto=url;
-                          this.ocultarLoading();
-                        })
-                        .catch(error=> {
-                          this.ocultarLoading();
-                        });
-                      }
-                    },
-                    (error)=>{
-                      this.ocultarLoading();
-                    }
-                    ); 
-                  },
-                  (error)=>{
-                    this.ocultarLoading();
-                  }
-                  ); 
-                }else{
-                  this.ocultarLoading();
-                }
-              })
-              .catch(error=> {
-                this.ocultarLoading();
-              });
-            }
-          },
-          (error)=>{
+          const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioSolicita}.jpg`);
+          imageRef.getDownloadURL().then(url=> {
+            this.fotoSolicita=url;
             this.ocultarLoading();
-          }
-          ); 
+          })
+          .catch(error=> {
+            this.ocultarLoading();
+          });
+        });
+        
+      }else{
+        this.ocultarLoading();
+      }
+      if(this.favor.usuarioRealiza){
+        this._personaService.recuperarPorUsuario(this.favor.usuarioRealiza).subscribe(res => {
+          let personas=[];
+          res.forEach((doc) => {
+            personas.push( {
+              id: doc.id,
+              ...<any>doc.data()
+            } as Persona);
+          });
+          this.personaRealiza=personas[0];
+          
+          const imageRef = this.storageRef.child(`fotoPerfil/${this.favor.usuarioRealiza}.jpg`);
+          imageRef.getDownloadURL().then(url=> {
+            this.fotoRealiza=url;
+          })
+          .catch(error=> {
+          });
         },
         (error)=>{
-          this.ocultarLoading();
-        }
-        ); 
+        }); 
       }
-      else{
-          this.ocultarLoading();
-      }
-    },
-    (error)=>{
-      this.ocultarLoading();
-      console.log(error);
-    }
-    ); 
+    }); 
   }
 
-  recuperarUsuario(){
+recuperarUsuario(){
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{
         if(data){
@@ -197,8 +153,10 @@ export class FavorRecibidoPage implements OnInit {
 
   async eliminarFavor(mensaje: string, paginaRetorna:string){
     await this.mostrarLoading(this.constantes._cancelandoSolicitud);
+    console.log('eeeee');
     this._favorService.eliminar(this.idFavor)
     .then((data)=> {
+      console.log('eeee1')
       this.ocultarLoading();
       this.mostrarMensaje(mensaje);
       if(paginaRetorna){
@@ -207,6 +165,7 @@ export class FavorRecibidoPage implements OnInit {
     })
     .catch(err=>{
       this.ocultarLoading();
+      console.log('eeee2')
       console.log("error: "+err);
       this.mostrarMensaje(err.message);
     });
@@ -234,49 +193,41 @@ export class FavorRecibidoPage implements OnInit {
   }
   aceptaSolicitante(){
     this.favor.estado=EstadofavorEnum.realizando;
-    this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.aceptaAyudante),null);
   }
   rechazaSolicitante(){
     this.favor.estado=EstadofavorEnum.solicitado;
-    this.cambiarUsuarioDTOtoString();
     this.favor.usuarioRealiza=null;
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.rechazaSolicitante),null);
   }
   finalizaSolicitante(calificacion:number){
     this.favor.estado=EstadofavorEnum.finalizado;
     this.favor.calificacionSolicita=calificacion;
-    this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.finalizaSolicitante),null);
   }
   calificaSolicitante(calificacion:number){
     this.favor.estado=EstadofavorEnum.calificado;
     this.favor.calificacionSolicita=calificacion;
-    this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.calificaSolicitante),null);
   }
   aceptaAyudante(){
-    this.favor.estado=EstadofavorEnum.aceptado;
-    this.cambiarUsuarioDTOtoString();
-    this.favor.usuarioRealiza=(this.usuario) as any;
+    this.favor.estado=EstadofavorEnum.pendiente;
+    this.favor.usuarioRealiza=this.usuario;
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.aceptaAyudante),null);
   }
   cancelaAyudante(){
     this.favor.estado=EstadofavorEnum.solicitado;
-    this.cambiarUsuarioDTOtoString();
     this.favor.usuarioRealiza=null;
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.cancelaAyudante),'favores');
   }
   finalizaAyudante(calificacion:number){
     this.favor.estado=EstadofavorEnum.finalizado;
     this.favor.calificacionRealiza=calificacion;
-    this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.finalizaAyudante),null);
   }
   calificaAyudante(calificacion:number){
     this.favor.estado=EstadofavorEnum.calificado;
     this.favor.calificacionRealiza=calificacion;
-    this.cambiarUsuarioDTOtoString();
     this.actualizarFavor(this.devolverMensajeFinAccion(AccionFavorEnum.calificaAyudante),null);
   }
 
@@ -288,10 +239,7 @@ export class FavorRecibidoPage implements OnInit {
         'mensaje': mensaje,
       }
     });
-    await modal.present();
-
-    //const {data}= await modal.onDidDismiss();
-    
+    await modal.present();    
     const {data}= await modal.onWillDismiss();
     if(data){
       this.ejecutarAccion(accion,data.calificacion);
@@ -302,19 +250,10 @@ export class FavorRecibidoPage implements OnInit {
     if(accion==AccionFavorEnum.finalizaAyudante || accion==AccionFavorEnum.calificaAyudante){
       await this.mostrarModal(accion,'Califica al usuario que solicitó el favor, otorgándole de 1 a 5 estrellas.');
       return null;
-      // if(this.favor.calificacionRealiza==0){
-      //   this.mostrarMensaje("Debe calificar a la persona que solicitó el favor");
-      //   return null;
-      // }
-
     }
     else if(accion==AccionFavorEnum.finalizaSolicitante || accion==AccionFavorEnum.calificaSolicitante){
       await this.mostrarModal(accion,'Califica al usuario que te ayudó con el favor, otorgándole de 1 a 5 estrellas.');
       return null;
-      // if(this.favor.calificacionSolicita==0){
-      //   this.mostrarMensaje("Debe calificar a la persona que le ayudó con el favor");
-      //   return null;
-      // }
     }
     let mensajeAdvertenciaDTO:MensajeAdvertenciaDTO= this.devolverMensajeAdvertencia(accion);
     await this.confirmarAccion(accion, mensajeAdvertenciaDTO);
@@ -323,7 +262,6 @@ export class FavorRecibidoPage implements OnInit {
   async confirmarAccion(accion:string,mensajeAdvertenciaDTO: MensajeAdvertenciaDTO){
     const alert = await this.alertController.create({
       header: mensajeAdvertenciaDTO.titulo,
-      //subHeader: mensajeAdvertenciaDTO.subtitulo,
       message: mensajeAdvertenciaDTO.mensaje,
       buttons: [
         {
@@ -341,23 +279,14 @@ export class FavorRecibidoPage implements OnInit {
     await alert.present();
   }
 
-  cambiarUsuarioDTOtoString(){
-    if(this.favor.usuarioRealiza && this.favor.usuarioRealiza.usuario){
-      this.favor.usuarioRealiza=(this.favor.usuarioRealiza.usuario) as any;
-    }
-    if(this.favor.usuarioSolicita && this.favor.usuarioSolicita.usuario){
-      this.favor.usuarioSolicita=(this.favor.usuarioSolicita.usuario) as any;
-    }
-  }
-
   devolverMensajeAdvertencia(accion:string){
     switch(accion) {
       case AccionFavorEnum.cancelaSolicitante: 
         return new MensajeAdvertenciaDTO('Cancelar Favor','Cancelar Favor','Se va a ELIMINAR el favor solicitado. ¿Está seguro de elimarlo?','Si, eliminar','No');
       case AccionFavorEnum.aceptaSolicitante: 
-        return new MensajeAdvertenciaDTO('Aceptar Ayuda','Aceptar Ayuda','¿Está seguro de ACEPTAR la ayuda de ' +this.favor.usuarioRealiza.persona.nombresApellidos+'?','Si, aceptar','Cancelar');
+        return new MensajeAdvertenciaDTO('Aceptar Ayuda','Aceptar Ayuda','¿Está seguro de ACEPTAR la ayuda de ' +this.personaRealiza.nombresApellidos+'?','Si, aceptar','Cancelar');
       case AccionFavorEnum.rechazaSolicitante: 
-        return new MensajeAdvertenciaDTO('Rechazar Ayuda','Rechazar Ayuda','¿Está seguro de RECHAZAR la ayuda de ' +this.favor.usuarioRealiza.persona.nombresApellidos+'?','Si, rechazar','Cancelar');
+        return new MensajeAdvertenciaDTO('Rechazar Ayuda','Rechazar Ayuda','¿Está seguro de RECHAZAR la ayuda de ' +this.personaRealiza.nombresApellidos+'?','Si, rechazar','Cancelar');
       case AccionFavorEnum.finalizaSolicitante: 
         return new MensajeAdvertenciaDTO('Finalizar Favor','Finalizar Favor','Usted CALIFICARÁ con '+this.favor.calificacionSolicita+ ' estrellas al usuario que le ayudó con el favor.','Aceptar','Cancelar');
       case AccionFavorEnum.calificaSolicitante: 
@@ -442,12 +371,7 @@ export class FavorRecibidoPage implements OnInit {
 
   }
 
-  verInformacionPersonal(usuario:any){
-    if(usuario.usuario){
-      this.router.navigate(['/informacion-personal', usuario.usuario]);
-    }
-    else{
-      this.router.navigate(['/informacion-personal', usuario]);
-    }
+  verInformacionPersonal(usuario:string){
+    this.router.navigate(['/informacion-personal', usuario]);
   }
 }

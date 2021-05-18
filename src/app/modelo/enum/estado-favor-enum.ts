@@ -1,6 +1,6 @@
 export enum EstadofavorEnum {
     solicitado='solicitado',
-    aceptado='aceptado',
+    pendiente='pendiente',
     realizando='realizando',
     finalizado='finalizado',
     calificado='calificado',

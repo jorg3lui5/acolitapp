@@ -6,6 +6,8 @@
 
 .boton-estrella {
     height: auto;
+    --padding-end: 0px !important;
+    --padding-start: 0px !important;
 }
 
 .favor-calificacion-primaria {
@@ -24,11 +26,6 @@
 ion-button {
     --padding-end: 5px !important;
     --padding-start: 5px !important;
-}
-
-ion-card {
-    margin-inline: 0px;
-    margin: 0px;
 }
 
 .calificacion-titulo {
