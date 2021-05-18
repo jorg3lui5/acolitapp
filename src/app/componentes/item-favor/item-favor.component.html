@@ -66,7 +66,7 @@
   <ion-item-option (click)="visualizar()" color="primary">
     <ion-icon slot="icon-only" name="eye-outline" size="large"></ion-icon>
   </ion-item-option>
-  <ion-item-option (click)="editar()" color="danger">
+  <ion-item-option (click)="editar()" color="danger" *ngIf="this.tipoFavor==tipoFavorEnum.solicitado">
     <ion-icon slot="icon-only" name="create-outline" size="large"></ion-icon>
   </ion-item-option>
 </ion-item-options>

@@ -23,6 +23,7 @@ export class ItemFavorComponent implements OnInit {
   estadosFavor: string[]=[];
   constantes: Constantes = new Constantes;
   usuario: string;
+  tipoFavorEnum = TipoFavorEnum;
 
   constructor(
     private router: Router,
