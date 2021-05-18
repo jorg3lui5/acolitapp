@@ -16,11 +16,16 @@
         </div>
         <div>
           <ion-text color="primary">
+            <p>Telf: {{persona?.telefono}}</p>
+          </ion-text>
+        </div>
+        <div>
+          <ion-text color="primary">
             <p>ID: {{persona?.identificacion}}</p>
           </ion-text>
         </div>
         <div class="favor-calificacion-secundaria">
-          <ion-icon [name]="i<=5?'star':'star-outline'" size="large" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
+          <ion-icon [name]="i<=5?'star':'star-outline'" size="medium" color="warning" *ngFor="let i of [1,2,3,4,5]"></ion-icon>
         </div>
       </ion-label>
     </ion-item>
