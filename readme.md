@@ -49,6 +49,7 @@ Para que se genere el proyecto android a partir del código de ionic, se debe ej
 ```bash
 ionic build
 ionic capacitor add android
+ionic capacitor copy android
 ionic capacitor build android --prod
 ```
 
@@ -58,24 +59,4 @@ ionic capacitor build android --prod
 
 
 ## Uso del aplicativo
-Para probar la funcionalidad y el objetivo del aplicativo siga los siguientes pasos:
-
-* 1. Registre 2 usuarios en el aplicativo
-* 2. Inicie sesión con un usuario o con los 2 al mismo tiempo.
-* 3. Solicite un favor, pulsando el botón con signo más **(+)**
-* 4. Una vez solicitado el favor, deberá aparecer en la lista de favores.
-* 5. El otro usuario podrá ayudar con el favor solicitado, al dar clic en el título del favor.
-
-A continuación se explica los estados que puede tener un favor y las acciones que pueden realizar el solicitante, el ayudante o cualquier otra persona que no haya aceptado el favor.
-
-**Solicitado:**
-Un favor tiene este estado cuando el usuario solicita el favor y aun nadie se ofrece a ayudarle.
-Solicitante: puede CANCELAR la solicitud del favor. Esto eliminará el favor solicitado
-Cualquier otro usuario: puede AYUDAR con el favor solicitado. AL momento que ayuda, el favor pasa a estado PENDIENTE
-
-**Pendiente:**
-UN favor tiene este estado cuando un usuario ofreció ayudar con el favor, pero el solicitante aún no acepta la ayuda.
-Solicitante: puede ACEPTAR o RECHAZAR la ayuda ofrecida por el otro usuario. 
-Si rechaza la ayuda, entonces el favor vuelve a estado SOLICITADO, hasta que alguien más acepte ayudarle.
-Si acpeta 
-Cualquier otro usuario: puede AYUDAR con el favor solicitado.
+Para probar la funcionalidad y el objetivo del aplicativo se recomienda revisar el apartado 3.2.2 de la memoria del trabajo final
