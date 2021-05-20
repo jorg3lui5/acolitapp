@@ -11,6 +11,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from '../../servicios/librerias/storage.service';
 import { User } from '../../interfaces/firebase/User';
 
+/* 
+es la pantalla principal de la aplicación, y permite iniciar sesión al usuario
+ o redireccionar a la pantalla de registro cuando aún no está registrado.
+ */
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -26,6 +31,7 @@ export class LoginPage implements OnInit {
     contrasenia: ['', Validators.required],
   });
 
+  //define las validaciones para el formulario reactivo
   mensajesError = {
     correo: [
       {tipo: 'required', mensaje: 'El correo es requerido'},
@@ -60,6 +66,8 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
+  //el método se llama cuando el usuario presiona el botón INICIAR SESION, se valida que los campos estén llenados, y trata de autenticar con firebase, si todo está bien entonces guarda al usuario 
+  //autenticado en el localstorage y navega hacia la pagina de favores.
   loguear() {
     if(this.formularioLogin.valid){
       this._usuarioService.loguear(this.formularioLogin.value.correo.toLowerCase().trim(),this.formularioLogin.value.contrasenia)
@@ -111,6 +119,7 @@ export class LoginPage implements OnInit {
     }
   }
 
+  //abre la pantalla de registro para que el usuario pueda registrarse
   abrirRegistro() {
     this.router.navigate(['/registro']);
   }

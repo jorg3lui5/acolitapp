@@ -8,6 +8,10 @@ import { StorageService } from 'src/app/servicios/librerias/storage.service';
 import { Constantes } from '../../compartido/constantes';
 import { TipoFavorEnum } from '../../modelo/enum/tipo-favor-enum';
 
+/* visualiza los datos de un favor específico. 
+Posee funcionalidades para visualizar el favor, los datos de la persona solicitante o ayudante y la forma de pago por el favor realizado.
+ */
+
 @Component({
   selector: 'app-item-favor',
   templateUrl: './item-favor.component.html',
@@ -40,6 +44,7 @@ export class ItemFavorComponent implements OnInit {
     this.recuperarUsuario();
   }
 
+  //* Cuando se desliza el dedo sobre el favor muestra en aun action sheet estas 2 opciones, que permite visualizar o editar el favor seleccionado */
   mostrarOpciones(){
     let opciones: any[] = [{
       text: 'Visualizar',
@@ -64,6 +69,7 @@ export class ItemFavorComponent implements OnInit {
     this.visualizar();
   }
 
+  //Muestra las opciones en el action sheet
   async pesentarOpciones(opciones: any[]) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Favor',
@@ -72,6 +78,7 @@ export class ItemFavorComponent implements OnInit {
     await actionSheet.present();
   }
 
+  //recupera el usuario almacenado en el local storage
   recuperarUsuario(){
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{
@@ -86,6 +93,7 @@ export class ItemFavorComponent implements OnInit {
     });
   }
 
+  //dependiendo del favor y el usuario almacenado en el local storage, se define si este favor es solicita por el usuario o ayudante del favor, o ninguno de los 2
   establecerTipoFavor(){
     if(this.favor.usuarioSolicita){
       if(this.usuario==(this.favor.usuarioSolicita as any) || (this.favor.usuarioSolicita.usuario && this.usuario==this.favor.usuarioSolicita.usuario)){
@@ -100,17 +108,19 @@ export class ItemFavorComponent implements OnInit {
     }
   }
 
+  //navega a la ventana que muestra el favor seleccionado
   visualizar(){
     this.ionList.closeSlidingItems(); 
     this.router.navigate(['/favor-recibido', this.favor.id]);
   }
-
+  //navega a la pantalla de edición del favor
   editar(){
     this.ionList.closeSlidingItems();
     this.router.navigate(['/solicitud', this.favor.id]);
 
   }
 
+  //Navega y muestra la información persona de la persona seleccionada en el favor.
   verInformacionPersonal(usuario:any){
     if(usuario.usuario){
       this.router.navigate(['/informacion-personal', usuario.usuario]);
@@ -120,6 +130,7 @@ export class ItemFavorComponent implements OnInit {
     }
   }
 
+  //muestra en un alert, el tipo de pago del favor seleccionado
   async verDescripcionPago(){
       const alert = await this.alertController.create({
         header: 'Pago: '+this.favor.tipoPago,

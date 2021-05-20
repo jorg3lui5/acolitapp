@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
   templateUrl: './favores.page.html',
   styleUrls: ['./favores.page.scss'],
 })
+
+/* 
+contiene tabs que se pueden seleccionar para ver todos los favores o  filtrar los favores solicitados o realizados. Además, desde esta interfaz se puede solicitar un nuevo favor.
+*/
 export class FavoresPage implements OnInit {
 
   constantes: Constantes = new Constantes;

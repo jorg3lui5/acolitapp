@@ -28,6 +28,9 @@ import { PersonaService } from '../../servicios/persona.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from '../../servicios/librerias/storage.service';
 
+
+/* permite registrar la información personal del usuario para brindar seguridad y confianza enmtre las personas que usan la App. */
+
 @Component({
   selector: 'app-datos-personales',
   templateUrl: './datos-personales.page.html',
@@ -49,6 +52,7 @@ export class DatosPersonalesPage implements OnInit {
   persona: Persona;
   usuario: string;
 
+    //define las validaciones para el formulario reactivo
   formularioDatosPersonales: FormGroup = this.formBuilder.group({
     identificacion: ['', Validators.required],
     nombresApellidos: ['', Validators.compose([Validators.required,Validators.minLength(5)])],
@@ -184,6 +188,7 @@ export class DatosPersonalesPage implements OnInit {
   }
 
   ngOnInit() {
+    //recupera las opciones que se van a cargar en los combos o listas desplegables
     this.recuperarPaises();
     this.recuperarNivelesEstudio();
     this.recuperarOcupaciones();
@@ -224,6 +229,7 @@ export class DatosPersonalesPage implements OnInit {
     return this._nacionalidadService.recuperarPorPais(pais);
   }
 
+  //al seleccionar el pais, se recuperan las ciudades y la nacionalidad
   seleccionarPais(){
     this.ciudad.setValue('');
     this.ciudad.updateValueAndValidity();
@@ -237,6 +243,8 @@ export class DatosPersonalesPage implements OnInit {
     this.nacionalidad.updateValueAndValidity();
 
   }
+
+  //cuando el usuario elige un nivel de estudios universitario, se habilita el campo para que seleccione la profesión del usuario.
   seleccionarNivelEstudios()
   {
     this.profesion.setValue('');
@@ -246,6 +254,7 @@ export class DatosPersonalesPage implements OnInit {
     }
   }
 
+  //si la persona posee vehículo, entonces se coloca como requerido las placasa del vehículo
   seleccionarTipoVehiculo(){
     // this.placaVehiculo.setValue('');
     // this.placaVehiculo.updateValueAndValidity();
@@ -258,6 +267,7 @@ export class DatosPersonalesPage implements OnInit {
     this.placaVehiculo.updateValueAndValidity();
   }
 
+  //Se ejecuta una vez que se haya completado el formulario de datos personales. Se llama al metodo de crear persona, para almacenarlo en la base de datos.l
   async finalizar(){
     await this.mostrarLoading(this.constantes._guardandoDatos);
     if(this.formularioDatosPersonales.valid){
@@ -271,6 +281,7 @@ export class DatosPersonalesPage implements OnInit {
     }
   }
 
+  //almacena la persona en el firestore.
   crearPersona(persona) {
     this._personaService.crear(persona)
     .then((data)=>{
@@ -298,6 +309,7 @@ export class DatosPersonalesPage implements OnInit {
     toast.present();
   }
 
+  //recupera el nombre de usuario desde el localstorage
   recuperarUsuario(){
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{

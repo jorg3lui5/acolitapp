@@ -21,6 +21,7 @@ export class AuthGuard implements CanActivate {
 
   }
 
+  /* permite cargar ciertas rutas o pantallas cuando el usuario está logueado.*/
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
@@ -35,21 +36,6 @@ export class AuthGuard implements CanActivate {
           }
         }
       ));
-
-      // return this._storageService.guardar(this.constantes._usuario,"usu").then((dato) => {
-      //   if(dato){
-      //     return true;
-      //   }
-      //   else{
-      //     this._router.navigate(['/login']);
-      //     return false;
-      //   }
-      // })
-      // .catch(err=>{
-      //   console.log("error: "+err);
-      //   this._router.navigate(['/login']);
-      //   return false;
-      // });
   }
   
 }

@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, PopoverController, ToastController } from '@ionic/angular';
 import { Constantes } from '../../compartido/constantes';
 
+/* •	contiene la ventana que se despliega al momento de calificar el favor. 
+      Permite calificar al usuario con un valor de 1 a 5 estrellas.
+ */
+
 @Component({
   selector: 'app-calificacion',
   templateUrl: './calificacion.component.html',

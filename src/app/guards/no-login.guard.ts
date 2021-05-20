@@ -23,6 +23,9 @@ export class NoLoginGuard implements CanActivate {
   }
 
   canActivate(
+
+/*     permite cargar ciertas rutas o pantallas cuantas el usuario no está logueado.
+ */
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       return this._angularFireAuth.authState.pipe(

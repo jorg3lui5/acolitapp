@@ -66,6 +66,9 @@ export class FavorRecibidoPage implements OnInit {
     this.recuperarUsuario();
   }
 
+  //recupera todos los favores que se han solicitado. Estos son recuperados desde firestore, además recupera el usuario que solicita y el usuario que realiza el favor para ir construyendo 
+  // el objeto que se visualiza en la pantalla.
+  //Además de los datos del usuario, tambien llama al servicio de CLoud Storage para recuperar la foto del usuario
   async recuperarFavor(){
     this._favorService.recuperarPorId(this.idFavor).subscribe(res => {
       this.favor= {...<any>res};
@@ -123,6 +126,7 @@ export class FavorRecibidoPage implements OnInit {
     }); 
   }
 
+  //recupera el nombre del usuario almacenado en el local storage.
 recuperarUsuario(){
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{
@@ -151,6 +155,7 @@ recuperarUsuario(){
     toast.present();
   }
 
+  //eliomina el favor recibido, siempre y cuando el usuario cancele el favor solicitado.
   async eliminarFavor(mensaje: string, paginaRetorna:string){
     await this.mostrarLoading(this.constantes._cancelandoSolicitud);
     this._favorService.eliminar(this.idFavor)
@@ -168,6 +173,7 @@ recuperarUsuario(){
     });
   }
 
+  //actualiza los datoa del usuario o del favor según la acción seleccionada. Puede cancelarse el favor, asi como acpetar, rechazar, finalizar o calificar.
   async actualizarFavor(mensaje: string, paginaRetorna:string){
     await this.mostrarLoading(this.constantes._guardandoDatos);
     this._favorService.actualizar(this.favor,this.idFavor)

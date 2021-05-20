@@ -53,6 +53,10 @@ export class FavoresTodosPage implements OnInit, OnChanges {
   ngOnChanges(){
   }
 
+
+  //recupera todos los favores que se han solicitado por cualqueir usuario. Estos son recuperados desde firestore, además recupera el usuario que solicita y el usuario que realiza el favor para ir construyendo 
+  // el objeto que se visualiza en la pantalla.
+  //Además de los datos del usuario, tambien llama al servicio de CLoud Storage para recuperar la foto del usuario
   recuperarFavores(){
     this._favorService.listarTodos().subscribe(res => {
       this.favores = res.map( (e:any) => {

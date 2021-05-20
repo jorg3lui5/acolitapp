@@ -8,6 +8,9 @@ import { avanceFavorDTO } from '../modelo/dto/avance-favor-dto';
 })
 export class ColorEstadoPipe implements PipeTransform {
 
+
+/*   retorna un color según el estado del favor (ejemplo: rojo= “PENDIENTE”). 
+ */  
   transform(estado: string): string {
     switch(estado) { 
       case EstadofavorEnum.solicitado: { 

@@ -7,6 +7,9 @@ import { PaisEnum } from '../modelo/enum/pais-enum';
 export class NacionalidadPorPaisPipe implements PipeTransform {
 
   transform(pais: string, ...args: unknown[]): string {
+
+/*     retorna la nacionalidad según el país.
+ */    
     switch(pais) { 
       case PaisEnum.alemania: { 
          return 'Alemán';

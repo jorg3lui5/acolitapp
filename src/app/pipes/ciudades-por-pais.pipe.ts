@@ -6,6 +6,7 @@ import { PaisEnum } from '../modelo/enum/pais-enum';
 })
 export class CiudadesPorPaisPipe implements PipeTransform {
 
+  /* retorna una lista de ciudades según el país.  */
   
   transform(pais: string, ...args: unknown[]): string[] {
     switch(pais) { 

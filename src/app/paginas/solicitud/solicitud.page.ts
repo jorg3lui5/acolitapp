@@ -12,6 +12,8 @@ import { TipoPagoEnum } from '../../modelo/enum/tipo-pago-enum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EstadofavorEnum } from '../../modelo/enum/estado-favor-enum';
 
+
+/* es la interfaz que permite al usuario solicitar un nuevo favor. Pues, deberá llenar el título, descripcion y forma de pago por el favor realizado. */
 @Component({
   selector: 'app-solicitud',
   templateUrl: './solicitud.page.html',
@@ -28,6 +30,7 @@ export class SolicitudPage implements OnInit {
   usuario: string;
   idFavor:string;
 
+  //define las validaciones para el formulario reactivo
 
   formularioNuevoFavor: FormGroup = this.formBuilder.group({
     titulo: ['', Validators.required],
@@ -111,6 +114,7 @@ export class SolicitudPage implements OnInit {
     }
   }
 
+  //cuando se selecciona el tipo de pago coloca como requerido la descripcion del pago o el valor monetario según la forma de pago seleccionada.
   seleccionarTipoPago(){
     if(this.formularioNuevoFavor.value.tipoPago){
       if(this.formularioNuevoFavor.value.tipoPago==this.tipoPagoEnum.valorMonetario){
@@ -136,6 +140,7 @@ export class SolicitudPage implements OnInit {
 
   }
 
+  //Crea un nuevo favor, almacenandolo en el forebase storage según los datos registrados en el formulario
   nuevoFavor(){
     if(this.formularioNuevoFavor.valid){
       this.favor=this.formularioNuevoFavor.value;
@@ -152,6 +157,7 @@ export class SolicitudPage implements OnInit {
     }
   }
   
+  //Modifica el favor siempre y cuando el usuario solicitante fue quién ingresó a esta pantalla mediante el botón de edición
   modificaFavor(){
     if(this.formularioNuevoFavor.valid){
       this.favor.titulo=this.formularioNuevoFavor.value.titulo;
@@ -167,6 +173,7 @@ export class SolicitudPage implements OnInit {
     }
   }
 
+  //llama al metodo que almacena el favor de la base de datos, y una vez guardado, redirecciona a la lista de favores.
   crearFavor(favor){
     this.mostrarLoading(this.constantes._guardandoDatos);
     this._favorService.crear(favor)
@@ -182,6 +189,7 @@ export class SolicitudPage implements OnInit {
     });
   }
 
+  //Actializa el favor modificado y redirecciona a la pagina de favores.
   actualizarFavor(favor){
     this.mostrarLoading(this.constantes._actualizandoDatos);
     this._favorService.actualizar(favor,this.idFavor)
@@ -215,6 +223,7 @@ export class SolicitudPage implements OnInit {
     toast.present();
   }
 
+  //recupera el nombre del usuario almacenado en el local storage.
   recuperarUsuario(){
     this._storageService.recuperar(this.constantes._usuario).then(
       (data:string)=>{
@@ -235,6 +244,7 @@ export class SolicitudPage implements OnInit {
     });
   }
 
+  //obtiene el favor según el id pasado como parámetro. Esta funcion se llama cuando se va a editar el favor.
   recuperarFavor(){
     this._favorService.recuperarPorId(this.idFavor).subscribe(res => {
       this.favor= {...<any>res};
@@ -248,6 +258,7 @@ export class SolicitudPage implements OnInit {
     ); 
   }
 
+  //actualiza los campos del formulario cuando recupera un favor mediante el ID. Además establece los campos requeridos.-
   actualizarCampos(favor:Favor){
 
     this.formularioNuevoFavor.patchValue({

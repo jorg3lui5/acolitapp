@@ -1,3 +1,9 @@
+/* 
+tiene palabras y mensajes que se muestran en las diferentes pantallas de la aplicación. 
+ De esta manera, si reemplazo el nombre de una accion (por ejemplo: la palabra “modificar” por “actualizar”), entonces no debería cambiar manualmente en cada lugar donde aparece dicha palabra,
+ sino que solo cambiaría esa constante y automáticamente se cambiaría en todos los lugares donde se use la misma.
+
+*/
 export class Constantes {
     public _inicio = 'Inicio';
     public _acolitApp = 'AcolitApp';

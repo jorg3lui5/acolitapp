@@ -15,6 +15,9 @@ import { TipoFotoEnum } from '../../modelo/enum/tipo-foto-enum';
 import firebase from 'firebase';
 
 
+/* permite al usuario registrarse en la aplicación para poder utilizarla. 
+  Además permite subir una fotografía desde la galería o mediante la cámara del dispositivo.
+ */
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.page.html',
@@ -26,6 +29,8 @@ export class RegistroPage implements OnInit {
   loading: HTMLIonLoadingElement;
 
   usuario: Usuario;
+
+    //define las validaciones para el formulario reactivo
 
   expresionMail: RegExp = new RegExp(this.constantes._expresionMail);
   formularioRegistro: FormGroup = this.formBuilder.group({
@@ -96,6 +101,8 @@ export class RegistroPage implements OnInit {
   ngOnInit() {
   }
 
+  /* EL método se encarga de registrar al usuario con firebase auth, además crea al usuario en la base de datos de firestore, almacena la foto en el cloud storage
+    y finalmente guarda el usuario en el local storage. Despues de todo eso, redirecciona a la pantalla de datos personales*/ 
   async registrar() {
     await this.mostrarLoading(this.constantes._guardandoDatos);
 
@@ -180,6 +187,7 @@ export class RegistroPage implements OnInit {
     toast.present();
   }
 
+  //Abre la cámara para que pueda subir la foto de perfil
   abrirCamaraGaleria(opcionesCamara: CameraOptions){
     this.camera.getPicture(opcionesCamara).then((imageData) => {
       this.foto.setValue('data:image/jpeg;base64,' + imageData);
@@ -194,6 +202,8 @@ export class RegistroPage implements OnInit {
   subirFoto(){
     this.seleccionarTipoFoto();
   }
+
+  //MUestr un action sheet en el cual permite seleccionar si la foto se va a subir de la galeria o desde la camara
 
   async seleccionarTipoFoto() {
     const actionSheet = await this.actionSheetController.create({
@@ -220,6 +230,7 @@ export class RegistroPage implements OnInit {
     await actionSheet.present();
   }
 
+  //Establece las opciones para tomar la foto o recuperar de la galeria
   obtenerOpcionesSubidaFoto(tipoFoto: string){
     const opcionesCamara: CameraOptions = {
       quality: 100,

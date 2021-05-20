@@ -19,6 +19,11 @@ import firebase from 'firebase';
   templateUrl: './favores-realizados.page.html',
   styleUrls: ['./favores-realizados.page.scss'],
 })
+
+/* 
+esta pantalla lista y visualiza todos los favores realizados por el usuario actual (usuario logueado).
+
+*/
 export class FavoresRealizadosPage implements OnInit {
   favores: FavorDTO[]=[];
   constantes: Constantes = new Constantes;
@@ -45,6 +50,9 @@ export class FavoresRealizadosPage implements OnInit {
     this.recuperarUsuario();
   }
 
+  //recupera todos los favores que se han realizado por el usuario logueado. Estos son recuperados desde firestore, además recupera el usuario que solicita y el usuario que realiza el favor para ir construyendo 
+  // el objeto que se visualiza en la pantalla.
+  //Además de los datos del usuario, tambien llama al servicio de CLoud Storage para recuperar la foto del usuario
   recuperarFavores(){
     this._favorService.recuperarPorUsuarioRealiza(this.usuario).subscribe(res => {
       this.favores = res.map( (e:any) => {
