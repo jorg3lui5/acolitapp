@@ -52,6 +52,7 @@ ionic capacitor add android
 ionic capacitor copy android
 ionic capacitor build android --prod
 ```
+Esto genera una carpeta Android dentro del proyecto, el cual tiene el proyecto para Android Studio
 
 ## Ejecutar el aplicativo android con Android Studio.
 * Abir con Android Studio, la carpeta Android que se encuentra en la raiz del proyecto.
