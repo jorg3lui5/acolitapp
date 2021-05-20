@@ -48,10 +48,10 @@ Para que se genere el proyecto android a partir del código de ionic, se debe ej
 
 ```bash
 ionic build
-
+ionic capacitor add android
 ionic capacitor build android --prod
 ```
 
 ## Ejecutar el aplicativo android con android studio.
 * Abir con Android Studio, la carpeta Android que se encuentra en la raiz del proyecto.
-* Ejecute el proyecto con android studio, utilizando un emulador o un dispositivo físico, o simplemente vuelva a generar el APK e instálelo en su dispositivo Android
+* Ejecute el proyecto con Android Studio, utilizando un emulador o un dispositivo físico, o simplemente vuelva a generar el APK e instálelo en su dispositivo Android
