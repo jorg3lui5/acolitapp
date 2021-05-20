@@ -22,21 +22,17 @@ git config --global user.email "Tu correo"
 * [ionic framework](https://ionicframework.com/)
 
 
-## Content
-This proyect has two branches: develop1 and develop2. **develop1** contains the tests of the repositories and **develop2** contains the test of the use cases.
+## Clonar el aplicativo
 
-## Demo
-If you want to see the demo of this proyect deployed, you can visit [Demo of the proyect](https://anabelisa.co/tips-para-hacer-un-buen-readme-md/)
+Una vez instaladas las herramientas, acceda a **visual studio code** o a **git** y desde la terminal clone este proyecto:
 
-## How to clone
-If you have special requirements, you have to list it step by step.
-* This is the first step
-* Then you have to do this
-* Finally do this
-
-Markdown has enumation and nested lists.
+```bash
+git clone https://github.com/jorg3lui5/acolitapp.git
+```
+Una vez clonado el proyecto, ingrese a la carpeta del proyecto y compile.
 
 ## Compilación y ejecución del aplicativo 
+
 Para compilar primero debe instalar las dependencias del proyecto. Para esto, debe ejecutar el siguiente comando:
 ```bash
 npm install --save
@@ -48,15 +44,14 @@ ionic serve
 
 ## Construir el aplicativo para android
 
-Para que se genere el proyecto android a partir del código de ionic, se debe ejecutar el siguiente comando.
+Para que se genere el proyecto android a partir del código de ionic, se debe ejecutar los siguientes comandos.
 
 ```bash
+ionic build
+
 ionic capacitor build android --prod
-ionic serve
 ```
 
-
-![](/preview.jpg)
-
-### Notes
-If you want to learn all about markdown i recommend you visit the site [markdown.es](https://markdown.es/sintaxis-markdown/)
+## Ejecutar el aplicativo android con android studio.
+* Abir con Android Studio, la carpeta Android que se encuentra en la raiz del proyecto.
+* Ejecute el proyecto con android studio, utilizando un emulador o un dispositivo físico, o simplemente vuelva a generar el APK e instálelo en su dispositivo Android
