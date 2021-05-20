@@ -1,6 +1,26 @@
-# README.MD
-Making attractive and usable readme's. 
-This is a short description about the content of my proyect. This text have to be simple and explicit.
+# ACOLITAPP
+Este es el repositorio de la App acolitapp, realizado como trabajo final de master.
+
+
+## Instalaciones necesarias para ejecutar la aplicación
+
+* [Google Chrome](https://www.google.com/chrome/)
+
+* [Visual Studio Code](https://code.visualstudio.com/)
+
+* [Git](https://git-scm.com/)
+```
+git config --global user.name "Tu nombre"
+git config --global user.email "Tu correo"
+```
+* [Node](https://nodejs.org/es/)
+
+* [Android Studio](https://developer.android.com/studio/?gclid=Cj0KCQjwhb36BRCfARIsAKcXh6GRXJN_hJrabNpOE94384hWx1uh4qPgqVQBiZJMkDEcNUgTQf3UwZoaAr-ZEALw_wcB&gclsrc=aw.ds)
+
+* [AngularCLI](https://cli.angular.io/)
+
+* [ionic framework](https://ionicframework.com/)
+
 
 ## Content
 This proyect has two branches: develop1 and develop2. **develop1** contains the tests of the repositories and **develop2** contains the test of the use cases.
@@ -16,13 +36,25 @@ If you have special requirements, you have to list it step by step.
 
 Markdown has enumation and nested lists.
 
-## Installation
-To install and run this proyect just type and execute
+## Compilación y ejecución del aplicativo 
+Para compilar primero debe instalar las dependencias del proyecto. Para esto, debe ejecutar el siguiente comando:
 ```bash
-npm install
+npm install --save
 ```
-## Preview
-Insert here an image of the preview if your project has one. The image can be into the project, you have to indicate the route and look like this.
+Una vez instaladas las dependencias, compile y ejecute el proyecto con el siguiente comando:
+```bash
+ionic serve
+```
+
+## Construir el aplicativo para android
+
+Para que se genere el proyecto android a partir del código de ionic, se debe ejecutar el siguiente comando.
+
+```bash
+ionic capacitor build android --prod
+ionic serve
+```
+
 
 ![](/preview.jpg)
 
