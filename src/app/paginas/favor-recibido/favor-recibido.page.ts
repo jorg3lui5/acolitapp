@@ -153,10 +153,8 @@ recuperarUsuario(){
 
   async eliminarFavor(mensaje: string, paginaRetorna:string){
     await this.mostrarLoading(this.constantes._cancelandoSolicitud);
-    console.log('eeeee');
     this._favorService.eliminar(this.idFavor)
     .then((data)=> {
-      console.log('eeee1')
       this.ocultarLoading();
       this.mostrarMensaje(mensaje);
       if(paginaRetorna){
@@ -165,7 +163,6 @@ recuperarUsuario(){
     })
     .catch(err=>{
       this.ocultarLoading();
-      console.log('eeee2')
       console.log("error: "+err);
       this.mostrarMensaje(err.message);
     });
