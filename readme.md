@@ -55,3 +55,27 @@ ionic capacitor build android --prod
 ## Ejecutar el aplicativo android con Android Studio.
 * Abir con Android Studio, la carpeta Android que se encuentra en la raiz del proyecto.
 * Ejecute el proyecto con Android Studio, utilizando un emulador o un dispositivo físico, o simplemente vuelva a generar el APK e instálelo en su dispositivo Android
+
+
+## Uso del aplicativo
+Para probar la funcionalidad y el objetivo del aplicativo siga los siguientes pasos:
+
+* 1. Registre 2 usuarios en el aplicativo
+* 2. Inicie sesión con un usuario o con los 2 al mismo tiempo.
+* 3. Solicite un favor, pulsando el botón con signo más **(+)**
+* 4. Una vez solicitado el favor, deberá aparecer en la lista de favores.
+* 5. El otro usuario podrá ayudar con el favor solicitado, al dar clic en el título del favor.
+
+A continuación se explica los estados que puede tener un favor y las acciones que pueden realizar el solicitante, el ayudante o cualquier otra persona que no haya aceptado el favor.
+
+**Solicitado:**
+Un favor tiene este estado cuando el usuario solicita el favor y aun nadie se ofrece a ayudarle.
+Solicitante: puede CANCELAR la solicitud del favor. Esto eliminará el favor solicitado
+Cualquier otro usuario: puede AYUDAR con el favor solicitado. AL momento que ayuda, el favor pasa a estado PENDIENTE
+
+**Pendiente:**
+UN favor tiene este estado cuando un usuario ofreció ayudar con el favor, pero el solicitante aún no acepta la ayuda.
+Solicitante: puede ACEPTAR o RECHAZAR la ayuda ofrecida por el otro usuario. 
+Si rechaza la ayuda, entonces el favor vuelve a estado SOLICITADO, hasta que alguien más acepte ayudarle.
+Si acpeta 
+Cualquier otro usuario: puede AYUDAR con el favor solicitado.
