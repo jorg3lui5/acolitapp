@@ -35,6 +35,7 @@
     "cordova-sqlite-storage": "^6.0.0",
     "es.keensoft.fullscreenimage": "^0.2.10",
     "firebase": "^8.4.3",
+    "globalthis": "^1.0.2",
     "jetifier": "^2.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
